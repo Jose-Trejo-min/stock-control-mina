@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock Control — Mina</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0F2044;--navy2:#162A55;--navy3:#1E3666;--navy-light:#2A4580;
+  --bar:#1A3060;--bar2:#243D78;
+  --white:#FFFFFF;--off:#F7F8FA;--light:#EEF1F6;
+  --border:#D8DDE8;--border2:#C4CAD8;
+  --text:#1A2340;--muted:#5A6680;--muted2:#8A96B0;
+  --green:#1A7A40;--green-bg:#EAF5EE;
+  --red:#C0281E;--red-bg:#FAEAEA;
+  --orange:#D4700A;--orange-bg:#FEF3E6;
+  --accent:#E8471A;
+  --blue-kpi:#1E5FBE;--blue-kpi-bg:#EBF2FF;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Inter',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:14px}
+body{background:var(--navy);color:var(--text);font-family:var(--sans);min-height:100vh}
+
+/* ── HEADER ── */
+.app-header{
+  background:var(--navy);
+  padding:1.1rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.app-title{font-size:22px;font-weight:700;color:var(--white);letter-spacing:-.01em}
+.app-logo{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.app-logo-name{font-size:20px;font-weight:700;color:var(--white);letter-spacing:.05em}
+.app-logo-sub{font-size:9px;color:rgba(255,255,255,.5);letter-spacing:.15em;text-transform:uppercase}
+.logo-dot{display:inline-block;width:8px;height:8px;background:var(--accent);border-radius:50%;margin-left:2px;vertical-align:super}
+
+/* ── FILTER BAR ── */
+.filter-bar-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;width:100%}
+.filter-bar{
+  background:var(--bar);
+  padding:.75rem 2rem;
+  display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.filter-group{display:flex;flex-direction:column;gap:3px}
+.filter-label{font-size:10px;font-weight:600;color:rgba(255,255,255,.55);letter-spacing:.08em;text-transform:uppercase}
+.filter-select,.filter-input{
+  background:var(--bar2);border:1px solid rgba(255,255,255,.12);
+  border-radius:4px;color:var(--white);font-family:var(--sans);font-size:12px;
+  padding:5px 28px 5px 10px;min-width:120px;outline:none;cursor:pointer;
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,.4)'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;
+}
+.filter-input{padding:5px 10px;background-image:none;min-width:130px}
+.filter-select option{background:var(--navy2);color:var(--white)}
+.filter-actions{display:flex;gap:8px;align-items:flex-end;margin-left:auto}
+.btn-filter{
+  padding:6px 16px;border-radius:4px;font-size:12px;font-weight:600;
+  cursor:pointer;font-family:var(--sans);border:none;transition:all .15s;
+}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#f05530}
+.btn-secondary{background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.15)}
+.btn-secondary:hover{background:rgba(255,255,255,.16)}
+
+/* ── CONTENT ── */
+.content{padding:1.5rem 2rem;background:var(--navy);min-height:calc(100vh - 140px)}
+.page{display:none}.page.active{display:block}
+
+/* ── NAV TABS (dentro del content) ── */
+.nav-tabs{display:flex;gap:0;margin-bottom:1.25rem;border-bottom:2px solid rgba(255,255,255,.08);flex-wrap:wrap}
+.nav-tab{
+  padding:.6rem 1.25rem;font-size:12px;font-weight:500;color:rgba(255,255,255,.5);
+  cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;
+  transition:all .15s;white-space:nowrap;letter-spacing:.02em;
+}
+.nav-tab:hover{color:rgba(255,255,255,.8)}
+.nav-tab.active{color:var(--white);border-bottom-color:var(--accent);font-weight:600}
+
+/* ── KPI ROW ── */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.25rem}
+.kpi-card{
+  background:var(--white);border-radius:6px;padding:.875rem 1.1rem;
+  border-left:4px solid var(--kpi-color,var(--blue-kpi));
+}
+.kpi-label{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.kpi-value{font-size:22px;font-weight:700;font-family:var(--mono);color:var(--kpi-color,var(--blue-kpi));line-height:1}
+.kpi-unit{font-size:10px;color:var(--muted2);margin-top:3px;font-family:var(--mono)}
+
+/* ── WHITE CARD ── */
+.wcard{background:var(--white);border-radius:8px;margin-bottom:1.25rem;overflow:hidden}
+.wcard-head{
+  padding:.75rem 1.25rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+}
+.wcard-title{font-size:11px;font-weight:700;color:var(--text);letter-spacing:.08em;text-transform:uppercase}
+.wcard-sub{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.wcard-body{padding:1.25rem}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{
+  padding:8px 12px;text-align:left;font-size:10px;font-weight:700;
+  color:var(--text);letter-spacing:.07em;text-transform:uppercase;
+  background:var(--light);border-bottom:2px solid var(--border2);white-space:nowrap;
+}
+tbody td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text);white-space:nowrap;font-size:12px}
+tbody td.mono{font-family:var(--mono);font-size:11px}
+tbody td.pos{color:var(--green);font-weight:600;font-family:var(--mono)}
+tbody td.neg{color:var(--red);font-weight:600;font-family:var(--mono)}
+tbody td.neu{color:var(--muted);font-family:var(--mono)}
+tbody td.bold{font-weight:700;color:var(--text)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--off)}
+tr.total-row td{background:var(--light);font-weight:700;border-top:2px solid var(--border2)}
+tr.group-header td{background:var(--navy);color:rgba(255,255,255,.9);font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:6px 12px}
+
+/* ── FORM ── */
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg label{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
+.form-input,.form-select{
+  background:var(--white);border:1px solid var(--border2);border-radius:4px;
+  color:var(--text);font-family:var(--sans);font-size:13px;padding:7px 10px;
+  width:100%;outline:none;transition:border-color .15s;
+}
+.form-input:focus,.form-select:focus{border-color:var(--blue-kpi);box-shadow:0 0 0 2px rgba(30,95,190,.12)}
+.form-select option{background:var(--white)}
+.form-input::placeholder{color:var(--muted2)}
+
+/* ── BADGES ── */
+.badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.badge-ok{background:var(--green-bg);color:var(--green)}
+.badge-warn{background:var(--orange-bg);color:var(--orange)}
+.badge-err{background:var(--red-bg);color:var(--red)}
+
+/* ── ALERTS ── */
+.alert{padding:.75rem 1rem;border-radius:5px;font-size:12px;margin-top:.875rem;display:flex;align-items:flex-start;gap:8px;font-family:var(--mono)}
+.alert-err{background:var(--red-bg);border-left:3px solid var(--red);color:var(--red)}
+.alert-warn{background:var(--orange-bg);border-left:3px solid var(--orange);color:var(--orange)}
+.alert-ok{background:var(--green-bg);border-left:3px solid var(--green);color:var(--green)}
+.alert-info{background:var(--blue-kpi-bg);border-left:3px solid var(--blue-kpi);color:var(--blue-kpi)}
+
+/* ── STOCK CARDS ── */
+.stock-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:10px;margin:.875rem 0}
+.stock-card{
+  background:var(--white);border:1px solid var(--border);border-radius:6px;
+  padding:.875rem;cursor:pointer;transition:all .2s;user-select:none;
+}
+.stock-card:hover{border-color:var(--border2);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.stock-card.selected{border-color:var(--blue-kpi);border-width:2px;background:var(--blue-kpi-bg)}
+.sc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.sc-name{font-size:12px;font-weight:700;font-family:var(--mono);color:var(--text)}
+.sc-chk{width:16px;height:16px;border-radius:3px;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .15s;flex-shrink:0;color:transparent}
+.stock-card.selected .sc-chk{background:var(--blue-kpi);border-color:var(--blue-kpi);color:#fff}
+.sc-ley{font-size:10px;color:var(--muted);font-family:var(--mono);margin-bottom:6px}
+.sc-ton{font-size:20px;font-weight:700;font-family:var(--mono);color:var(--blue-kpi);line-height:1}
+.sc-tonlbl{font-size:10px;color:var(--muted2)}
+.sc-bar{margin-top:8px;height:4px;background:var(--light);border-radius:2px;overflow:hidden}
+.sc-fill{height:100%;border-radius:2px;transition:width .5s}
+
+/* ── DOS RESULT ── */
+.dos-box{background:var(--light);border:1px solid var(--border);border-radius:6px;padding:1.25rem;margin-top:1rem}
+.dos-box-title{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.875rem}
+.dos-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;font-family:var(--mono)}
+.dos-row:last-child{border-bottom:none}
+.dos-row .dl{color:var(--muted)}
+.dos-row .dv{color:var(--text);font-weight:600}
+.dos-row.hl{background:var(--navy);margin:0 -1.25rem;padding:10px 1.25rem;border-color:transparent}
+.dos-row.hl .dl,.dos-row.hl .dv{color:var(--white);font-weight:700;font-size:14px}
+
+.mix-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:.5rem}
+.mix-tbl th{padding:7px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--text);letter-spacing:.07em;text-transform:uppercase;border-bottom:2px solid var(--border2);background:var(--light)}
+.mix-tbl td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text)}
+.mix-tbl tr.ghhw-row td{background:var(--orange-bg);color:var(--orange);font-weight:600}
+.mix-tbl tr.dil-row td{color:var(--muted2)}
+.mix-tbl tr.total-row td{background:var(--navy);color:var(--white);font-weight:700}
+.pbar{display:flex;align-items:center;gap:8px}
+.ptrack{flex:1;max-width:120px;height:5px;background:var(--light);border-radius:3px;overflow:hidden;border:1px solid var(--border)}
+.pfill{height:100%;border-radius:3px;transition:width .5s}
+
+/* ── UPLOAD ── */
+.upload-zone{
+  border:2px dashed var(--border2);border-radius:6px;padding:2rem;
+  text-align:center;cursor:pointer;transition:all .2s;background:var(--white);
+}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--blue-kpi);background:var(--blue-kpi-bg)}
+#file-inp{display:none}
+
+/* ── CHARTS ── */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem}
+.chart-card{background:var(--white);border-radius:6px;overflow:hidden;border:1px solid var(--border)}
+.chart-head{padding:.75rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.chart-title{font-size:10px;font-weight:700;color:var(--text);letter-spacing:.08em;text-transform:uppercase}
+.chart-body{padding:.375rem .875rem .625rem;height:245px}
+
+/* ── FOOTER ── */
+.app-footer{
+  background:var(--navy);padding:.75rem 2rem;
+  display:flex;align-items:center;justify-content:flex-end;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.footer-ts{font-size:10px;color:rgba(255,255,255,.35);font-family:var(--mono)}
+
+/* ── MISC ── */
+hr.div{border:none;border-top:1px solid var(--border);margin:1.25rem 0}
+.section-lbl{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px}
+.dot-ok{background:var(--green)}.dot-warn{background:var(--orange)}
+
+.ghhw-toggle{
+  display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:4px;
+  cursor:pointer;font-size:12px;font-weight:600;border:1px solid var(--border2);
+  background:var(--white);color:var(--muted);transition:all .2s;margin-top:1rem;font-family:var(--sans);
+}
+.ghhw-toggle:hover{border-color:var(--blue-kpi);color:var(--blue-kpi)}
+.ghhw-toggle.on{background:var(--blue-kpi);color:#fff;border-color:var(--blue-kpi)}
+
+@media(max-width:700px){.chart-grid{grid-template-columns:1fr}.filter-bar-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;width:100%}
+.filter-bar{gap:.75rem}.kpi-row{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="app-header">
+  <div class="app-title">Stock Control — Mina</div>
+  <div class="app-logo">
+    <div class="app-logo-name">MINA<span class="logo-dot"></span></div>
+    <div class="app-logo-sub">Aranzazú</div>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-group">
+    <div class="filter-label">Año</div>
+    <select class="filter-select" id="fil-year" onchange="applyFilters()">
+      <option value="">Todos</option>
+      <option value="2026" selected>2026</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <div class="filter-label">Mes</div>
+    <select class="filter-select" id="fil-month" onchange="applyFilters()">
+      <option value="">Todos</option>
+      <option value="01">Enero</option><option value="02">Febrero</option>
+      <option value="03">Marzo</option><option value="04">Abril</option>
+      <option value="05" selected>Mayo</option><option value="06">Junio</option>
+      <option value="07">Julio</option><option value="08">Agosto</option>
+      <option value="09">Septiembre</option><option value="10">Octubre</option>
+      <option value="11">Noviembre</option><option value="12">Diciembre</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <div class="filter-label">Desde</div>
+    <input type="date" class="filter-input" id="fil-desde" onchange="applyFilters()">
+  </div>
+  <div class="filter-group">
+    <div class="filter-label">Hasta</div>
+    <input type="date" class="filter-input" id="fil-hasta" onchange="applyFilters()">
+  </div>
+  <div class="filter-group">
+    <div class="filter-label">Stock</div>
+    <select class="filter-select" id="fil-stock" onchange="applyFilters()">
+      <option value="">Todos</option>
+      <option value="STOCK1">STOCK1</option>
+      <option value="STOCK2">STOCK2</option>
+      <option value="STOCK3">STOCK3</option>
+      <option value="STOCK4">STOCK4</option>
+      <option value="GHHW">GHHW</option>
+    </select>
+  </div>
+  <div class="filter-actions">
+    <button class="btn-filter btn-secondary" onclick="clearFilters()">Limpiar</button>
+    <button class="btn-filter btn-primary" onclick="goTo('fuente',null)">⊞ Cargar Excel</button>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+  <div class="nav-tabs">
+    <div class="nav-tab active" id="nt-dashboard" onclick="goTo('dashboard',this)">Resumen</div>
+    <div class="nav-tab" id="nt-extraccion" onclick="goTo('extraccion',this)">Extracción</div>
+    <div class="nav-tab" id="nt-alimentacion" onclick="goTo('alimentacion',this)">Alimentación</div>
+    <div class="nav-tab" id="nt-stock" onclick="goTo('stock',this)">Stock Real</div>
+    <div class="nav-tab" id="nt-dosif" onclick="goTo('dosif',this)">Dosificación</div>
+    <div class="nav-tab" id="nt-fuente" onclick="goTo('fuente',this)">Fuente de datos</div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="page-dashboard" class="page active">
+    <div class="kpi-row" id="dash-kpis"></div>
+    <!-- PATIO DE GRUESOS -->
+    <div class="wcard" style="margin-bottom:1rem;">
+      <!-- Header -->
+      <div style="background:var(--navy);padding:.625rem 1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div>
+            <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.45);letter-spacing:.12em;text-transform:uppercase">AURA 360° MINING</div>
+            <div style="font-size:15px;font-weight:700;color:var(--white);line-height:1.2">PATIO DE GRUESOS</div>
+          </div>
+          <span id="patio-fecha" style="font-size:11px;color:var(--accent);font-weight:600;font-family:var(--mono)"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span id="patio-src-lbl" style="font-size:10px;color:rgba(255,255,255,.4);font-family:var(--mono)"></span>
+          <label id="patio-load-btn" style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:4px;padding:4px 12px;cursor:pointer;font-size:11px;color:var(--white);font-weight:600">
+            📷 Cargar foto
+            <input type="file" id="patio-file" accept="image/*,.tif,.tiff" style="display:none" onchange="loadPatio(this)">
+          </label>
+          <button id="patio-crop-btn" onclick="applyCrop()" style="display:none;background:var(--accent);border:none;border-radius:4px;padding:4px 14px;cursor:pointer;font-size:11px;color:#fff;font-weight:700">✂ Recortar</button>
+          <button id="patio-reset-btn" onclick="resetPatio()" style="display:none;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:4px;padding:4px 10px;cursor:pointer;font-size:11px;color:rgba(255,255,255,.7)">↺ Nueva foto</button>
+          <div style="font-size:14px;font-weight:700;letter-spacing:.06em;color:var(--white)">aura<span style="display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;margin-left:1px;vertical-align:super"></span></div>
+        </div>
+      </div>
+      <!-- Canvas area + dona -->
+      <div style="display:grid;grid-template-columns:1fr 260px;background:#0a0a0a" id="patio-outer">
+      <div style="position:relative;background:#0a0a0a;display:block;overflow:visible;width:100%" id="patio-wrap">
+        <!-- Placeholder -->
+        <div id="patio-ph" style="text-align:center;color:rgba(255,255,255,.2);padding:3rem 2rem;cursor:pointer;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0a0a" onclick="document.getElementById('patio-file').click()">
+          <div style="font-size:38px;margin-bottom:8px">🛰</div>
+          <div style="font-size:12px;font-family:var(--mono)">Haz clic o arrastra la foto del levantamiento</div>
+          <div style="font-size:10px;margin-top:4px;opacity:.6">Después selecciona la zona del patio y presiona Recortar</div>
+        </div>
+        <!-- Canvas selección (imagen completa + selector) -->
+        <canvas id="patio-select-canvas" style="display:none;max-width:100%;cursor:crosshair"></canvas>
+        <!-- Canvas final (imagen recortada + leyes) -->
+        <canvas id="patio-canvas" style="display:none;width:100%;display:block"></canvas>
+      </div>
+      <!-- Panel dona derecho -->
+      <div style="background:#0d1525;border-left:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem;gap:8px" id="patio-dona-panel">
+        <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.12em;text-transform:uppercase;text-align:center">Inventario por stock</div>
+        <canvas id="ch-patio-dona" style="max-width:180px;max-height:180px"></canvas>
+        <div id="patio-dona-legend" style="width:100%"></div>
+      </div>
+      </div>
+      <!-- Hint -->
+      <div id="patio-hint-select" style="display:none;padding:.4rem 1.25rem;background:#1a3060;border-top:1px solid rgba(255,255,255,.08);font-size:10px;color:rgba(255,255,255,.6);font-family:var(--mono)">
+        ✦ Arrastra para seleccionar la zona del patio → presiona <b style="color:var(--accent)">✂ Recortar</b>
+      </div>
+      <div id="patio-hint-done" style="display:none;padding:.4rem 1.25rem;background:var(--light);border-top:1px solid var(--border);font-size:10px;color:var(--muted);font-family:var(--mono)">
+        ℹ Las etiquetas son arrastrables. Carga una nueva foto con "↺ Nueva foto".
+      </div>
+    </div>
+
+
+    <div class="kpi-row" id="dash-kpis"></div>
+    
+
+
+    <div class="kpi-row" id="dash-kpis"></div>
+    
+
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:1.25rem">
+      <div class="chart-card"><div class="chart-head"><span class="chart-title">Extracción diaria por stock (t)</span></div><div class="chart-body"><canvas id="ch-ext" height="220"></canvas></div></div>
+      <div class="chart-card"><div class="chart-head"><span class="chart-title">Ley Cu ponderada diaria (%)</span></div><div class="chart-body"><canvas id="ch-ley" height="220"></canvas></div></div>
+      <div class="chart-card"><div class="chart-head"><span class="chart-title">Ley Cu por stock (%)</span></div><div class="chart-body"><canvas id="ch-leystock" height="220"></canvas></div></div>
+      <div class="chart-card"><div class="chart-head"><span class="chart-title">Alimentación a planta por stock (t)</span></div><div class="chart-body"><canvas id="ch-ali-stack" height="220"></canvas></div></div>
+    </div>
+  </div>
+
+  <!-- EXTRACCIÓN -->
+  <div id="page-extraccion" class="page">
+    <div class="kpi-row" id="ext-kpis"></div>
+    <div class="wcard">
+      <div class="wcard-head"><span class="wcard-title">Agregar extracción</span></div>
+      <div class="wcard-body">
+        <div class="form-grid" style="align-items:end">
+          <div class="fg"><label>Fecha</label><input type="date" class="form-input" id="e-fecha"></div>
+          <div class="fg"><label>Turno</label><select class="form-select" id="e-turno"><option value="A">Turno A</option><option value="B">Turno B</option><option value="—">Sin turno</option></select></div>
+          <div class="fg"><label>Área / Frente</label><input type="text" class="form-input" id="e-area" placeholder="ej: ST_4058_1415"></div>
+          <div class="fg"><label>Toneladas</label><input type="number" class="form-input" id="e-ton" step="0.001" placeholder="0.000"></div>
+          <div class="fg"><label>Ley Cu (%)</label><input type="number" class="form-input" id="e-cu" step="0.001" placeholder="0.000"></div>
+          <div class="fg"><label>Ley Au (g/t)</label><input type="number" class="form-input" id="e-au" step="0.001" placeholder="0.000"></div>
+          <div class="fg"><label>Ley Ag (g/t)</label><input type="number" class="form-input" id="e-ag" step="0.01" placeholder="0.00"></div>
+          <div class="fg"><label>Stock destino</label><select class="form-select" id="e-stock"><option value="STOCK1">STOCK1</option><option value="STOCK2">STOCK2</option><option value="STOCK3">STOCK3</option><option value="STOCK4">STOCK4</option><option value="GHHW">GHHW</option></select></div>
+          <div class="fg" style="justify-content:flex-end"><button class="btn-filter btn-primary" style="width:100%;padding:8px" onclick="addExt()">+ Agregar</button></div>
+        </div>
+        <div id="ext-msg" style="margin-top:.75rem"></div>
+      </div>
+    </div>
+    <div class="wcard">
+      <div class="wcard-head"><span class="wcard-title">Registros</span><span class="wcard-sub" id="ext-count"></span></div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Fecha</th><th>Turno</th><th>Área / Frente</th><th>Toneladas</th><th>Cu %</th><th>Au g/t</th><th>Ag g/t</th><th>Stock</th><th></th></tr></thead>
+        <tbody id="ext-body"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- ALIMENTACIÓN -->
+  <div id="page-alimentacion" class="page">
+    <div class="kpi-row" id="ali-kpis"></div>
+    <div class="wcard">
+      <div class="wcard-head"><span class="wcard-title">Agregar alimentación a planta</span></div>
+      <div class="wcard-body">
+        <div class="form-grid" style="align-items:end">
+          <div class="fg"><label>Fecha</label><input type="date" class="form-input" id="a-fecha"></div>
+          <div class="fg"><label>Turno</label><select class="form-select" id="a-turno"><option value="A">Turno A</option><option value="B">Turno B</option><option value="—">Sin turno</option></select></div>
+          <div class="fg"><label>Toneladas</label><input type="number" class="form-input" id="a-ton" step="0.001" placeholder="0.000"></div>
+          <div class="fg"><label>Ley Cu (%)</label><input type="number" class="form-input" id="a-cu" step="0.001" placeholder="0.000"></div>
+          <div class="fg"><label>Ley Au (g/t)</label><input type="number" class="form-input" id="a-au" step="0.001" placeholder="0.000"></div>
+          <div class="fg"><label>Ley Ag (g/t)</label><input type="number" class="form-input" id="a-ag" step="0.01" placeholder="0.00"></div>
+        </div>
+        <hr class="div">
+        <div class="section-lbl">% por stock (debe sumar 100)</div>
+        <div class="form-grid">
+          <div class="fg"><label>STOCK1 %</label><input type="number" class="form-input" id="a-s1" step="0.1" placeholder="0" oninput="updSuma()"></div>
+          <div class="fg"><label>STOCK2 %</label><input type="number" class="form-input" id="a-s2" step="0.1" placeholder="0" oninput="updSuma()"></div>
+          <div class="fg"><label>STOCK3 %</label><input type="number" class="form-input" id="a-s3" step="0.1" placeholder="0" oninput="updSuma()"></div>
+          <div class="fg"><label>STOCK4 %</label><input type="number" class="form-input" id="a-s4" step="0.1" placeholder="0" oninput="updSuma()"></div>
+          <div class="fg"><label>GHHW %</label><input type="number" class="form-input" id="a-sg" step="0.1" placeholder="0" oninput="updSuma()"></div>
+          <div class="fg"><label>Suma %</label><input type="text" class="form-input" id="a-suma" readonly style="font-weight:700"></div>
+        </div>
+        <div style="margin-top:1rem;display:flex;gap:8px;align-items:center">
+          <button class="btn-filter btn-primary" onclick="addAli()">+ Agregar</button>
+          <span id="ali-msg" style="font-size:11px;color:var(--green);font-family:var(--mono)"></span>
+        </div>
+      </div>
+    </div>
+    <div class="wcard">
+      <div class="wcard-head"><span class="wcard-title">Registros de alimentación</span></div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Fecha</th><th>Turno</th><th>Ton (t)</th><th>Cu %</th><th>Au</th><th>Ag</th><th>S1%</th><th>S2%</th><th>S3%</th><th>S4%</th><th>GHHW%</th><th>Suma</th><th></th></tr></thead>
+        <tbody id="ali-body"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- STOCK REAL -->
+  <div id="page-stock" class="page">
+    <div class="wcard">
+      <div class="wcard-head"><span class="wcard-title">Inventario real por stock</span><span class="wcard-sub" id="stk-ts"></span></div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Stock</th><th>Extraído (t)</th><th>Alimentado (t)</th><th>Inventario (t)</th><th>Ley Cu % pond.</th><th>Ley Au pond.</th><th>Ley Ag pond.</th><th>Metal Cu (t)</th><th>Estado</th></tr></thead>
+        <tbody id="stk-body"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- DOSIFICACIÓN -->
+  <div id="page-dosif" class="page">
+    <div class="wcard">
+      <div class="wcard-head"><span class="wcard-title">Parámetros de dosificación</span></div>
+      <div class="wcard-body">
+        <div class="form-grid" style="max-width:440px;align-items:end">
+          <div class="fg"><label>Ley Cu objetivo (%)</label><input type="number" class="form-input" id="d-ley" step="0.001" placeholder="ej: 1.200" oninput="calcDos()"></div>
+          <div class="fg"><label>Toneladas a procesar</label><input type="number" class="form-input" id="d-ton" step="10" placeholder="ej: 3500" oninput="calcDos()"></div>
+        </div>
+        <hr class="div">
+        <div class="section-lbl">Stocks disponibles — selecciona los que quieres usar</div>
+        <div class="stock-grid" id="dos-stocks"></div>
+        <div id="ghhw-btn-wrap"></div>
+        <div id="dos-out"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FUENTE -->
+  <div id="page-fuente" class="page">
+    <div class="wcard">
+      <div class="wcard-head"><span class="wcard-title">Datos cargados</span></div>
+      <div class="wcard-body"><div id="data-status-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px"></div></div>
+    </div>
+    <div class="wcard">
+      <div class="wcard-head"><span class="wcard-title">Opción 1 — Subir archivo Excel</span></div>
+      <div class="wcard-body">
+        <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-inp').click()"
+          ondragover="event.preventDefault();this.classList.add('drag')"
+          ondragleave="this.classList.remove('drag')"
+          ondrop="handleDrop(event)">
+          <div style="font-size:28px;margin-bottom:8px">📂</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">Arrastra STOCK_MINERAL.xlsx aquí o haz clic</div>
+          <div style="font-size:11px;color:var(--muted);font-family:var(--mono)">Hojas requeridas: EXTRACCION · ALIMENTACION</div>
+        </div>
+        <input type="file" id="file-inp" accept=".xlsx,.xls" onchange="loadFile(this)">
+        <div id="upload-status" style="margin-top:.875rem"></div>
+      </div>
+    </div>
+    <div class="wcard">
+      <div class="wcard-head"><span class="wcard-title">Opción 2 — OneDrive / SharePoint</span></div>
+      <div class="wcard-body">
+        <div style="display:flex;gap:10px;align-items:flex-end">
+          <div class="fg" style="flex:1"><label>URL de descarga directa</label><input type="text" class="form-input" id="od-url" placeholder="https://tuempresa.sharepoint.com/.../STOCK_MINERAL.xlsx?download=1"></div>
+          <button class="btn-filter btn-primary" style="padding:8px 18px;white-space:nowrap" onclick="loadFromURL()">Cargar</button>
+        </div>
+        <div id="od-status" style="margin-top:.875rem"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- FOOTER -->
+<div class="app-footer">
+  <span class="footer-ts" id="footer-ts"></span>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+
+/* ═══ DATA REAL ═══ */
+let STATE = {
+  extraccion: [
+    {fecha:"2026-05-18",turno:"—",area:"ST_4058_1415",ton:677.825,cu:1.27,au:0.62,ag:14.35,stock:"STOCK1"},
+    {fecha:"2026-05-19",turno:"—",area:"ST_4060_1475",ton:114.0,cu:0.66,au:0.68,ag:11.62,stock:"STOCK1"},
+    {fecha:"2026-05-19",turno:"—",area:"ST_4058_1415",ton:463.0,cu:1.27,au:0.62,ag:14.35,stock:"STOCK1"},
+    {fecha:"2026-05-19",turno:"—",area:"ST_4036_1580",ton:109.0,cu:1.73,au:1.05,ag:20.0,stock:"STOCK4"},
+    {fecha:"2026-05-20",turno:"—",area:"ST_4058_1415",ton:556.0,cu:1.27,au:0.62,ag:14.35,stock:"STOCK1"},
+    {fecha:"2026-05-20",turno:"—",area:"ST_4042_1580",ton:817.0,cu:1.17,au:0.46,ag:17.33,stock:"STOCK4"},
+    {fecha:"2026-05-21",turno:"—",area:"ST_4060_1475",ton:648.9355,cu:0.66,au:0.68,ag:11.62,stock:"STOCK1"},
+    {fecha:"2026-05-21",turno:"—",area:"ST_4058_1415",ton:544.502,cu:1.27,au:0.62,ag:14.35,stock:"STOCK1"},
+    {fecha:"2026-05-21",turno:"—",area:"ST_4042_1580",ton:181.108,cu:1.17,au:0.46,ag:17.33,stock:"STOCK4"}
+  ],
+  alimentacion: [
+    {fecha:"2026-05-19",turno:"—",ton:109.0,cu:1.73,au:1.05,ag:20.0,s1:0,s2:0,s3:0,s4:100,sg:0},
+    {fecha:"2026-05-20",turno:"—",ton:817.0,cu:1.17,au:0.46,ag:17.33,s1:0,s2:0,s3:0,s4:100,sg:0}
+  ],
+  source:"STOCK_MINERAL.xlsx"
+};
+
+const STOCKS = ['STOCK1','STOCK2','STOCK3','STOCK4','GHHW'];
+const COLORS = ['#1E5FBE','#F28B6E','#5DC490','#B57FE8','#F5A84E'];
+let selStocks = {}, useGHHW = false, charts = {};
+let filtExt = [], filtAli = [];
+
+const f  = (v,d=2) => v!=null&&!isNaN(v) ? (+v).toFixed(d) : '—';
+const fd = s => { if(!s) return ''; const p=String(s).slice(5).split('-'); return p.length===2?p[1]+'-'+p[0]:String(s).slice(5); };
+const now = () => new Date().toISOString().slice(0,10);
+
+/* ═══ FILTERS ═══ */
+function applyFilters(){
+  const yr=document.getElementById('fil-year').value;
+  const mo=document.getElementById('fil-month').value;
+  const ds=document.getElementById('fil-desde').value;
+  const ht=document.getElementById('fil-hasta').value;
+  const sk=document.getElementById('fil-stock').value;
+  filtExt=STATE.extraccion.filter(r=>{
+    if(yr&&!r.fecha.startsWith(yr))return false;
+    if(mo&&r.fecha.slice(5,7)!==mo)return false;
+    if(ds&&r.fecha<ds)return false;
+    if(ht&&r.fecha>ht)return false;
+    if(sk&&r.stock!==sk)return false;
+    return true;
+  });
+  filtAli=STATE.alimentacion.filter(r=>{
+    if(yr&&!r.fecha.startsWith(yr))return false;
+    if(mo&&r.fecha.slice(5,7)!==mo)return false;
+    if(ds&&r.fecha<ds)return false;
+    if(ht&&r.fecha>ht)return false;
+    return true;
+  });
+  renderDash();
+  renderPatioStocks();
+  renderPatioDonut();
+}
+function clearFilters(){
+  ['fil-year','fil-month','fil-stock'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fil-year').value='2026';
+  document.getElementById('fil-month').value='05';
+  ['fil-desde','fil-hasta'].forEach(id=>document.getElementById(id).value='');
+  applyFilters();
+}
+
+/* ═══ STOCK CALC ═══ */
+function calcSR(){
+  const map={};
+  STOCKS.forEach(s=>map[s]={ext:0,ali:0,mCu:0,mAu:0,mAg:0});
+  STATE.extraccion.forEach(r=>{
+    if(!map[r.stock])map[r.stock]={ext:0,ali:0,mCu:0,mAu:0,mAg:0};
+    map[r.stock].ext+=r.ton; map[r.stock].mCu+=r.ton*r.cu/100;
+    map[r.stock].mAu+=r.ton*r.au; map[r.stock].mAg+=r.ton*r.ag;
+  });
+  STATE.alimentacion.forEach(r=>{
+    const p={STOCK1:r.s1,STOCK2:r.s2,STOCK3:r.s3,STOCK4:r.s4,GHHW:r.sg};
+    STOCKS.forEach(s=>{if(!map[s])map[s]={ext:0,ali:0,mCu:0,mAu:0,mAg:0};map[s].ali+=r.ton*(p[s]||0)/100;});
+  });
+  const res={};
+  STOCKS.forEach(s=>{
+    const v=map[s];
+    res[s]={ext:v.ext,ali:v.ali,inv:v.ext-v.ali,
+      leyCu:v.ext>0?v.mCu/v.ext*100:0,leyAu:v.ext>0?v.mAu/v.ext:0,
+      leyAg:v.ext>0?v.mAg/v.ext:0,metalCu:(v.ext-v.ali)>0?(v.ext>0?v.mCu/v.ext*(v.ext-v.ali)/100:0):0};
+  });
+  return res;
+}
+
+/* ═══ NAV ═══ */
+function goTo(p,el){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  const nt=document.getElementById('nt-'+p); if(nt)nt.classList.add('active');
+  if(p==='dashboard')renderDash();
+  if(p==='stock')renderStock();
+  if(p==='dosif')renderDosStocks();
+  if(p==='extraccion')renderExt();
+  if(p==='alimentacion')renderAli();
+  if(p==='fuente')renderDataStatus();
+}
+
+/* ═══ DASHBOARD ═══ */
+function renderDash(){
+  const sr=calcSR();
+  const totExt=filtExt.reduce((a,r)=>a+r.ton,0);
+  const totAli=filtAli.reduce((a,r)=>a+r.ton,0);
+  const totMet=filtExt.reduce((a,r)=>a+r.ton*r.cu/100,0);
+  const leyP=totExt>0?totMet/totExt*100:0;
+  const totInv=STOCKS.reduce((a,s)=>a+Math.max(0,sr[s].inv),0);
+  const fechas=[...new Set(filtExt.map(r=>r.fecha))].sort();
+
+  document.getElementById('dash-kpis').innerHTML=[
+    {l:'Total extraído',v:f(totExt,1),u:'toneladas',c:'#1E5FBE'},
+    {l:'Total alimentado',v:f(totAli,1),u:'toneladas',c:'#1A7A40'},
+    {l:'Inventario total',v:f(totInv,1),u:'en stock',c:'#8B35B8'},
+    {l:'Ley Cu ponderada',v:f(leyP,4),u:'%',c:'#E8471A'},
+    {l:'Metal Cu fino',v:f(totMet,3),u:'t Cu',c:'#D4700A'},
+    {l:'Días registrados',v:fechas.length,u:'días',c:'#5A6680'},
+  ].map(k=>`<div class="kpi-card" style="--kpi-color:${k.c}"><div class="kpi-label">${k.l}</div><div class="kpi-value">${k.v}</div><div class="kpi-unit">${k.u}</div></div>`).join('');
+
+  const mkChart=(id,cfg)=>{if(charts[id])charts[id].destroy();const ctx=document.getElementById(id);if(ctx)charts[id]=new Chart(ctx,cfg);};
+  const ax={x:{ticks:{color:'#5A6680',font:{family:'JetBrains Mono',size:10}},grid:{color:'rgba(0,0,0,.05)'}},y:{ticks:{color:'#5A6680',font:{family:'JetBrains Mono',size:10}},grid:{color:'rgba(0,0,0,.05)'}}};
+  const lg={labels:{color:'#5A6680',font:{family:'JetBrains Mono',size:10},padding:8,boxWidth:10,boxHeight:10}};
+
+  const datasets=STOCKS.map((s,i)=>({label:s,data:fechas.map(f=>filtExt.filter(r=>r.fecha===f&&r.stock===s).reduce((a,r)=>a+r.ton,0)),backgroundColor:COLORS[i]+'BB',borderColor:COLORS[i],borderWidth:1,borderRadius:2,stack:'s'}));
+  mkChart('ch-ext',{type:'bar',data:{labels:fechas.map(fd),datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:lg.labels}},scales:{x:{...ax.x,stacked:true},y:{...ax.y,stacked:true}}}});
+
+  const leyCu=fechas.map(f=>{const rows=filtExt.filter(r=>r.fecha===f);const t=rows.reduce((a,r)=>a+r.ton,0);const m=rows.reduce((a,r)=>a+r.ton*r.cu/100,0);return t>0?m/t*100:0;});
+  mkChart('ch-ley',{type:'line',data:{labels:fechas.map(fd),datasets:[{label:'Ley Cu %',data:leyCu,borderColor:'#E8471A',backgroundColor:'rgba(232,71,26,.08)',tension:.3,fill:true,pointRadius:4,pointBackgroundColor:'#E8471A'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:ax}});
+
+  const invTons=STOCKS.map(s=>Math.max(0,sr[s].inv));
+
+  const leysStock=STOCKS.map(s=>sr[s].leyCu);
+  mkChart('ch-leystock',{type:'bar',data:{labels:STOCKS,datasets:[{label:'Ley Cu %',data:leysStock,backgroundColor:COLORS.map(c=>c+'BB'),borderColor:COLORS,borderWidth:1,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:ax}});
+
+  const fechasAli=[...new Set(filtAli.map(r=>r.fecha))].sort();
+  const aliKeys=['s1','s2','s3','s4','sg'];
+  const aliDS=STOCKS.map((s,i)=>({label:s,data:fechasAli.map(f=>{const rows=filtAli.filter(r=>r.fecha===f);return rows.reduce((a,r)=>a+r.ton*(r[aliKeys[i]]||0)/100,0);}),backgroundColor:COLORS[i]+'CC',borderColor:COLORS[i],borderWidth:1,borderRadius:2,stack:'ali'}));
+  mkChart('ch-ali-stack',{type:'bar',data:{labels:fechasAli.map(fd),datasets:aliDS},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:lg.labels}},scales:{x:{...ax.x,stacked:true},y:{...ax.y,stacked:true}}}});
+}
+
+/* ═══ EXTRACCIÓN ═══ */
+function addExt(){
+  const fecha=document.getElementById('e-fecha').value;
+  const ton=parseFloat(document.getElementById('e-ton').value);
+  const cu=parseFloat(document.getElementById('e-cu').value);
+  if(!fecha||isNaN(ton)||ton<=0||isNaN(cu)){showMsg('ext-msg','Completa fecha, toneladas y ley Cu.','err');return;}
+  STATE.extraccion.push({fecha,turno:document.getElementById('e-turno').value,area:document.getElementById('e-area').value||'—',ton,cu,au:parseFloat(document.getElementById('e-au').value)||0,ag:parseFloat(document.getElementById('e-ag').value)||0,stock:document.getElementById('e-stock').value});
+  applyFilters(); renderExt(); showMsg('ext-msg','✓ Registro agregado','ok');
+  ['e-ton','e-cu','e-au','e-ag','e-area'].forEach(id=>document.getElementById(id).value='');
+}
+function delExt(i){STATE.extraccion.splice(i,1);applyFilters();renderExt();}
+function renderExt(){
+  const totTon=STATE.extraccion.reduce((a,r)=>a+r.ton,0);
+  const totMet=STATE.extraccion.reduce((a,r)=>a+r.ton*r.cu/100,0);
+  const leyP=totTon>0?totMet/totTon*100:0;
+  document.getElementById('ext-count').textContent=STATE.extraccion.length+' registros';
+  document.getElementById('ext-kpis').innerHTML=[
+    {l:'Registros',v:STATE.extraccion.length,u:'frentes',c:'#5A6680'},
+    {l:'Total extraído',v:f(totTon,1),u:'t',c:'#1E5FBE'},
+    {l:'Ley Cu pond.',v:f(leyP,4),u:'%',c:'#E8471A'},
+    {l:'Metal Cu',v:f(totMet,3),u:'t Cu',c:'#1A7A40'},
+  ].map(k=>`<div class="kpi-card" style="--kpi-color:${k.c}"><div class="kpi-label">${k.l}</div><div class="kpi-value">${k.v}</div><div class="kpi-unit">${k.u}</div></div>`).join('');
+  document.getElementById('ext-body').innerHTML=STATE.extraccion.slice().reverse().map((r,i)=>`<tr>
+    <td class="mono">${fd(r.fecha)}</td><td style="color:var(--muted)">${r.turno||'—'}</td>
+    <td style="color:var(--muted);font-size:11px">${r.area}</td>
+    <td class="mono bold">${f(r.ton,3)}</td>
+    <td class="pos">${f(r.cu,4)}</td><td class="mono">${f(r.au,4)}</td><td class="mono">${f(r.ag,2)}</td>
+    <td><span class="badge badge-ok">${r.stock}</span></td>
+    <td><button onclick="delExt(${STATE.extraccion.length-1-i})" style="background:none;border:1px solid var(--border2);border-radius:3px;padding:2px 8px;cursor:pointer;font-size:10px;color:var(--muted)">✕</button></td>
+  </tr>`).join('')||'<tr><td colspan="9" style="text-align:center;color:var(--muted2);padding:2rem">Sin registros</td></tr>';
+}
+
+/* ═══ ALIMENTACIÓN ═══ */
+function updSuma(){
+  const s=['a-s1','a-s2','a-s3','a-s4','a-sg'].reduce((a,id)=>a+(parseFloat(document.getElementById(id).value)||0),0);
+  const el=document.getElementById('a-suma');
+  el.value=f(s,1)+'%'; el.style.color=Math.abs(s-100)<0.5?'var(--green)':'var(--red)';
+}
+function addAli(){
+  const fecha=document.getElementById('a-fecha').value;
+  const ton=parseFloat(document.getElementById('a-ton').value);
+  const cu=parseFloat(document.getElementById('a-cu').value);
+  const pcts=['a-s1','a-s2','a-s3','a-s4','a-sg'].map(id=>parseFloat(document.getElementById(id).value)||0);
+  if(!fecha||isNaN(ton)||ton<=0||isNaN(cu)){showMsg('ali-msg','Completa fecha, toneladas y ley Cu.','err');return;}
+  if(Math.abs(pcts.reduce((a,b)=>a+b,0)-100)>0.5){showMsg('ali-msg','Los % deben sumar 100.','err');return;}
+  STATE.alimentacion.push({fecha,turno:document.getElementById('a-turno').value,ton,cu,au:parseFloat(document.getElementById('a-au').value)||0,ag:parseFloat(document.getElementById('a-ag').value)||0,s1:pcts[0],s2:pcts[1],s3:pcts[2],s4:pcts[3],sg:pcts[4]});
+  applyFilters(); renderAli(); showMsg('ali-msg','✓ Registro agregado','ok');
+  ['a-ton','a-cu','a-au','a-ag','a-s1','a-s2','a-s3','a-s4','a-sg'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('a-suma').value='';
+}
+function delAli(i){STATE.alimentacion.splice(i,1);applyFilters();renderAli();}
+function renderAli(){
+  const totTon=STATE.alimentacion.reduce((a,r)=>a+r.ton,0);
+  const totMet=STATE.alimentacion.reduce((a,r)=>a+r.ton*r.cu/100,0);
+  const leyP=totTon>0?totMet/totTon*100:0;
+  document.getElementById('ali-kpis').innerHTML=[
+    {l:'Registros',v:STATE.alimentacion.length,u:'turnos',c:'#5A6680'},
+    {l:'Total alimentado',v:f(totTon,1),u:'t',c:'#1A7A40'},
+    {l:'Ley Cu pond.',v:f(leyP,4),u:'%',c:'#E8471A'},
+  ].map(k=>`<div class="kpi-card" style="--kpi-color:${k.c}"><div class="kpi-label">${k.l}</div><div class="kpi-value">${k.v}</div><div class="kpi-unit">${k.u}</div></div>`).join('');
+  document.getElementById('ali-body').innerHTML=STATE.alimentacion.slice().reverse().map((r,i)=>`<tr>
+    <td class="mono">${fd(r.fecha)}</td><td style="color:var(--muted)">${r.turno||'—'}</td>
+    <td class="mono bold">${f(r.ton,1)}</td><td class="pos">${f(r.cu,4)}</td>
+    <td class="mono">${f(r.au,4)}</td><td class="mono">${f(r.ag,2)}</td>
+    <td class="mono">${f(r.s1,1)}</td><td class="mono">${f(r.s2,1)}</td><td class="mono">${f(r.s3,1)}</td><td class="mono">${f(r.s4,1)}</td><td class="mono">${f(r.sg,1)}</td>
+    <td style="color:var(--green);font-weight:700;font-family:var(--mono)">${f(r.s1+r.s2+r.s3+r.s4+r.sg,1)}</td>
+    <td><button onclick="delAli(${STATE.alimentacion.length-1-i})" style="background:none;border:1px solid var(--border2);border-radius:3px;padding:2px 8px;cursor:pointer;font-size:10px;color:var(--muted)">✕</button></td>
+  </tr>`).join('')||'<tr><td colspan="13" style="text-align:center;color:var(--muted2);padding:2rem">Sin registros</td></tr>';
+}
+
+/* ═══ STOCK REAL ═══ */
+function renderStock(){
+  const sr=calcSR();
+  document.getElementById('stk-ts').textContent='Actualizado: '+now();
+  let html='',totE=0,totA=0,totM=0;
+  STOCKS.forEach((s,i)=>{
+    const v=sr[s]; totE+=v.ext; totA+=v.ali; totM+=Math.max(0,v.metalCu);
+    const est=v.inv<0?`<span class="badge badge-err">⚠ DÉFICIT</span>`:v.inv<500?`<span class="badge badge-warn">BAJO</span>`:`<span class="badge badge-ok">OK</span>`;
+    html+=`<tr>
+      <td style="color:${COLORS[i]};font-weight:700;font-family:var(--mono)">${s}</td>
+      <td class="mono bold">${f(v.ext,3)}</td><td class="mono">${f(v.ali,3)}</td>
+      <td class="pos">${f(Math.max(0,v.inv),3)}</td>
+      <td class="pos">${f(v.leyCu,4)}</td>
+      <td class="mono">${f(v.leyAu,4)}</td><td class="mono">${f(v.leyAg,2)}</td>
+      <td class="mono">${f(Math.max(0,v.metalCu),4)}</td>
+      <td>${est}</td>
+    </tr>`;
+  });
+  html+=`<tr class="total-row"><td>TOTAL</td><td class="mono">${f(totE,3)}</td><td class="mono">${f(totA,3)}</td><td class="mono">${f(totE-totA,3)}</td><td>—</td><td>—</td><td>—</td><td class="mono">${f(totM,4)}</td><td>—</td></tr>`;
+  document.getElementById('stk-body').innerHTML=html;
+}
+
+/* ═══ DOSIFICACIÓN ═══ */
+function renderDosStocks(){
+  const sr=calcSR();
+  const maxInv=Math.max(...STOCKS.map(s=>Math.max(0,sr[s].inv)),1);
+  STOCKS.forEach(s=>{if(selStocks[s]===undefined)selStocks[s]=sr[s].inv>0;});
+  document.getElementById('dos-stocks').innerHTML=STOCKS.map((s,i)=>{
+    const v=sr[s]; const inv=Math.max(0,v.inv); const pct=inv/maxInv*100; const sel=selStocks[s];
+    return`<div class="stock-card${sel?' selected':''}" id="sc-${s}" onclick="togStock('${s}')">
+      <div class="sc-top"><span class="sc-name" style="color:${COLORS[i]}">${s}</span><span class="sc-chk">${sel?'✓':''}</span></div>
+      <div class="sc-ley">Cu: <b>${f(v.leyCu,4)}%</b> · Au: ${f(v.leyAu,4)} g/t</div>
+      <div class="sc-ton">${f(inv,1)}</div><div class="sc-tonlbl">t disponibles</div>
+      <div class="sc-bar"><div class="sc-fill" style="width:${pct}%;background:${COLORS[i]}"></div></div>
+    </div>`;
+  }).join('');
+  calcDos();
+}
+function togStock(s){
+  selStocks[s]=!selStocks[s];
+  const c=document.getElementById('sc-'+s);
+  c.classList.toggle('selected',selStocks[s]);
+  c.querySelector('.sc-chk').textContent=selStocks[s]?'✓':'';
+  calcDos();
+}
+function calcDos(){
+  const leyObj=parseFloat(document.getElementById('d-ley').value);
+  const tonProc=parseFloat(document.getElementById('d-ton').value);
+  const out=document.getElementById('dos-out');
+  const btnW=document.getElementById('ghhw-btn-wrap');
+  if(isNaN(leyObj)||leyObj<=0||isNaN(tonProc)||tonProc<=0){out.innerHTML='';btnW.innerHTML='';return;}
+  const sr=calcSR();
+  const act=STOCKS.filter(s=>selStocks[s]&&sr[s]&&sr[s].inv>0);
+  if(!act.length){out.innerHTML=`<div class="alert alert-warn">Selecciona al menos un stock con inventario.</div>`;btnW.innerHTML='';return;}
+  const totTon=act.reduce((a,s)=>a+sr[s].inv,0);
+  const totMet=act.reduce((a,s)=>a+sr[s].inv*sr[s].leyCu/100,0);
+  const leyMix=totTon>0?totMet/totTon*100:0;
+  if(tonProc>totTon){out.innerHTML=`<div class="alert alert-err">Stock insuficiente. Disponible: ${f(totTon,1)} t.</div>`;btnW.innerHTML='';return;}
+  if(leyMix<leyObj){out.innerHTML=`<div class="alert alert-err">Ley ponderada (${f(leyMix,4)}%) menor que objetivo (${f(leyObj,3)}%). Activa más stocks.</div>`;btnW.innerHTML='';return;}
+  const factor=tonProc*leyObj/(leyMix*totTon);
+  const dist=act.map(s=>({s,i:STOCKS.indexOf(s),ley:sr[s].leyCu,inv:sr[s].inv,tu:sr[s].inv*factor,pct:0}));
+  const tonUsada=dist.reduce((a,d)=>a+d.tu,0);
+  dist.forEach(d=>d.pct=tonUsada>0?d.tu/tonUsada*100:0);
+  const tonDil=tonProc-tonUsada;
+  const hayGHHW=!!sr['GHHW']&&sr['GHHW'].inv>0;
+  const leyGHHW=hayGHHW?sr['GHHW'].leyCu:0;
+  const ghhwYaUsado=dist.find(d=>d.s==='GHHW')?.tu||0;
+  const ghhwLibre=Math.max(0,(sr['GHHW']?.inv||0)-ghhwYaUsado);
+  let metalRes=dist.reduce((a,d)=>a+d.tu*d.ley/100,0);
+  let leyFinal=metalRes/tonProc*100;
+  let ghhwEnDil=0;
+  if(useGHHW&&hayGHHW&&tonDil>0.5&&ghhwLibre>0){ghhwEnDil=Math.min(tonDil,ghhwLibre);metalRes+=ghhwEnDil*leyGHHW/100;leyFinal=metalRes/tonProc*100;}
+  if(tonDil>0.5&&hayGHHW&&ghhwLibre>0){
+    btnW.innerHTML=`<button class="ghhw-toggle${useGHHW?' on':''}" onclick="togGHHW()">${useGHHW?'✓ Sustituyendo dilución con GHHW':'↔ Sustituir dilución con GHHW'}</button>
+    <span style="font-size:11px;color:var(--muted);margin-left:10px;font-family:var(--mono)">GHHW libre: ${f(ghhwLibre,1)} t · Ley: ${f(leyGHHW,4)}%${useGHHW?` <b style="color:var(--orange)">→ Ley final: ${f(leyFinal,4)}%</b>`:''}</span>`;
+  } else {btnW.innerHTML='';}
+  const leyCol=useGHHW&&tonDil>0.5&&hayGHHW?'var(--orange)':'var(--green)';
+  const mixRows=dist.map(d=>`<tr>
+    <td style="color:${COLORS[d.i]};font-weight:700;font-family:var(--mono)">${d.s}</td>
+    <td class="pos">${f(d.ley,4)} %</td>
+    <td class="pos">${f(d.tu,1)} t</td>
+    <td class="mono">${f(d.pct,1)}%</td>
+    <td><div class="pbar"><div class="ptrack"><div class="pfill" style="width:${Math.min(d.pct,100)}%;background:${COLORS[d.i]}"></div></div><span style="color:var(--muted2);font-size:10px;font-family:var(--mono)">${f(d.pct,1)}%</span></div></td>
+  </tr>`).join('');
+  let dilRow='';
+  if(tonDil>0.5){
+    if(useGHHW&&hayGHHW&&ghhwEnDil>0){
+      dilRow=`<tr class="ghhw-row"><td>GHHW (sustituye dilución)</td><td>${f(leyGHHW,4)} %</td><td>${f(ghhwEnDil,1)} t</td><td>${f(ghhwEnDil/tonUsada*100,1)}%</td><td></td></tr>`;
+    }
+    const dilNota=`<div style="font-size:11px;color:var(--muted);margin-top:.5rem;padding:.5rem .75rem;background:var(--light);border-radius:4px;border-left:3px solid var(--border2);font-family:var(--mono)">ℹ ${f(tonDil,1)} t adicionales de dilución/relleno completan las ${f(tonProc,0)} t totales</div>`;
+    out.innerHTML=`<div class="dos-box">
+      <div class="dos-box-title">Resultado — Plan de dosificación</div>
+      <div class="dos-row"><span class="dl">Ley Cu objetivo</span><span class="dv">${f(leyObj,3)} %</span></div>
+      <div class="dos-row"><span class="dl">Ley Cu resultante</span><span class="dv" style="color:${leyCol}">${f(leyFinal,4)} %</span></div>
+      <div class="dos-row hl"><span class="dl">Total a procesar</span><span class="dv">${f(tonProc,0)} t</span></div>
+      <div class="dos-row"><span class="dl">Mineral de stock</span><span class="dv">${f(tonUsada,1)} t</span></div>
+      <div class="dos-row"><span class="dl">Metal Cu resultante</span><span class="dv">${f(metalRes,4)} t</span></div>
+    </div>
+    <div class="wcard" style="margin-top:.875rem">
+      <div class="wcard-head"><span class="wcard-title">Toneladas a extraer por stock</span><span class="wcard-sub">% sobre mineral de stock</span></div>
+      <div class="tbl-wrap"><table class="mix-tbl">
+        <thead><tr><th>Stock</th><th>Ley Cu %</th><th>Toneladas</th><th>% de stocks</th><th>Proporción</th></tr></thead>
+        <tbody>${mixRows}${dilRow}<tr class="total-row"><td>TOTAL STOCKS</td><td>${f(leyFinal,4)} %</td><td>${f(tonUsada,1)} t</td><td>100%</td><td>—</td></tr></tbody>
+      </table></div>
+    </div>
+    ${dilNota}
+    <div class="alert ${useGHHW&&tonDil>0.5&&hayGHHW?'alert-warn':'alert-ok'}" style="margin-top:.75rem">
+      ✓ ${dist.map(d=>d.s+': '+f(d.tu,0)+' t').join(' · ')}${useGHHW&&ghhwEnDil>0?' · GHHW: '+f(ghhwEnDil,0)+' t':''}
+    </div>`;
+    return;
+  }
+  out.innerHTML=`<div class="dos-box">
+    <div class="dos-box-title">Resultado — Plan de dosificación</div>
+    <div class="dos-row"><span class="dl">Ley Cu objetivo</span><span class="dv">${f(leyObj,3)} %</span></div>
+    <div class="dos-row"><span class="dl">Ley Cu resultante</span><span class="dv" style="color:${leyCol}">${f(leyFinal,4)} %</span></div>
+    <div class="dos-row hl"><span class="dl">Total a procesar</span><span class="dv">${f(tonProc,0)} t</span></div>
+    <div class="dos-row"><span class="dl">Metal Cu resultante</span><span class="dv">${f(metalRes,4)} t</span></div>
+  </div>
+  <div class="wcard" style="margin-top:.875rem">
+    <div class="wcard-head"><span class="wcard-title">Toneladas a extraer por stock</span></div>
+    <div class="tbl-wrap"><table class="mix-tbl">
+      <thead><tr><th>Stock</th><th>Ley Cu %</th><th>Toneladas</th><th>% de stocks</th><th>Proporción</th></tr></thead>
+      <tbody>${mixRows}<tr class="total-row"><td>TOTAL</td><td>${f(leyFinal,4)} %</td><td>${f(tonUsada,1)} t</td><td>100%</td><td>—</td></tr></tbody>
+    </table></div>
+  </div>
+  <div class="alert alert-ok" style="margin-top:.75rem">✓ ${dist.map(d=>d.s+': '+f(d.tu,0)+' t').join(' · ')}</div>`;
+}
+function togGHHW(){useGHHW=!useGHHW;calcDos();}
+
+/* ═══ FUENTE ═══ */
+function renderDataStatus(){
+  document.getElementById('data-status-grid').innerHTML=[
+    {l:'Extracción',v:STATE.extraccion.length+' registros',ok:STATE.extraccion.length>0},
+    {l:'Alimentación',v:STATE.alimentacion.length+' registros',ok:STATE.alimentacion.length>0},
+    {l:'Fuente',v:STATE.source,ok:true},
+  ].map(it=>`<div class="kpi-card" style="--kpi-color:${it.ok?'var(--green)':'var(--muted)'}">
+    <div class="kpi-label">${it.l}</div>
+    <div class="kpi-value" style="font-size:14px">${it.v}</div>
+    <div class="kpi-unit"><span class="dot ${it.ok?'dot-ok':'dot-warn'}"></span>${it.ok?'Cargado':'Sin datos'}</div>
+  </div>`).join('');
+}
+function handleDrop(e){e.preventDefault();document.getElementById('drop-zone').classList.remove('drag');const file=e.dataTransfer.files[0];if(file)processFile(file);}
+function loadFile(inp){if(inp.files[0])processFile(inp.files[0]);}
+function processFile(file){
+  const st=document.getElementById('upload-status');
+  st.innerHTML=`<div class="alert alert-info">⏳ Leyendo ${file.name}...</div>`;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const wb=XLSX.read(e.target.result,{type:'array',cellDates:true});
+      let extR=0,aliR=0;
+      if(wb.SheetNames.includes('EXTRACCION')){
+        const data=XLSX.utils.sheet_to_json(wb.Sheets['EXTRACCION'],{header:1,defval:''});
+        STATE.extraccion=[];
+        for(let i=3;i<data.length;i++){
+          const r=data[i]; if(!r[0]&&!r[3])continue;
+          const fecha=r[0] instanceof Date?r[0].toISOString().slice(0,10):String(r[0]).slice(0,10);
+          const ton=parseFloat(r[3]); if(isNaN(ton)||ton<=0)continue;
+          STATE.extraccion.push({fecha,turno:r[1]||'—',area:r[2]||'—',ton,cu:parseFloat(r[4])||0,au:parseFloat(r[5])||0,ag:parseFloat(r[6])||0,stock:r[7]||'STOCK1'});
+          extR++;
+        }
+      }
+      if(wb.SheetNames.includes('ALIMENTACION')){
+        const data=XLSX.utils.sheet_to_json(wb.Sheets['ALIMENTACION'],{header:1,defval:''});
+        STATE.alimentacion=[];
+        for(let i=3;i<data.length;i++){
+          const r=data[i]; if(!r[0]&&!r[2])continue;
+          const fecha=r[0] instanceof Date?r[0].toISOString().slice(0,10):String(r[0]).slice(0,10);
+          const ton=parseFloat(r[2]); if(isNaN(ton)||ton<=0)continue;
+          STATE.alimentacion.push({fecha,turno:r[1]||'—',ton,cu:parseFloat(r[3])||0,au:parseFloat(r[4])||0,ag:parseFloat(r[5])||0,s1:parseFloat(r[6])||0,s2:parseFloat(r[7])||0,s3:parseFloat(r[8])||0,s4:parseFloat(r[9])||0,sg:parseFloat(r[10])||0});
+          aliR++;
+        }
+      }
+      STATE.source=file.name;
+      applyFilters();
+      renderPatioStocks();
+      st.innerHTML=`<div class="alert alert-ok">✓ ${file.name} — ${extR} extracciones · ${aliR} alimentaciones cargados</div>`;
+      renderDataStatus();
+      updFooter();
+    }catch(err){st.innerHTML=`<div class="alert alert-err">✕ Error: ${err.message}</div>`;}
+  };
+  reader.readAsArrayBuffer(file);
+}
+function loadFromURL(){
+  const url=document.getElementById('od-url').value.trim();
+  if(!url){document.getElementById('od-status').innerHTML=`<div class="alert alert-err">Ingresa una URL.</div>`;return;}
+  document.getElementById('od-status').innerHTML=`<div class="alert alert-info">⏳ Conectando...</div>`;
+  fetch(url).then(r=>{if(!r.ok)throw new Error('Error '+r.status);return r.arrayBuffer();})
+    .then(buf=>processFile(new File([buf],'onedrive.xlsx',{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})))
+    .catch(err=>{document.getElementById('od-status').innerHTML=`<div class="alert alert-err">✕ ${err.message}</div>`;});
+}
+function showMsg(id,msg,type){
+  const el=document.getElementById(id);if(!el)return;
+  el.innerHTML=`<div class="alert alert-${type}">${msg}</div>`;
+  setTimeout(()=>el.innerHTML='',3000);
+}
+function updFooter(){
+  const now=new Date();
+  document.getElementById('footer-ts').textContent='Última actualización: '+now.toLocaleDateString('es-MX')+' '+now.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+
+
+/* ═══ PATIO DE GRUESOS ═══ */
+const PATIO_COLORS=['#1E5FBE','#F28B6E','#5DC490','#B57FE8','#F5A84E'];
+let patioRaw=null, patioCropped=null, patioLabels=[];
+let selecting=false, selStart={x:0,y:0}, selEnd={x:0,y:0}, hasSel=false;
+let scaleImgX=1, scaleImgY=1;
+let dragIdx=-1, dragOff={x:0,y:0};
+
+/* ── roundRect polyfill ── */
+if(!CanvasRenderingContext2D.prototype.roundRect){
+  CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
+    this.beginPath();this.moveTo(x+r,y);this.lineTo(x+w-r,y);
+    this.quadraticCurveTo(x+w,y,x+w,y+r);this.lineTo(x+w,y+h-r);
+    this.quadraticCurveTo(x+w,y+h,x+w-r,y+h);this.lineTo(x+r,y+h);
+    this.quadraticCurveTo(x,y+h,x,y+h-r);this.lineTo(x,y+r);
+    this.quadraticCurveTo(x,y,x+r,y);this.closePath();
+  };
+}
+
+/* ── Cargar imagen ── */
+function loadPatio(inp){
+  const file=inp.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onerror=()=>{
+      // TIF no soportado directo — convertir via canvas
+      const url=e.target.result;
+      const tryImg=new Image();
+      tryImg.src=url;
+      alert('Este formato de imagen no es compatible con el navegador directamente. Por favor guarda el TIF como JPG o PNG e inténtalo de nuevo.');
+    };
+    img.onload=()=>{
+      patioRaw=img; patioCropped=null; hasSel=false; patioLabels=[];
+      const wrap=document.getElementById('patio-wrap');
+      const sc=document.getElementById('patio-select-canvas');
+      const fc=document.getElementById('patio-canvas');
+      const ph=document.getElementById('patio-ph');
+
+      // Tamaño display del canvas de selección
+      // Máximo ancho del contenedor, altura proporcional pero limitada a 460px
+      const dispW=wrap.offsetWidth||900;
+      const rawRatio=img.height/img.width;
+      const dispH=Math.min(Math.round(dispW*rawRatio), 460);
+      // Ajustar ancho si la imagen es más alta que ancha
+      const finalDispW=rawRatio>1 ? Math.round(dispH/rawRatio) : dispW;
+      const finalDispH=Math.round(finalDispW*rawRatio);
+
+      sc.width=finalDispW; sc.height=finalDispH;
+      sc.style.width=finalDispW+'px'; sc.style.height=finalDispH+'px';
+      sc.style.display='block'; fc.style.display='none';
+      if(ph) ph.style.display='none';
+
+      // Escala para convertir coords display → coords imagen original
+      scaleImgX=img.width/finalDispW;
+      scaleImgY=img.height/finalDispH;
+
+      drawSelection();
+      document.getElementById('patio-src-lbl').textContent=file.name;
+      document.getElementById('patio-crop-btn').style.display='inline-flex';
+      document.getElementById('patio-reset-btn').style.display='inline-flex';
+      document.getElementById('patio-hint-select').style.display='block';
+      document.getElementById('patio-hint-done').style.display='none';
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ── Canvas de selección ── */
+function drawSelection(){
+  const sc=document.getElementById('patio-select-canvas');
+  if(!sc||!patioRaw)return;
+  const ctx=sc.getContext('2d');
+  ctx.clearRect(0,0,sc.width,sc.height);
+  ctx.drawImage(patioRaw,0,0,sc.width,sc.height);
+  if(hasSel||selecting){
+    const x1=Math.min(selStart.x,selEnd.x),y1=Math.min(selStart.y,selEnd.y);
+    const x2=Math.max(selStart.x,selEnd.x),y2=Math.max(selStart.y,selEnd.y);
+    ctx.fillStyle='rgba(0,0,0,.5)';
+    ctx.fillRect(0,0,sc.width,y1);
+    ctx.fillRect(0,y2,sc.width,sc.height-y2);
+    ctx.fillRect(0,y1,x1,y2-y1);
+    ctx.fillRect(x2,y1,sc.width-x2,y2-y1);
+    ctx.strokeStyle='#E8471A'; ctx.lineWidth=2; ctx.setLineDash([5,3]);
+    ctx.strokeRect(x1,y1,x2-x1,y2-y1); ctx.setLineDash([]);
+    ctx.fillStyle='#E8471A';
+    [[x1,y1],[x2,y1],[x1,y2],[x2,y2]].forEach(([cx,cy])=>{
+      ctx.beginPath(); ctx.arc(cx,cy,4,0,Math.PI*2); ctx.fill();
+    });
+  }
+}
+
+/* ── Aplicar recorte ── */
+function applyCrop(){
+  if(!patioRaw)return;
+  const wrap=document.getElementById('patio-wrap');
+  const sc=document.getElementById('patio-select-canvas');
+  const fc=document.getElementById('patio-canvas');
+
+  // Coordenadas en imagen original
+  let ix1,iy1,icw,ich;
+  if(hasSel){
+    ix1=Math.round(Math.min(selStart.x,selEnd.x)*scaleImgX);
+    iy1=Math.round(Math.min(selStart.y,selEnd.y)*scaleImgY);
+    const ix2=Math.round(Math.max(selStart.x,selEnd.x)*scaleImgX);
+    const iy2=Math.round(Math.max(selStart.y,selEnd.y)*scaleImgY);
+    ix1=Math.max(0,ix1); iy1=Math.max(0,iy1);
+    icw=Math.min(patioRaw.width,ix2)-ix1;
+    ich=Math.min(patioRaw.height,iy2)-iy1;
+  } else {
+    ix1=0; iy1=0; icw=patioRaw.width; ich=patioRaw.height;
+  }
+  if(icw<10||ich<10)return;
+
+  // Canvas = ancho completo del contenedor, alto proporcional al recorte (max 460)
+  const fullW=wrap.offsetWidth||900;
+  const cropRatio=ich/icw;
+  const imgDispH=Math.min(Math.round(fullW*cropRatio), 460);
+  const imgDispW=Math.round(imgDispH/cropRatio);
+
+  // El canvas ocupa TODO el ancho, la imagen se dibuja a la izquierda
+  fc.width=fullW; fc.height=imgDispH;
+  fc.style.width=fullW+'px'; fc.style.height=imgDispH+'px';
+
+  // Guardar donde está la imagen dentro del canvas
+  fc._imgW=imgDispW; fc._imgH=imgDispH;
+
+  const ctx=fc.getContext('2d');
+  // Fondo negro
+  ctx.fillStyle='#0a0a0a';
+  ctx.fillRect(0,0,fullW,imgDispH);
+  // Imagen centrada
+  const imgOffX=Math.round((fullW-imgDispW)/2);
+  ctx.drawImage(patioRaw, ix1,iy1,icw,ich, imgOffX,0,imgDispW,imgDispH);
+  fc._imgX=imgOffX;
+
+  // Guardar recorte para redraws
+  const tmp=document.createElement('canvas');
+  tmp.width=imgDispW; tmp.height=imgDispH;
+  tmp.getContext('2d').drawImage(patioRaw,ix1,iy1,icw,ich,0,0,imgDispW,imgDispH);
+  patioCropped=new Image();
+  patioCropped.onload=()=>{ buildLabels(fullW,imgDispH); drawPatio(); };
+  patioCropped.src=tmp.toDataURL('image/jpeg',0.95);
+
+  sc.style.display='none'; fc.style.display='block';
+  document.getElementById('patio-crop-btn').style.display='none';
+  document.getElementById('patio-hint-select').style.display='none';
+  document.getElementById('patio-hint-done').style.display='block';
+}
+
+/* ── Construir etiquetas ── */
+function buildLabels(cw,ch){
+  const sr=calcSR();
+  // Obtener offset de imagen centrada
+  const fc2=document.getElementById('patio-canvas');
+  const imgX=fc2?fc2._imgX||0:0;
+  const imgW=fc2?fc2._imgW||cw:cw;
+  // Posiciones relativas a la imagen centrada
+  const positions=[
+    {rx:.05,ry:.06},{rx:.05,ry:.50},{rx:.55,ry:.06},{rx:.55,ry:.50},{rx:.28,ry:.76}
+  ];
+  patioLabels=[]; let pi=0;
+  STOCKS.forEach((s,i)=>{
+    const v=sr[s]; if(v.inv<=0.5)return;
+    const pos=positions[pi%positions.length];
+    patioLabels.push({s,i,col:PATIO_COLORS[i],
+      x:imgX+pos.rx*imgW, y:pos.ry*ch,
+      inv:v.inv,leyCu:v.leyCu,leyAu:v.leyAu,leyAg:v.leyAg});
+    pi++;
+  });
+}
+
+/* ── Dibujar canvas final ── */
+function drawPatio(){
+  const fc=document.getElementById('patio-canvas');
+  if(!fc||!patioCropped)return;
+  const ctx=fc.getContext('2d');
+  // Fondo negro completo
+  ctx.fillStyle='#0a0a0a';
+  ctx.fillRect(0,0,fc.width,fc.height);
+  // Imagen centrada horizontalmente
+  const imgW=fc._imgW||fc.width;
+  const imgH=fc._imgH||fc.height;
+  const imgX=Math.round((fc.width-imgW)/2);
+  ctx.drawImage(patioCropped,imgX,0,imgW,imgH);
+  // Guardar offset para que las etiquetas se inicien centradas también
+  fc._imgX=imgX;
+  patioLabels.forEach(lb=>{
+    const W=148, H=46, r=4;
+    const x=lb.x, y=lb.y;
+    ctx.save();
+    ctx.shadowColor='rgba(0,0,0,.3)'; ctx.shadowBlur=6; ctx.shadowOffsetX=1; ctx.shadowOffsetY=2;
+    ctx.fillStyle='rgba(255,255,255,.88)';
+    ctx.beginPath(); ctx.roundRect(x,y,W,H,r); ctx.fill();
+    ctx.restore();
+    ctx.strokeStyle=lb.col+'AA'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.roundRect(x,y,W,H,r); ctx.stroke();
+    // Fondo blanco semi-transparente más compacto
+    // Chip nombre (color pastel claro)
+    const chipCol=lb.col+'55'; // muy transparente
+    ctx.fillStyle=chipCol;
+    ctx.beginPath(); ctx.roundRect(x+4,y+4,42,12,3); ctx.fill();
+    ctx.fillStyle=lb.col; ctx.font='bold 7px "JetBrains Mono",monospace';
+    ctx.textAlign='left'; ctx.fillText(lb.s,x+7,y+14);
+    // Toneladas
+    ctx.fillStyle='#1A2340'; ctx.font='bold 9px "JetBrains Mono",monospace';
+    ctx.fillText(f(lb.inv,1)+' t',x+50,y+14);
+    // Cu
+    ctx.fillStyle='#888'; ctx.font='7px "JetBrains Mono",monospace';
+    ctx.fillText('Cu:',x+4,y+26);
+    ctx.fillStyle=lb.col; ctx.font='bold 7.5px "JetBrains Mono",monospace';
+    ctx.fillText(f(lb.leyCu,4)+'%',x+20,y+26);
+    // Au
+    ctx.fillStyle='#888'; ctx.font='7px "JetBrains Mono",monospace';
+    ctx.fillText('Au:',x+76,y+26);
+    ctx.fillStyle='#444'; ctx.font='bold 7px "JetBrains Mono",monospace';
+    ctx.fillText(f(lb.leyAu,4),x+91,y+26);
+    // Ag
+    ctx.fillStyle='#888'; ctx.font='7px "JetBrains Mono",monospace';
+    ctx.fillText('Ag:',x+4,y+38);
+    ctx.fillStyle='#444'; ctx.font='bold 7px "JetBrains Mono",monospace';
+    ctx.fillText(f(lb.leyAg,2)+' g/t',x+20,y+38);
+    // Metal Cu
+    ctx.fillStyle='#999'; ctx.font='6.5px "JetBrains Mono",monospace';
+    ctx.fillText('Metal Cu: '+f(lb.inv*lb.leyCu/100,3)+' t',x+4,y+46);
+  });
+}
+
+/* ── Reset ── */
+function resetPatio(){
+  patioRaw=null; patioCropped=null; patioLabels=[]; hasSel=false; selecting=false;
+  const sc=document.getElementById('patio-select-canvas');
+  const fc=document.getElementById('patio-canvas');
+  const ph=document.getElementById('patio-ph');
+  if(sc)sc.style.display='none'; if(fc)fc.style.display='none';
+  if(ph)ph.style.display='flex';
+  document.getElementById('patio-crop-btn').style.display='none';
+  document.getElementById('patio-reset-btn').style.display='none';
+  document.getElementById('patio-hint-select').style.display='none';
+  document.getElementById('patio-hint-done').style.display='none';
+  document.getElementById('patio-src-lbl').textContent='';
+  document.getElementById('patio-file').value='';
+}
+
+/* ── Eventos mouse/touch para selección y drag etiquetas ── */
+(function(){
+  // Helpers
+  function scCanvas(){return document.getElementById('patio-select-canvas');}
+  function fcCanvas(){return document.getElementById('patio-canvas');}
+  function posOnCanvas(e,canvas){
+    const r=canvas.getBoundingClientRect();
+    const src=e.touches?e.touches[0]:e;
+    return{
+      x:(src.clientX-r.left)*(canvas.width/r.width),
+      y:(src.clientY-r.top)*(canvas.height/r.height)
+    };
+  }
+  function findLabel(x,y){
+    for(let i=patioLabels.length-1;i>=0;i--){
+      const lb=patioLabels[i];
+      if(x>=lb.x-5&&x<=lb.x+153&&y>=lb.y-5&&y<=lb.y+51)return i;
+    }
+    return -1;
+  }
+
+  // MOUSEDOWN
+  document.addEventListener('mousedown',e=>{
+    const sc=scCanvas(), fc=fcCanvas();
+    if(sc&&e.target===sc){
+      selecting=true; hasSel=false;
+      selStart=posOnCanvas(e,sc); selEnd={...selStart};
+      drawSelection(); e.preventDefault();
+    } else if(fc&&e.target===fc){
+      const p=posOnCanvas(e,fc);
+      dragIdx=findLabel(p.x,p.y);
+      if(dragIdx>=0){
+        dragOff={x:p.x-patioLabels[dragIdx].x, y:p.y-patioLabels[dragIdx].y};
+        fc.style.cursor='grabbing'; e.preventDefault();
+      }
+    }
+  });
+
+  // MOUSEMOVE
+  document.addEventListener('mousemove',e=>{
+    const sc=scCanvas(), fc=fcCanvas();
+    if(sc&&selecting){
+      selEnd=posOnCanvas(e,sc); drawSelection();
+    } else if(fc&&dragIdx>=0){
+      const p=posOnCanvas(e,fc);
+      patioLabels[dragIdx].x=p.x-dragOff.x;
+      patioLabels[dragIdx].y=p.y-dragOff.y;
+      drawPatio();
+    }
+  });
+
+  // MOUSEUP
+  document.addEventListener('mouseup',e=>{
+    if(selecting){selecting=false; hasSel=true; drawSelection();}
+    if(dragIdx>=0){
+      const fc=fcCanvas(); if(fc)fc.style.cursor='crosshair';
+      dragIdx=-1;
+    }
+  });
+
+  // TOUCH
+  document.addEventListener('touchstart',e=>{
+    const sc=scCanvas(), fc=fcCanvas();
+    if(sc&&e.target===sc){
+      selecting=true; hasSel=false;
+      selStart=posOnCanvas(e,sc); selEnd={...selStart};
+      drawSelection(); e.preventDefault();
+    } else if(fc&&e.target===fc){
+      const p=posOnCanvas(e,fc);
+      dragIdx=findLabel(p.x,p.y);
+      if(dragIdx>=0){dragOff={x:p.x-patioLabels[dragIdx].x,y:p.y-patioLabels[dragIdx].y};e.preventDefault();}
+    }
+  },{passive:false});
+
+  document.addEventListener('touchmove',e=>{
+    const sc=scCanvas(), fc=fcCanvas();
+    if(sc&&e.target===sc&&selecting){selEnd=posOnCanvas(e,sc);drawSelection();e.preventDefault();}
+    else if(fc&&e.target===fc&&dragIdx>=0){
+      const p=posOnCanvas(e,fc);
+      patioLabels[dragIdx].x=p.x-dragOff.x;
+      patioLabels[dragIdx].y=p.y-dragOff.y;
+      drawPatio(); e.preventDefault();
+    }
+  },{passive:false});
+
+  document.addEventListener('touchend',()=>{
+    if(selecting){selecting=false;hasSel=true;}
+    dragIdx=-1;
+  });
+
+  // Drag & drop archivo
+  document.addEventListener('DOMContentLoaded',()=>{
+    const wrap=document.getElementById('patio-wrap');
+    if(!wrap)return;
+    wrap.addEventListener('dragover',e=>{e.preventDefault();wrap.style.outline='2px dashed var(--accent)';});
+    wrap.addEventListener('dragleave',()=>wrap.style.outline='none');
+    wrap.addEventListener('drop',e=>{
+      e.preventDefault(); wrap.style.outline='none';
+      const file=e.dataTransfer.files[0]; if(!file)return;
+      loadPatio({files:[file]});
+    });
+  });
+})();
+
+function renderPatioStocks(){
+  const fechas=STATE.extraccion.map(r=>r.fecha).sort();
+  const ultima=fechas[fechas.length-1];
+  const fd2=document.getElementById('patio-fecha');
+  if(fd2&&ultima){
+    const d=new Date(ultima+'T12:00:00');
+    fd2.textContent=d.toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'}).toUpperCase();
+  }
+  if(patioCropped){
+    const fc=document.getElementById('patio-canvas');
+    if(fc){buildLabels(fc.width,fc.height); drawPatio();}
+  }
+  renderPatioDonut();
+}
+
+function renderPatioDonut(){
+  const sr=calcSR();
+  const invTons=STOCKS.map(s=>Math.max(0,sr[s].inv));
+  const total=invTons.reduce((a,b)=>a+b,0);
+  // Dona con Chart.js
+  const ctx=document.getElementById('ch-patio-dona');
+  if(!ctx)return;
+  if(charts['ch-patio-dona'])charts['ch-patio-dona'].destroy();
+  charts['ch-patio-dona']=new Chart(ctx,{
+    type:'doughnut',
+    data:{
+      labels:STOCKS,
+      datasets:[{
+        data:invTons,
+        backgroundColor:PATIO_COLORS.map(x=>x+'CC'),
+        borderColor:PATIO_COLORS,
+        borderWidth:1.5,
+        hoverOffset:6
+      }]
+    },
+    options:{
+      responsive:true,
+      cutout:'65%',
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          callbacks:{
+            label:ctx=>` ${ctx.label}: ${f(ctx.raw,1)} t`
+          }
+        }
+      }
+    }
+  });
+  // Leyenda manual
+  const leg=document.getElementById('patio-dona-legend');
+  if(leg){
+    leg.innerHTML=STOCKS.map((s,i)=>{
+      const v=sr[s]; if(v.inv<=0)return'';
+      const pct=total>0?v.inv/total*100:0;
+      return`<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.05)">
+        <div style="display:flex;align-items:center;gap:5px">
+          <div style="width:8px;height:8px;border-radius:2px;background:${PATIO_COLORS[i]};flex-shrink:0"></div>
+          <span style="font-size:9px;font-family:var(--mono);color:rgba(255,255,255,.6)">${s}</span>
+        </div>
+        <div style="text-align:right">
+          <span style="font-size:9px;font-family:var(--mono);color:rgba(255,255,255,.9);font-weight:600">${f(v.inv,0)}t</span>
+          <span style="font-size:8px;font-family:var(--mono);color:rgba(255,255,255,.4);margin-left:3px">${f(pct,1)}%</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+/* ═══ INIT ═══ */
+const cs=document.createElement('script');
+cs.src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js';
+cs.onload=()=>{applyFilters();};
+document.head.appendChild(cs);
+document.getElementById('e-fecha').value=now();
+document.getElementById('a-fecha').value=now();
+updFooter();
+setInterval(updFooter,60000);
+</script>
+</body>
+</html>
