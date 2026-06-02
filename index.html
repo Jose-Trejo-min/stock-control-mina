@@ -358,9 +358,9 @@ hr.div{border:none;border-top:1px solid var(--border);margin:1.25rem 0}
 
     <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:1.25rem">
       <div class="chart-card"><div class="chart-head"><span class="chart-title">Extracción diaria por stock (t)</span></div><div class="chart-body"><canvas id="ch-ext" height="220"></canvas></div></div>
+      <div class="chart-card"><div class="chart-head"><span class="chart-title">Alimentación a planta por stock (t)</span></div><div class="chart-body"><canvas id="ch-ali-stack" height="220"></canvas></div></div>
       <div class="chart-card"><div class="chart-head"><span class="chart-title">Ley Cu ponderada diaria (%)</span></div><div class="chart-body"><canvas id="ch-ley" height="220"></canvas></div></div>
       <div class="chart-card"><div class="chart-head"><span class="chart-title">Ley Cu por stock (%)</span></div><div class="chart-body"><canvas id="ch-leystock" height="220"></canvas></div></div>
-      <div class="chart-card"><div class="chart-head"><span class="chart-title">Alimentación a planta por stock (t)</span></div><div class="chart-body"><canvas id="ch-ali-stack" height="220"></canvas></div></div>
     </div>
   </div>
 
@@ -1104,7 +1104,7 @@ function drawPatio(){
   // Guardar offset para que las etiquetas se inicien centradas también
   fc._imgX=imgX;
   patioLabels.forEach(lb=>{
-    const W=148, H=46, r=4;
+    const W=175, H=54, r=4;
     const x=lb.x, y=lb.y;
     ctx.save();
     ctx.shadowColor='rgba(0,0,0,.3)'; ctx.shadowBlur=6; ctx.shadowOffsetX=1; ctx.shadowOffsetY=2;
@@ -1113,34 +1113,32 @@ function drawPatio(){
     ctx.restore();
     ctx.strokeStyle=lb.col+'AA'; ctx.lineWidth=1.5;
     ctx.beginPath(); ctx.roundRect(x,y,W,H,r); ctx.stroke();
-    // Fondo blanco semi-transparente más compacto
-    // Chip nombre (color pastel claro)
-    const chipCol=lb.col+'55'; // muy transparente
-    ctx.fillStyle=chipCol;
-    ctx.beginPath(); ctx.roundRect(x+4,y+4,42,12,3); ctx.fill();
-    ctx.fillStyle=lb.col; ctx.font='bold 7px "JetBrains Mono",monospace';
-    ctx.textAlign='left'; ctx.fillText(lb.s,x+7,y+14);
+    // Chip nombre
+    ctx.fillStyle=lb.col+'44';
+    ctx.beginPath(); ctx.roundRect(x+4,y+4,50,14,3); ctx.fill();
+    ctx.fillStyle='#000'; ctx.font='bold 8px "JetBrains Mono",monospace';
+    ctx.textAlign='left'; ctx.fillText(lb.s,x+7,y+15);
     // Toneladas
-    ctx.fillStyle='#1A2340'; ctx.font='bold 9px "JetBrains Mono",monospace';
-    ctx.fillText(f(lb.inv,1)+' t',x+50,y+14);
-    // Cu
-    ctx.fillStyle='#888'; ctx.font='7px "JetBrains Mono",monospace';
-    ctx.fillText('Cu:',x+4,y+26);
-    ctx.fillStyle=lb.col; ctx.font='bold 7.5px "JetBrains Mono",monospace';
-    ctx.fillText(f(lb.leyCu,4)+'%',x+20,y+26);
+    ctx.fillStyle='#000'; ctx.font='bold 11px "JetBrains Mono",monospace';
+    ctx.fillText(f(lb.inv,1)+' t',x+58,y+15);
+    // Cu — en ROJO y negritas resaltado
+    ctx.fillStyle='#555'; ctx.font='bold 8px "JetBrains Mono",monospace';
+    ctx.fillText('Cu:',x+4,y+29);
+    ctx.fillStyle='#CC0000'; ctx.font='bold 9px "JetBrains Mono",monospace';
+    ctx.fillText(f(lb.leyCu,4)+'%',x+22,y+29);
     // Au
-    ctx.fillStyle='#888'; ctx.font='7px "JetBrains Mono",monospace';
-    ctx.fillText('Au:',x+76,y+26);
-    ctx.fillStyle='#444'; ctx.font='bold 7px "JetBrains Mono",monospace';
-    ctx.fillText(f(lb.leyAu,4),x+91,y+26);
+    ctx.fillStyle='#555'; ctx.font='bold 8px "JetBrains Mono",monospace';
+    ctx.fillText('Au:',x+90,y+29);
+    ctx.fillStyle='#000'; ctx.font='bold 8px "JetBrains Mono",monospace';
+    ctx.fillText(f(lb.leyAu,4),x+108,y+29);
     // Ag
-    ctx.fillStyle='#888'; ctx.font='7px "JetBrains Mono",monospace';
-    ctx.fillText('Ag:',x+4,y+38);
-    ctx.fillStyle='#444'; ctx.font='bold 7px "JetBrains Mono",monospace';
-    ctx.fillText(f(lb.leyAg,2)+' g/t',x+20,y+38);
+    ctx.fillStyle='#555'; ctx.font='bold 8px "JetBrains Mono",monospace';
+    ctx.fillText('Ag:',x+4,y+42);
+    ctx.fillStyle='#000'; ctx.font='bold 8px "JetBrains Mono",monospace';
+    ctx.fillText(f(lb.leyAg,2)+' g/t',x+22,y+42);
     // Metal Cu
-    ctx.fillStyle='#999'; ctx.font='6.5px "JetBrains Mono",monospace';
-    ctx.fillText('Metal Cu: '+f(lb.inv*lb.leyCu/100,3)+' t',x+4,y+46);
+    ctx.fillStyle='#666'; ctx.font='7.5px "JetBrains Mono",monospace';
+    ctx.fillText('Metal Cu: '+f(lb.inv*lb.leyCu/100,3)+' t',x+4,y+52);
   });
 }
 
@@ -1176,7 +1174,7 @@ function resetPatio(){
   function findLabel(x,y){
     for(let i=patioLabels.length-1;i>=0;i--){
       const lb=patioLabels[i];
-      if(x>=lb.x-5&&x<=lb.x+153&&y>=lb.y-5&&y<=lb.y+51)return i;
+      if(x>=lb.x-5&&x<=lb.x+180&&y>=lb.y-5&&y<=lb.y+59)return i;
     }
     return -1;
   }
