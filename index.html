@@ -732,7 +732,16 @@ function renderStock(){
       <td>${est}</td>
     </tr>`;
   });
-  html+=`<tr class="total-row"><td>TOTAL</td><td class="mono">${f(totE,3)}</td><td class="mono">${f(totA,3)}</td><td class="mono">${f(totE-totA,3)}</td><td>—</td><td>—</td><td>—</td><td class="mono">${f(totM,4)}</td><td>—</td></tr>`;
+  // Calcular leyes ponderadas totales del inventario
+  let totMetCu=0, totMetAu=0, totMetAg=0, totInv=0;
+  STOCKS.forEach(s=>{
+    const v=sr[s]; const inv=Math.max(0,v.inv);
+    totInv+=inv; totMetCu+=inv*v.leyCu/100; totMetAu+=inv*v.leyAu; totMetAg+=inv*v.leyAg;
+  });
+  const leyTotCu=totInv>0?totMetCu/totInv*100:0;
+  const leyTotAu=totInv>0?totMetAu/totInv:0;
+  const leyTotAg=totInv>0?totMetAg/totInv:0;
+  html+=`<tr class="total-row"><td>TOTAL</td><td class="mono">${f(totE,3)}</td><td class="mono">${f(totA,3)}</td><td class="mono">${f(totE-totA,3)}</td><td class="pos">${f(leyTotCu,4)}</td><td class="mono">${f(leyTotAu,4)}</td><td class="mono">${f(leyTotAg,2)}</td><td class="mono">${f(totM,4)}</td><td>—</td></tr>`;
   document.getElementById('stk-body').innerHTML=html;
 }
 
