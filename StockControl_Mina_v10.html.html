@@ -24,7 +24,8 @@ body{display:flex;flex-direction:column}
 .b-acc{background:var(--acc);color:#fff}.b-green{background:var(--green);color:#060e18;font-weight:600}
 .b-out{background:transparent;color:var(--text);border:1px solid var(--brd)}
 .b-warn{background:#2d1f08;color:var(--amber);border:1px solid var(--amber)}
-.krow{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:1px;background:var(--brd);border-bottom:1px solid var(--brd)}
+.b-blue{background:var(--blue);color:#fff}
+.krow{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:1px;background:var(--brd);border-bottom:1px solid var(--brd)}
 .kpi{background:var(--bg1);padding:12px 15px}
 .kl{font-size:9px;color:var(--mut);letter-spacing:1.5px;font-family:'DM Mono',monospace;margin-bottom:4px}
 .kv{font-size:22px;font-weight:600;line-height:1;font-family:'DM Mono',monospace}
@@ -38,17 +39,34 @@ body{display:flex;flex-direction:column}
 .page{display:none}.page.active{display:block}
 .sl{font-size:9px;color:var(--mut);letter-spacing:2px;font-family:'DM Mono',monospace;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--brd)}
 .sl span{color:var(--acc)}
-.d0box{background:rgba(232,93,46,.08);border:1px solid rgba(232,93,46,.3);border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:flex-start;gap:12px}
+.d0box{background:rgba(232,93,46,.08);border:1px solid rgba(232,93,46,.3);border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
 .d0tag{background:var(--acc);color:#fff;font-size:11px;font-weight:600;font-family:'DM Mono',monospace;padding:4px 10px;border-radius:6px;white-space:nowrap}
 .d0info{font-size:12px;color:#c8d8e8;font-family:'DM Mono',monospace;line-height:1.6;flex:1}
-.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:9px;margin-bottom:12px}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:9px;margin-bottom:12px}
 .sc{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:13px;border-top:3px solid var(--acc)}
 .sct{font-size:11px;font-weight:600;margin-bottom:9px}
 .ir{margin-bottom:6px}
 .ir label{font-size:9px;color:var(--mut);letter-spacing:1px;font-family:'DM Mono',monospace;display:block;margin-bottom:2px}
 .ir input{background:var(--bg1);border:1px solid var(--brd);color:var(--text);font-size:13px;padding:5px 7px;border-radius:5px;width:100%;outline:none;font-family:'DM Mono',monospace}
 .ir input:focus{border-color:var(--blue)}
+.price-box{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.paro-box{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:14px;margin-bottom:14px}
+.paro-title{font-size:11px;color:var(--amber);font-family:'DM Mono',monospace;letter-spacing:1px;margin-bottom:10px}
+.dias-grid{display:flex;flex-wrap:wrap;gap:6px}
+.dia-btn{width:36px;height:36px;border-radius:6px;border:1px solid var(--brd);background:var(--bg3);color:var(--mut);font-size:11px;font-family:'DM Mono',monospace;cursor:pointer;transition:all .15s}
+.dia-btn:hover{border-color:var(--amber);color:var(--amber)}
+.dia-btn.paro{background:rgba(232,93,46,.25);border-color:var(--acc);color:var(--acc);font-weight:600}
+.dia-btn.excepcion{background:rgba(74,159,212,.2);border-color:var(--blue);color:var(--blue);font-weight:600}
+.paro-sum{font-size:11px;color:var(--mut);font-family:'DM Mono',monospace;margin-top:8px}
+.paro-sum span{color:var(--acc);font-weight:600}
 .pbox{background:var(--bg2);border:1px solid var(--brd);border-left:3px solid var(--green);border-radius:8px;padding:12px 16px;margin-bottom:12px;font-size:12px;font-family:'DM Mono',monospace;line-height:1.7}
+.uz{border:2px dashed var(--brd);border-radius:10px;padding:20px;text-align:center;cursor:pointer;margin-bottom:11px;background:var(--bg2);transition:border-color .2s}
+.uz:hover,.uz.drag{border-color:var(--blue)}
+.uz-i{font-size:26px;margin-bottom:5px}
+.uz-t{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px}
+.uz-s{font-size:11px;color:var(--mut);font-family:'DM Mono',monospace}
+.uz.ok{background:#0a2e1a;border-color:var(--green)}
+.uz.ok .uz-t,.uz.ok .uz-s{color:var(--green)}
 .tw{overflow-x:auto;border-radius:8px;border:1px solid var(--brd);margin-bottom:11px}
 table{width:100%;border-collapse:collapse;font-size:11px}
 thead th{background:var(--bg0);padding:8px 9px;text-align:right;font-size:9px;color:var(--mut);letter-spacing:.8px;font-family:'DM Mono',monospace;border-bottom:1px solid var(--brd);white-space:nowrap;position:sticky;top:0}
@@ -60,60 +78,27 @@ tbody td:first-child,tbody td:nth-child(2){text-align:left}
 tbody td.bl{border-left:1px solid var(--brd)}
 tbody tr:hover td{background:var(--bg2)}
 tbody tr:last-child td{border-bottom:none}
-.tr-d0 td{background:rgba(232,93,46,.07)}.tr-d1 td{background:rgba(46,204,138,.04)}.tr-tot td{background:var(--bg0);color:#fff;font-weight:600}
+.tr-d1 td{background:rgba(46,204,138,.04)}.tr-paro td{background:rgba(232,93,46,.04);color:#664433}
+.tr-tot td{background:var(--bg0);color:#fff;font-weight:600}
 .bdg{display:inline-block;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:500;font-family:'DM Mono',monospace}
 .bhi{background:#0a2e1a;color:var(--green)}.bmd{background:#2d1f08;color:var(--amber)}.blo{background:#2a0e0e;color:var(--red)}
+.bdg-paro{background:rgba(232,93,46,.2);color:var(--acc)}
 .cc{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:14px;margin-bottom:12px}
 .cleg{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}
 .leg{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--mut);font-family:'DM Mono',monospace}
 .lsq{width:9px;height:9px;border-radius:2px;flex-shrink:0}
 .emsg{text-align:center;padding:30px 20px;color:var(--mut);font-family:'DM Mono',monospace;font-size:12px}
 .emsg span{color:var(--acc)}
-.uz{border:2px dashed var(--brd);border-radius:10px;padding:24px;text-align:center;cursor:pointer;margin-bottom:11px;background:var(--bg2);transition:border-color .2s}
-.uz:hover,.uz.drag{border-color:var(--blue)}
-.uz-i{font-size:28px;margin-bottom:6px}
-.uz-t{font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px}
-.uz-s{font-size:11px;color:var(--mut);font-family:'DM Mono',monospace}
-.uz.ok{background:#0a2e1a;border-color:var(--green)}
-.uz.ok .uz-t,.uz.ok .uz-s{color:var(--green)}
+.exc-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:200;align-items:center;justify-content:center}
+.exc-modal.open{display:flex}
+.exc-box{background:var(--bg1);border:1px solid var(--brd);border-radius:12px;padding:24px;min-width:300px}
+.exc-title{font-size:13px;font-weight:600;color:#fff;margin-bottom:4px}
+.exc-sub{font-size:11px;color:var(--mut);font-family:'DM Mono',monospace;margin-bottom:16px}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:var(--bg0)}
 ::-webkit-scrollbar-thumb{background:var(--brd);border-radius:3px}
-
-.b-warn{background:#2d1f08;color:var(--amber);border:1px solid var(--amber)}
-.paro-box{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:14px;margin-bottom:14px}
-.paro-title{font-size:11px;color:var(--amber);font-family:'DM Mono',monospace;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.dias-grid{display:flex;flex-wrap:wrap;gap:6px}
-.dia-btn{width:36px;height:36px;border-radius:6px;border:1px solid var(--brd);background:var(--bg3);color:var(--mut);font-size:11px;font-family:'DM Mono',monospace;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-weight:400}
-.dia-btn:hover{border-color:var(--amber);color:var(--amber)}
-.dia-btn.paro{background:rgba(232,93,46,.25);border-color:var(--acc);color:var(--acc);font-weight:600}
-.paro-sum{font-size:11px;color:var(--mut);font-family:'DM Mono',monospace;margin-top:8px}
-.paro-sum span{color:var(--acc);font-weight:600}
-.tr-paro td{background:rgba(232,93,46,.04);color:#554433;font-style:italic}
-.bdg-paro{background:rgba(232,93,46,.2);color:var(--acc)}
-.d0box{flex-wrap:wrap}
-
-.price-box{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
-.dias-grid{display:flex;flex-wrap:wrap;gap:6px}
-.dia-btn{width:36px;height:36px;border-radius:6px;border:1px solid var(--brd);background:var(--bg3);color:var(--mut);font-size:11px;font-family:'DM Mono',monospace;cursor:pointer;transition:all .15s}
-.dia-btn:hover{border-color:var(--amber);color:var(--amber)}
-.dia-btn.paro{background:rgba(232,93,46,.25);border-color:var(--acc);color:var(--acc);font-weight:600}
-.paro-box{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:14px;margin-bottom:14px}
-.paro-title{font-size:11px;color:var(--amber);font-family:'DM Mono',monospace;letter-spacing:1px;margin-bottom:10px}
-.paro-sum{font-size:11px;color:var(--mut);font-family:'DM Mono',monospace;margin-top:8px}
-.paro-sum span{color:var(--acc);font-weight:600}
-.tr-d1 td{background:rgba(46,204,138,.04)}
-.tr-paro td{background:rgba(232,93,46,.04);color:#664433}
-.bdg-paro{background:rgba(232,93,46,.2);color:var(--acc)}
-
-.uz{border:2px dashed var(--brd);border-radius:10px;padding:24px;text-align:center;cursor:pointer;margin-bottom:11px;background:var(--bg2);transition:border-color .2s}
-.uz:hover,.uz.drag{border-color:var(--blue)}
-.uz-i{font-size:28px;margin-bottom:6px}
-.uz-t{font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px}
-.uz-s{font-size:11px;color:var(--mut);font-family:'DM Mono',monospace}
-.uz.ok{background:#0a2e1a;border-color:var(--green)}
-.uz.ok .uz-t,.uz.ok .uz-s{color:var(--green)}
 </style>
+</head>
 <body>
 <div class="topbar">
   <div><div class="brand">Stock Control &mdash; Mina<span class="bdot">&deg;</span></div>
@@ -130,7 +115,7 @@ tbody tr:last-child td{border-bottom:none}
 <div class="krow">
   <div class="kpi"><div class="kl">STOCK D&Iacute;A 0</div><div class="kv" id="k0" style="color:var(--acc)">0</div><div class="ku">t mes anterior</div></div>
   <div class="kpi"><div class="kl">PLAN EXTRACCI&Oacute;N</div><div class="kv" id="kex" style="color:var(--blue)">&mdash;</div><div class="ku">t total mes</div></div>
-  <div class="kpi"><div class="kl">D&Iacute;AS ACTIVOS</div><div class="kv" id="kd" style="color:var(--pur)">&mdash;</div><div class="ku">d&iacute;as planta</div></div>
+  <div class="kpi"><div class="kl">D&Iacute;AS ACTIVOS</div><div class="kv" id="kd" style="color:var(--pur)">&mdash;</div><div class="ku">d&iacute;as</div></div>
   <div class="kpi"><div class="kl">LEY Cu D&Iacute;A 1</div><div class="kv" id="kci" style="color:var(--green)">&mdash;</div><div class="ku">%</div></div>
   <div class="kpi"><div class="kl">LEY Cu FINAL</div><div class="kv" id="kcf" style="color:var(--amber)">&mdash;</div><div class="ku">%</div></div>
   <div class="kpi"><div class="kl">Au PONDERADO</div><div class="kv" id="k-au" style="color:var(--amber)">&mdash;</div><div class="ku">g/t</div></div>
@@ -211,52 +196,80 @@ tbody tr:last-child td{border-bottom:none}
   <div class="ir"><label>NSR (USD/t)</label><input type="number" id="pon-nsr" value="420.1" min="0" step="0.1"></div>
 </div>
 </div>
+<div style="background:var(--bg2);border:1px solid var(--brd);border-left:3px solid var(--blue);border-radius:10px;padding:12px 16px;margin-bottom:14px">
+  <div style="font-size:9px;color:var(--blue);font-family:'DM Mono',monospace;letter-spacing:1px;margin-bottom:8px">PLAN DE PLANTA &mdash; <span style="font-size:10px;color:var(--mut);font-weight:400">tonelaje diario y % GHHW por d&iacute;a</span></div>
+  <div class="uz" id="uz-planta" onclick="document.getElementById('fi-planta').click()"
+    ondragover="event.preventDefault();this.classList.add('drag')"
+    ondragleave="this.classList.remove('drag')"
+    ondrop="hDropPlanta(event)" style="padding:14px;margin-bottom:0">
+    <input type="file" id="fi-planta" accept=".xlsx,.xls" style="display:none" onchange="hFilePlanta(this.files[0])">
+    <div class="uz-i" id="uz-planta-i">&#128203;</div>
+    <div class="uz-t" id="uz-planta-t">Arrastra o clic &mdash; Plan de Planta (.xlsx)</div>
+    <div class="uz-s" id="uz-planta-s">Col N = Ton/d&iacute;a &middot; Col O = % GHHW &middot; Hoja2</div>
+  </div>
+  <div id="planta-status" style="display:none;margin-top:8px;font-size:11px;font-family:'DM Mono',monospace;color:var(--green)"></div>
+</div>
 <div style="background:var(--bg2);border:1px solid var(--brd);border-left:3px solid #9b7fe8;border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
-  <div style="font-size:9px;color:#9b7fe8;font-family:'DM Mono',monospace;letter-spacing:1px;width:100%;margin-bottom:2px">
-    DISTRIBUCI&#211;N GHHW &mdash; <span style="font-size:10px;color:var(--mut);font-weight:400">% de las toneladas del plan de extracci&#243;n de GHHW que ir&#225;n al blend cada d&#237;a</span>
-  </div>
-  <div class="fg">
-    <label>% DE GHHW DEL PLAN</label>
-    <div style="display:flex;align-items:center;gap:8px">
-      <input type="number" id="ghhw-pct" value="100" min="0" max="100" step="1" style="width:70px" oninput="updGhhwPct()">
-      <span style="font-size:13px;color:#9b7fe8;font-family:'DM Mono',monospace;font-weight:600">%</span>
-    </div>
-  </div>
-  <div style="font-size:11px;color:var(--mut);font-family:'DM Mono',monospace;line-height:1.7;flex:1" id="ghhw-pct-detail">
-    Ejemplo: plan dice 300t GHHW ese d&#237;a &rarr; con 25% = 75t al blend
+  <div style="font-size:9px;color:#9b7fe8;font-family:'DM Mono',monospace;letter-spacing:1px;width:100%;margin-bottom:2px">DISTRIBUCI&Oacute;N GHHW &mdash; <span style="font-size:10px;color:var(--mut);font-weight:400">tope fijo mensual &mdash; clic derecho en un d&iacute;a para poner % diferente ese d&iacute;a</span></div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="font-size:32px;font-weight:600;font-family:'DM Mono',monospace;color:#9b7fe8">25%</div>
+    <input type="hidden" id="ghhw-pct" value="25">
+    <div style="font-size:11px;color:var(--mut);font-family:'DM Mono',monospace;line-height:1.6" id="ghhw-pct-detail"></div>
   </div>
 </div>
-<div class="price-box"><div style="font-size:9px;color:var(--amber);font-family:'DM Mono',monospace;letter-spacing:1px;width:100%;margin-bottom:2px">PRECIOS &mdash; GEO</div><div class="fg"><label>Au (USD/oz)</label><input type="number" id="p-au" value="3930" min="1" step="10" style="width:86px"></div><div class="fg"><label>Cu (USD/lb)</label><input type="number" id="p-cu" value="4.85" min="0.1" step="0.05" style="width:76px"></div><div class="fg"><label>Ag (USD/oz)</label><input type="number" id="p-ag" value="45.20" min="1" step="0.5" style="width:76px"></div><div class="fg"><label>Mo (USD/lb)</label><input type="number" id="p-mo" value="20.00" min="1" step="0.5" style="width:76px"></div><div style="font-size:10px;color:var(--mut);font-family:'DM Mono',monospace;flex:1;line-height:1.5">GEO = Au(g)/31.1035 + [t&times;Cu%/100&times;2204.62&times;P_Cu/P_Au] + [Ag(g)/31.1035&times;P_Ag/P_Au]</div></div>
-<div class="paro-box"><div class="paro-title">&#9744; D&Iacute;AS SIN OPERACI&Oacute;N &mdash; <span style="font-size:10px;color:var(--mut);font-weight:400">clic para marcar paros</span></div><div class="dias-grid"><button class="dia-btn" id="dia-1" onclick="toggleParo(1)">1</button><button class="dia-btn" id="dia-2" onclick="toggleParo(2)">2</button><button class="dia-btn" id="dia-3" onclick="toggleParo(3)">3</button><button class="dia-btn" id="dia-4" onclick="toggleParo(4)">4</button><button class="dia-btn" id="dia-5" onclick="toggleParo(5)">5</button><button class="dia-btn" id="dia-6" onclick="toggleParo(6)">6</button><button class="dia-btn" id="dia-7" onclick="toggleParo(7)">7</button><button class="dia-btn" id="dia-8" onclick="toggleParo(8)">8</button><button class="dia-btn" id="dia-9" onclick="toggleParo(9)">9</button><button class="dia-btn" id="dia-10" onclick="toggleParo(10)">10</button><button class="dia-btn" id="dia-11" onclick="toggleParo(11)">11</button><button class="dia-btn" id="dia-12" onclick="toggleParo(12)">12</button><button class="dia-btn" id="dia-13" onclick="toggleParo(13)">13</button><button class="dia-btn" id="dia-14" onclick="toggleParo(14)">14</button><button class="dia-btn" id="dia-15" onclick="toggleParo(15)">15</button><button class="dia-btn" id="dia-16" onclick="toggleParo(16)">16</button><button class="dia-btn" id="dia-17" onclick="toggleParo(17)">17</button><button class="dia-btn" id="dia-18" onclick="toggleParo(18)">18</button><button class="dia-btn" id="dia-19" onclick="toggleParo(19)">19</button><button class="dia-btn" id="dia-20" onclick="toggleParo(20)">20</button><button class="dia-btn" id="dia-21" onclick="toggleParo(21)">21</button><button class="dia-btn" id="dia-22" onclick="toggleParo(22)">22</button><button class="dia-btn" id="dia-23" onclick="toggleParo(23)">23</button><button class="dia-btn" id="dia-24" onclick="toggleParo(24)">24</button><button class="dia-btn" id="dia-25" onclick="toggleParo(25)">25</button><button class="dia-btn" id="dia-26" onclick="toggleParo(26)">26</button><button class="dia-btn" id="dia-27" onclick="toggleParo(27)">27</button><button class="dia-btn" id="dia-28" onclick="toggleParo(28)">28</button><button class="dia-btn" id="dia-29" onclick="toggleParo(29)">29</button><button class="dia-btn" id="dia-30" onclick="toggleParo(30)">30</button></div><div class="paro-sum" id="paro-sum">Ning&uacute;n d&iacute;a marcado</div></div>
+<div class="price-box">
+  <div style="font-size:9px;color:var(--amber);font-family:'DM Mono',monospace;letter-spacing:1px;width:100%;margin-bottom:2px">PRECIOS &mdash; GEO (Gold Equivalent Ounces)</div>
+  <div class="fg"><label>Au (USD/oz)</label><input type="number" id="p-au" value="3930" min="1" step="10" style="width:86px"></div>
+  <div class="fg"><label>Cu (USD/lb)</label><input type="number" id="p-cu" value="4.85" min="0.1" step="0.05" style="width:76px"></div>
+  <div class="fg"><label>Ag (USD/oz)</label><input type="number" id="p-ag" value="45.20" min="1" step="0.5" style="width:76px"></div>
+  <div class="fg"><label>Mo (USD/lb)</label><input type="number" id="p-mo" value="20.00" min="1" step="0.5" style="width:76px"></div>
+  <div style="font-size:10px;color:var(--mut);font-family:'DM Mono',monospace;flex:1;line-height:1.5">GEO = Au(g)/31.1035 + [t&times;Cu%/100&times;2204.62&times;P_Cu/P_Au] + [Ag(g)/31.1035&times;P_Ag/P_Au]</div>
+</div>
+<div class="paro-box">
+<div class="paro-title">&#9744; D&Iacute;AS SIN OPERACI&Oacute;N &amp; EXCEPCIONES GHHW &mdash; <span style="font-size:10px;color:var(--mut);font-weight:400">clic izquierdo = paro &nbsp;|&nbsp; clic derecho = excepci&oacute;n % GHHW</span></div>
+<div class="dias-grid"><button class="dia-btn" id="dia-1" onclick="toggleParo(1)" oncontextmenu="event.preventDefault();openExcModal(1)" title="">1</button><button class="dia-btn" id="dia-2" onclick="toggleParo(2)" oncontextmenu="event.preventDefault();openExcModal(2)" title="">2</button><button class="dia-btn" id="dia-3" onclick="toggleParo(3)" oncontextmenu="event.preventDefault();openExcModal(3)" title="">3</button><button class="dia-btn" id="dia-4" onclick="toggleParo(4)" oncontextmenu="event.preventDefault();openExcModal(4)" title="">4</button><button class="dia-btn" id="dia-5" onclick="toggleParo(5)" oncontextmenu="event.preventDefault();openExcModal(5)" title="">5</button><button class="dia-btn" id="dia-6" onclick="toggleParo(6)" oncontextmenu="event.preventDefault();openExcModal(6)" title="">6</button><button class="dia-btn" id="dia-7" onclick="toggleParo(7)" oncontextmenu="event.preventDefault();openExcModal(7)" title="">7</button><button class="dia-btn" id="dia-8" onclick="toggleParo(8)" oncontextmenu="event.preventDefault();openExcModal(8)" title="">8</button><button class="dia-btn" id="dia-9" onclick="toggleParo(9)" oncontextmenu="event.preventDefault();openExcModal(9)" title="">9</button><button class="dia-btn" id="dia-10" onclick="toggleParo(10)" oncontextmenu="event.preventDefault();openExcModal(10)" title="">10</button><button class="dia-btn" id="dia-11" onclick="toggleParo(11)" oncontextmenu="event.preventDefault();openExcModal(11)" title="">11</button><button class="dia-btn" id="dia-12" onclick="toggleParo(12)" oncontextmenu="event.preventDefault();openExcModal(12)" title="">12</button><button class="dia-btn" id="dia-13" onclick="toggleParo(13)" oncontextmenu="event.preventDefault();openExcModal(13)" title="">13</button><button class="dia-btn" id="dia-14" onclick="toggleParo(14)" oncontextmenu="event.preventDefault();openExcModal(14)" title="">14</button><button class="dia-btn" id="dia-15" onclick="toggleParo(15)" oncontextmenu="event.preventDefault();openExcModal(15)" title="">15</button><button class="dia-btn" id="dia-16" onclick="toggleParo(16)" oncontextmenu="event.preventDefault();openExcModal(16)" title="">16</button><button class="dia-btn" id="dia-17" onclick="toggleParo(17)" oncontextmenu="event.preventDefault();openExcModal(17)" title="">17</button><button class="dia-btn" id="dia-18" onclick="toggleParo(18)" oncontextmenu="event.preventDefault();openExcModal(18)" title="">18</button><button class="dia-btn" id="dia-19" onclick="toggleParo(19)" oncontextmenu="event.preventDefault();openExcModal(19)" title="">19</button><button class="dia-btn" id="dia-20" onclick="toggleParo(20)" oncontextmenu="event.preventDefault();openExcModal(20)" title="">20</button><button class="dia-btn" id="dia-21" onclick="toggleParo(21)" oncontextmenu="event.preventDefault();openExcModal(21)" title="">21</button><button class="dia-btn" id="dia-22" onclick="toggleParo(22)" oncontextmenu="event.preventDefault();openExcModal(22)" title="">22</button><button class="dia-btn" id="dia-23" onclick="toggleParo(23)" oncontextmenu="event.preventDefault();openExcModal(23)" title="">23</button><button class="dia-btn" id="dia-24" onclick="toggleParo(24)" oncontextmenu="event.preventDefault();openExcModal(24)" title="">24</button><button class="dia-btn" id="dia-25" onclick="toggleParo(25)" oncontextmenu="event.preventDefault();openExcModal(25)" title="">25</button><button class="dia-btn" id="dia-26" onclick="toggleParo(26)" oncontextmenu="event.preventDefault();openExcModal(26)" title="">26</button><button class="dia-btn" id="dia-27" onclick="toggleParo(27)" oncontextmenu="event.preventDefault();openExcModal(27)" title="">27</button><button class="dia-btn" id="dia-28" onclick="toggleParo(28)" oncontextmenu="event.preventDefault();openExcModal(28)" title="">28</button><button class="dia-btn" id="dia-29" onclick="toggleParo(29)" oncontextmenu="event.preventDefault();openExcModal(29)" title="">29</button><button class="dia-btn" id="dia-30" onclick="toggleParo(30)" oncontextmenu="event.preventDefault();openExcModal(30)" title="">30</button></div>
+<div class="paro-sum" id="paro-sum">Clic izquierdo = paro &nbsp;|&nbsp; Clic derecho = excepci&oacute;n % GHHW</div>
+</div>
 <div style="font-size:11px;color:var(--mut);font-family:'DM Mono',monospace;padding:5px 0">NSR = Cu&times;57.376 + Au&times;39.746 + Ag&times;0.365 (autom&aacute;tico)</div>
 </div>
 <div id="tab-plan" class="page">
-<div class="sl">PLAN DE EXTRACCI&Oacute;N &mdash; <span>CARGA EL EXCEL MENSUAL</span></div>
-<div class="uz" id="uz" onclick="document.getElementById('fi-plan').click()"
-  ondragover="event.preventDefault();this.classList.add('drag')"
-  ondragleave="this.classList.remove('drag')"
-  ondrop="hDrop(event)">
-  <input type="file" id="fi-plan" accept=".xlsx,.xls" style="display:none" onchange="hFile(this.files[0])">
-  <div class="uz-i" id="uz-i">&#128194;</div>
-  <div class="uz-t" id="uz-t">Haz clic o arrastra el Excel del plan de extracci&oacute;n</div>
-  <div class="uz-s" id="uz-s">Lee autom&aacute;ticamente la hoja <strong>Stock Detalle</strong> &mdash; .xlsx / .xls</div>
+<div class="sl">PLAN DE EXTRACCI&Oacute;N &mdash; <span>JUNIO 2026 (por defecto) o carga un Excel</span></div>
+<div style="background:var(--bg2);border:1px solid var(--brd);border-radius:8px;padding:12px 16px;margin-bottom:12px">
+<div class="uz" id="uz" onclick="document.getElementById('fi-plan').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="hDrop(event)" style="padding:14px;margin-bottom:0">
+<input type="file" id="fi-plan" accept=".xlsx,.xls" style="display:none" onchange="hFile(this.files[0])">
+<div class="uz-i" id="uz-i">&#128194;</div>
+<div class="uz-t" id="uz-t">Arrastra o clic &mdash; Plan de Extracci&oacute;n (.xlsx)</div>
+<div class="uz-s" id="uz-s">Lee autom&aacute;ticamente la hoja Stock Detalle</div>
 </div>
-<div id="plan-status" style="display:none" class="pbox"></div>
-<div class="tw"><table><thead><tr><th>DIA</th><th>FECHA</th><th class="cgh">GHHW</th><th class="cgh">Cu%</th><th class="cgh">Au</th><th class="cgh">Ag</th><th class="cgh">As</th><th class="cgh">Bi</th><th class="cgh">Zn%</th><th class="cgh">Mo</th><th class="cs1" style="border-left:1px solid var(--brd)">Stock 1 (0-1.2%)</th><th class="cs1">Cu%</th><th class="cs1">Au</th><th class="cs1">Ag</th><th class="cs1">As</th><th class="cs1">Bi</th><th class="cs1">Zn%</th><th class="cs1">Mo</th><th class="cs2" style="border-left:1px solid var(--brd)">Stock 2 (1.3-1.5%)</th><th class="cs2">Cu%</th><th class="cs2">Au</th><th class="cs2">Ag</th><th class="cs2">As</th><th class="cs2">Bi</th><th class="cs2">Zn%</th><th class="cs2">Mo</th><th class="cs3" style="border-left:1px solid var(--brd)">Stock 3 (>1.6%)</th><th class="cs3">Cu%</th><th class="cs3">Au</th><th class="cs3">Ag</th><th class="cs3">As</th><th class="cs3">Bi</th><th class="cs3">Zn%</th><th class="cs3">Mo</th><th class="cpo" style="border-left:1px solid var(--brd)">Poniente</th><th class="cpo">Cu%</th><th class="cpo">Au</th><th class="cpo">Ag</th><th class="cpo">As</th><th class="cpo">Bi</th><th class="cpo">Zn%</th><th class="cpo">Mo</th><th>TOT</th></tr></thead><tbody id="tbody-plan"></tbody></table></div>
+<div id="plan-status" style="display:none;margin-top:8px;font-size:11px;font-family:'DM Mono',monospace;color:var(--green)"></div>
+</div>
+<div class="tw" id="plan-tw"><table><thead><tr><th>DIA</th><th>FECHA</th><th class="cgh">GHHW</th><th class="cgh">Cu%</th><th class="cgh">Au</th><th class="cgh">Ag</th><th class="cgh">As</th><th class="cgh">Bi</th><th class="cgh">Zn%</th><th class="cgh">Mo</th><th class="cs1" style="border-left:1px solid var(--brd)">Stock 1 (0-1.2%)</th><th class="cs1">Cu%</th><th class="cs1">Au</th><th class="cs1">Ag</th><th class="cs1">As</th><th class="cs1">Bi</th><th class="cs1">Zn%</th><th class="cs1">Mo</th><th class="cs2" style="border-left:1px solid var(--brd)">Stock 2 (1.3-1.5%)</th><th class="cs2">Cu%</th><th class="cs2">Au</th><th class="cs2">Ag</th><th class="cs2">As</th><th class="cs2">Bi</th><th class="cs2">Zn%</th><th class="cs2">Mo</th><th class="cs3" style="border-left:1px solid var(--brd)">Stock 3 (>1.6%)</th><th class="cs3">Cu%</th><th class="cs3">Au</th><th class="cs3">Ag</th><th class="cs3">As</th><th class="cs3">Bi</th><th class="cs3">Zn%</th><th class="cs3">Mo</th><th class="cpo" style="border-left:1px solid var(--brd)">Poniente</th><th class="cpo">Cu%</th><th class="cpo">Au</th><th class="cpo">Ag</th><th class="cpo">As</th><th class="cpo">Bi</th><th class="cpo">Zn%</th><th class="cpo">Mo</th><th>TOT</th></tr></thead><tbody id="tbody-plan"></tbody></table></div>
 </div>
 <div id="tab-acum-ext" class="page">
-<div class="sl">ACUMULADO EXTRACCI&Oacute;N &mdash; <span>PLAN DIARIO ACUMULADO DE MINA</span></div>
+<div class="sl">ACUMULADO EXTRACCI&Oacute;N &mdash; <span>PLAN DIARIO DE MINA</span></div>
 <div id="ae-e" class="emsg">Presiona <span>&#9654; Generar blending</span></div>
 <div id="ae-c" style="display:none">
 <div class="cc"><div class="cleg"><div class="leg"><div class="lsq" style="background:var(--blue)"></div>Cu% acum</div><div class="leg"><div class="lsq" style="background:var(--amber)"></div>Au acum (g/t)</div><div class="leg"><div class="lsq" style="background:var(--green)"></div>Ag acum (g/t)</div><div class="leg"><div class="lsq" style="background:var(--pur)"></div>Ton &divide;1000</div></div><div style="position:relative;width:100%;height:240px"><canvas id="ch-ae"></canvas></div></div>
-<div class="tw"><table><thead><tr>
-<th rowspan="2">D&Iacute;A</th><th rowspan="2">FECHA</th><th rowspan="2">TON DIA</th><th rowspan="2">TON ACUM</th><th rowspan="2">Cu% DIA</th><th rowspan="2">Cu% ACUM</th><th rowspan="2">Au DIA</th><th rowspan="2">Au ACUM</th><th rowspan="2">Ag DIA</th><th rowspan="2">Ag ACUM</th><th rowspan="2">As</th><th rowspan="2">As ACUM</th><th rowspan="2">Bi</th><th rowspan="2">Bi ACUM</th><th rowspan="2">Zn%</th><th rowspan="2">Zn ACUM</th><th rowspan="2">Mo</th><th rowspan="2">Mo ACUM</th><th rowspan="2">NSR DIA</th><th rowspan="2">NSR ACUM</th><th class="cgh" colspan="9">GHHW</th><th class="cs1" colspan="9" style="border-left:1px solid var(--brd)">Stock 1 (0-1.2%)</th><th class="cs2" colspan="9" style="border-left:1px solid var(--brd)">Stock 2 (1.3-1.5%)</th><th class="cs3" colspan="9" style="border-left:1px solid var(--brd)">Stock 3 (>1.6%)</th><th class="cpo" colspan="9" style="border-left:1px solid var(--brd)">Poniente</th></tr><tr><th class="cgh">ton</th><th class="cgh">Cu%</th><th class="cgh">Au</th><th class="cgh">Ag</th><th class="cgh">As</th><th class="cgh">Bi</th><th class="cgh">Zn%</th><th class="cgh">Mo</th><th class="cgh">NSR</th><th class="cs1" style="border-left:1px solid var(--brd)">ton</th><th class="cs1">Cu%</th><th class="cs1">Au</th><th class="cs1">Ag</th><th class="cs1">As</th><th class="cs1">Bi</th><th class="cs1">Zn%</th><th class="cs1">Mo</th><th class="cs1">NSR</th><th class="cs2" style="border-left:1px solid var(--brd)">ton</th><th class="cs2">Cu%</th><th class="cs2">Au</th><th class="cs2">Ag</th><th class="cs2">As</th><th class="cs2">Bi</th><th class="cs2">Zn%</th><th class="cs2">Mo</th><th class="cs2">NSR</th><th class="cs3" style="border-left:1px solid var(--brd)">ton</th><th class="cs3">Cu%</th><th class="cs3">Au</th><th class="cs3">Ag</th><th class="cs3">As</th><th class="cs3">Bi</th><th class="cs3">Zn%</th><th class="cs3">Mo</th><th class="cs3">NSR</th><th class="cpo" style="border-left:1px solid var(--brd)">ton</th><th class="cpo">Cu%</th><th class="cpo">Au</th><th class="cpo">Ag</th><th class="cpo">As</th><th class="cpo">Bi</th><th class="cpo">Zn%</th><th class="cpo">Mo</th><th class="cpo">NSR</th></tr></thead><tbody id="tbody-ae"></tbody></table></div>
+<div class="tw"><table><thead>
+<tr>
+<th rowspan="2">D&Iacute;A</th><th rowspan="2">FECHA</th><th rowspan="2">TON DIA</th><th rowspan="2">TON ACUM</th><th rowspan="2">Cu% DIA</th><th rowspan="2">Cu% ACUM</th><th rowspan="2">Au DIA</th><th rowspan="2">Au ACUM</th><th rowspan="2">Ag DIA</th><th rowspan="2">Ag ACUM</th><th rowspan="2">As</th><th rowspan="2">As ACUM</th><th rowspan="2">Bi</th><th rowspan="2">Bi ACUM</th><th rowspan="2">Zn%</th><th rowspan="2">Zn ACUM</th><th rowspan="2">Mo</th><th rowspan="2">Mo ACUM</th><th rowspan="2">NSR DIA</th><th rowspan="2">NSR ACUM</th><th class="cgh" colspan="9">GHHW</th><th class="cs1" colspan="9" style="border-left:1px solid var(--brd)">Stock 1</th><th class="cs2" colspan="9" style="border-left:1px solid var(--brd)">Stock 2</th><th class="cs3" colspan="9" style="border-left:1px solid var(--brd)">Stock 3</th><th class="cpo" colspan="9" style="border-left:1px solid var(--brd)">Poniente</th>
+</tr>
+<tr>
+<th class="cgh">ton</th><th class="cgh">Cu%</th><th class="cgh">Au</th><th class="cgh">Ag</th><th class="cgh">As</th><th class="cgh">Bi</th><th class="cgh">Zn%</th><th class="cgh">Mo</th><th class="cgh">NSR</th><th class="cs1" style="border-left:1px solid var(--brd)">ton</th><th class="cs1">Cu%</th><th class="cs1">Au</th><th class="cs1">Ag</th><th class="cs1">As</th><th class="cs1">Bi</th><th class="cs1">Zn%</th><th class="cs1">Mo</th><th class="cs1">NSR</th><th class="cs2" style="border-left:1px solid var(--brd)">ton</th><th class="cs2">Cu%</th><th class="cs2">Au</th><th class="cs2">Ag</th><th class="cs2">As</th><th class="cs2">Bi</th><th class="cs2">Zn%</th><th class="cs2">Mo</th><th class="cs2">NSR</th><th class="cs3" style="border-left:1px solid var(--brd)">ton</th><th class="cs3">Cu%</th><th class="cs3">Au</th><th class="cs3">Ag</th><th class="cs3">As</th><th class="cs3">Bi</th><th class="cs3">Zn%</th><th class="cs3">Mo</th><th class="cs3">NSR</th><th class="cpo" style="border-left:1px solid var(--brd)">ton</th><th class="cpo">Cu%</th><th class="cpo">Au</th><th class="cpo">Ag</th><th class="cpo">As</th><th class="cpo">Bi</th><th class="cpo">Zn%</th><th class="cpo">Mo</th><th class="cpo">NSR</th>
+</tr>
+</thead><tbody id="tbody-ae"></tbody></table></div>
 </div></div>
 <div id="tab-alim" class="page">
 <div class="sl">ALIMENTACI&Oacute;N A PLANTA &mdash; <span>BLEND DIARIO</span></div>
 <div id="al-e" class="emsg">Presiona <span>&#9654; Generar blending</span></div>
-<div id="al-c" style="display:none"><div class="tw"><table><thead><tr>
-<th rowspan="2">D&Iacute;A</th><th rowspan="2">FECHA</th><th rowspan="2">TON</th><th rowspan="2">Cu%</th><th rowspan="2">Au</th><th rowspan="2">Ag</th><th rowspan="2">As</th><th rowspan="2">Bi</th><th rowspan="2">Zn%</th><th rowspan="2">Mo</th><th rowspan="2">NSR</th><th rowspan="2">GEO</th><th class="cgh" colspan="9">GHHW</th><th class="cs1" colspan="9" style="border-left:1px solid var(--brd)">Stock 1 (0-1.2%)</th><th class="cs2" colspan="9" style="border-left:1px solid var(--brd)">Stock 2 (1.3-1.5%)</th><th class="cs3" colspan="9" style="border-left:1px solid var(--brd)">Stock 3 (>1.6%)</th><th class="cpo" colspan="9" style="border-left:1px solid var(--brd)">Poniente</th><th rowspan="2">LEY</th></tr><tr><th class="cgh">ton</th><th class="cgh">Cu%</th><th class="cgh">Au</th><th class="cgh">Ag</th><th class="cgh">As</th><th class="cgh">Bi</th><th class="cgh">Zn%</th><th class="cgh">Mo</th><th class="cgh">NSR</th><th class="cs1" style="border-left:1px solid var(--brd)">ton</th><th class="cs1">Cu%</th><th class="cs1">Au</th><th class="cs1">Ag</th><th class="cs1">As</th><th class="cs1">Bi</th><th class="cs1">Zn%</th><th class="cs1">Mo</th><th class="cs1">NSR</th><th class="cs2" style="border-left:1px solid var(--brd)">ton</th><th class="cs2">Cu%</th><th class="cs2">Au</th><th class="cs2">Ag</th><th class="cs2">As</th><th class="cs2">Bi</th><th class="cs2">Zn%</th><th class="cs2">Mo</th><th class="cs2">NSR</th><th class="cs3" style="border-left:1px solid var(--brd)">ton</th><th class="cs3">Cu%</th><th class="cs3">Au</th><th class="cs3">Ag</th><th class="cs3">As</th><th class="cs3">Bi</th><th class="cs3">Zn%</th><th class="cs3">Mo</th><th class="cs3">NSR</th><th class="cpo" style="border-left:1px solid var(--brd)">ton</th><th class="cpo">Cu%</th><th class="cpo">Au</th><th class="cpo">Ag</th><th class="cpo">As</th><th class="cpo">Bi</th><th class="cpo">Zn%</th><th class="cpo">Mo</th><th class="cpo">NSR</th></tr></thead><tbody id="tbody-al"></tbody></table></div></div>
+<div id="al-c" style="display:none"><div class="tw"><table><thead>
+<tr>
+<th rowspan="2">D&Iacute;A</th><th rowspan="2">FECHA</th><th rowspan="2">TON</th><th rowspan="2">Cu%</th><th rowspan="2">Au</th><th rowspan="2">Ag</th><th rowspan="2">As</th><th rowspan="2">Bi</th><th rowspan="2">Zn%</th><th rowspan="2">Mo</th><th rowspan="2">NSR</th><th rowspan="2">GEO</th><th class="cgh" colspan="9">GHHW</th><th class="cs1" colspan="9" style="border-left:1px solid var(--brd)">Stock 1</th><th class="cs2" colspan="9" style="border-left:1px solid var(--brd)">Stock 2</th><th class="cs3" colspan="9" style="border-left:1px solid var(--brd)">Stock 3</th><th class="cpo" colspan="9" style="border-left:1px solid var(--brd)">Poniente</th><th rowspan="2">LEY</th>
+</tr>
+<tr>
+<th class="cgh">ton</th><th class="cgh">Cu%</th><th class="cgh">Au</th><th class="cgh">Ag</th><th class="cgh">As</th><th class="cgh">Bi</th><th class="cgh">Zn%</th><th class="cgh">Mo</th><th class="cgh">NSR</th><th class="cs1" style="border-left:1px solid var(--brd)">ton</th><th class="cs1">Cu%</th><th class="cs1">Au</th><th class="cs1">Ag</th><th class="cs1">As</th><th class="cs1">Bi</th><th class="cs1">Zn%</th><th class="cs1">Mo</th><th class="cs1">NSR</th><th class="cs2" style="border-left:1px solid var(--brd)">ton</th><th class="cs2">Cu%</th><th class="cs2">Au</th><th class="cs2">Ag</th><th class="cs2">As</th><th class="cs2">Bi</th><th class="cs2">Zn%</th><th class="cs2">Mo</th><th class="cs2">NSR</th><th class="cs3" style="border-left:1px solid var(--brd)">ton</th><th class="cs3">Cu%</th><th class="cs3">Au</th><th class="cs3">Ag</th><th class="cs3">As</th><th class="cs3">Bi</th><th class="cs3">Zn%</th><th class="cs3">Mo</th><th class="cs3">NSR</th><th class="cpo" style="border-left:1px solid var(--brd)">ton</th><th class="cpo">Cu%</th><th class="cpo">Au</th><th class="cpo">Ag</th><th class="cpo">As</th><th class="cpo">Bi</th><th class="cpo">Zn%</th><th class="cpo">Mo</th><th class="cpo">NSR</th>
+</tr>
+</thead><tbody id="tbody-al"></tbody></table></div></div>
 </div>
 <div id="tab-acum-planta" class="page">
 <div class="sl">ACUMULADO PLANTA &mdash; <span>PRODUCCI&Oacute;N ACUMULADA</span></div>
@@ -265,86 +278,128 @@ tbody tr:last-child td{border-bottom:none}
 <div class="cc"><div class="cleg"><div class="leg"><div class="lsq" style="background:var(--blue)"></div>Cu% acum</div><div class="leg"><div class="lsq" style="background:var(--amber)"></div>Au acum (g/t)</div><div class="leg"><div class="lsq" style="background:var(--green)"></div>Ag acum (g/t)</div></div><div style="position:relative;width:100%;height:240px"><canvas id="ch-ap"></canvas></div></div>
 <div class="cc"><div class="cleg"><div class="leg"><div class="lsq" style="background:var(--acc)"></div>Ton alim acum</div><div class="leg"><div class="lsq" style="background:var(--blue)"></div>Stock restante</div></div><div style="position:relative;width:100%;height:190px"><canvas id="ch-ap2"></canvas></div></div>
 <div class="sl" style="margin-top:4px">TABLA ACUMULADO PLANTA</div>
-<div class="tw"><table><thead><tr><th>D&Iacute;A</th><th>FECHA</th><th>ESTADO</th><th>TON</th><th>Cu%</th><th>Au</th><th>Ag</th><th>As</th><th>Bi</th><th>Zn%</th><th>Mo</th><th>NSR</th><th>GEO</th><th>TON ACUM</th><th>GEO ACUM</th><th>Cu% ACUM</th><th>Au ACUM</th><th>Ag ACUM</th><th>NSR ACUM</th><th class="cgh">GHHW</th><th class="cs1">Stock 1 (0-1.2%)</th><th class="cs2">Stock 2 (1.3-1.5%)</th><th class="cs3">Stock 3 (>1.6%)</th><th class="cpo">Poniente</th><th>TOTAL REST.</th></tr></thead><tbody id="tbody-ap"></tbody></table></div>
+<div class="tw"><table><thead><tr><th>D&Iacute;A</th><th>FECHA</th><th>ESTADO</th><th>TON</th><th>Cu%</th><th>Au</th><th>Ag</th><th>As</th><th>Bi</th><th>Zn%</th><th>Mo</th><th>NSR</th><th>GEO</th><th>TON ACUM</th><th>GEO ACUM</th><th>Cu% ACUM</th><th>Au ACUM</th><th>Ag ACUM</th><th>NSR ACUM</th><th class="cgh">GHHW</th><th class="cs1">Stock 1</th><th class="cs2">Stock 2</th><th class="cs3">Stock 3</th><th class="cpo">Poniente</th><th>TOTAL REST.</th></tr></thead><tbody id="tbody-ap"></tbody></table></div>
 </div></div>
+</div>
+<div class="exc-modal" id="exc-modal" onclick="if(event.target===this)closeExcModal()">
+  <div class="exc-box">
+    <div class="exc-title" id="exc-title">D&iacute;a de Excepci&oacute;n GHHW</div>
+    <div class="exc-sub">&gt; 25% = excepci&oacute;n (m&aacute;s GHHW) &nbsp;|&nbsp; &le; 25% = d&iacute;a normal</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <label style="font-size:10px;color:var(--mut);font-family:'DM Mono',monospace;letter-spacing:1px">% GHHW ESTE D&Iacute;A</label>
+      <input type="number" id="exc-pct-input" min="0" max="100" step="1" placeholder="0-100"
+        style="background:var(--bg2);border:1px solid var(--brd);color:var(--text);font-size:16px;padding:8px 12px;border-radius:6px;width:90px;outline:none;font-family:'DM Mono',monospace">
+      <span style="font-size:14px;color:var(--blue);font-family:'DM Mono',monospace;font-weight:600">%</span>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn b-blue" onclick="saveExcDay()" style="flex:1">&#10003; Guardar</button>
+      <button class="btn b-warn" onclick="removeExcDay()" style="flex:1">&times; Quitar</button>
+      <button class="btn b-out" onclick="closeExcModal()">Cancelar</button>
+    </div>
+  </div>
 </div>
 <script>
 var PLAN = [{"dia": 1, "fecha": "01/06/2026", "ghhw": {"ton": 233.73595, "cu": 1.088637, "au": 0.386818, "ag": 22.689878, "as_": 1598.42652, "bi": 377.619442, "zn": 0.01391, "mo": 138.212327, "nsr": 187.561826}, "s1": {"ton": 2200.036574, "cu": 0.409292, "au": 0.247813, "ag": 7.244546, "as_": 322.75729, "bi": 93.172546, "zn": 0.007991, "mo": 632.434918, "nsr": 92.093077}, "s2": {"ton": 899.988443, "cu": 1.288814, "au": 0.375571, "ag": 15.218577, "as_": 111.498811, "bi": 50.569282, "zn": 0.009548, "mo": 482.894267, "nsr": 214.038361}, "s3": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "pon": {"ton": 221.032378, "cu": 1.073031, "au": 0.372974, "ag": 4.079796, "as_": 364.700604, "bi": 148.974879, "zn": 0.008716, "mo": 94.064181, "nsr": 170.380281}}, {"dia": 2, "fecha": "02/06/2026", "ghhw": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s1": {"ton": 2200.058992, "cu": 0.409292, "au": 0.247813, "ag": 7.244546, "as_": 322.75729, "bi": 93.172546, "zn": 0.007991, "mo": 632.434918, "nsr": 92.093077}, "s2": {"ton": 1358.136026, "cu": 1.312323, "au": 0.437513, "ag": 16.660493, "as_": 469.671324, "bi": 73.956332, "zn": 0.022698, "mo": 533.092279, "nsr": 224.602301}, "s3": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "pon": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}}, {"dia": 3, "fecha": "03/06/2026", "ghhw": {"ton": 470.511598, "cu": 0.717063, "au": 0.389792, "ag": 10.98333, "as_": 1180.86699, "bi": 399.638061, "zn": 0.302691, "mo": 44.601703, "nsr": 131.443006}, "s1": {"ton": 1385.160993, "cu": 0.617192, "au": 0.372162, "ag": 9.636429, "as_": 407.249579, "bi": 153.532609, "zn": 0.018857, "mo": 552.545119, "nsr": 128.598505}, "s2": {"ton": 212.955057, "cu": 1.288814, "au": 0.375571, "ag": 15.218577, "as_": 111.498811, "bi": 50.569282, "zn": 0.009548, "mo": 482.894267, "nsr": 214.038361}, "s3": {"ton": 1306.676356, "cu": 1.765905, "au": 0.568668, "ag": 18.083561, "as_": 144.549794, "bi": 53.820858, "zn": 0.014706, "mo": 513.85017, "nsr": 292.703779}, "pon": {"ton": 230.169189, "cu": 2.71264, "au": 1.388032, "ag": 15.92094, "as_": 1234.386918, "bi": 473.901446, "zn": 0.046984, "mo": 286.986341, "nsr": 475.284249}}, {"dia": 4, "fecha": "04/06/2026", "ghhw": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s1": {"ton": 2442.968212, "cu": 0.706794, "au": 0.462889, "ag": 10.237028, "as_": 303.607424, "bi": 228.560228, "zn": 0.010046, "mo": 605.867835, "nsr": 149.337091}, "s2": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s3": {"ton": 999.937483, "cu": 1.606329, "au": 0.613617, "ag": 16.678316, "as_": 166.851851, "bi": 46.477316, "zn": 0.01097, "mo": 498.026679, "nsr": 275.65931}, "pon": {"ton": 241.573622, "cu": 2.973492, "au": 0.493982, "ag": 4.181612, "as_": 581.579174, "bi": 258.283033, "zn": 0.012996, "mo": 117.23106, "nsr": 415.971897}}, {"dia": 5, "fecha": "05/06/2026", "ghhw": {"ton": 231.45325, "cu": 1.451178, "au": 0.456665, "ag": 19.671626, "as_": 1446.919371, "bi": 296.014853, "zn": 0.016513, "mo": 92.772301, "nsr": 235.281178}, "s1": {"ton": 1584.527582, "cu": 0.847801, "au": 0.54979, "ag": 11.685825, "as_": 399.033824, "bi": 264.132403, "zn": 0.014495, "mo": 496.461505, "nsr": 172.930889}, "s2": {"ton": 800.003475, "cu": 1.440696, "au": 1.249209, "ag": 20.588218, "as_": 263.489148, "bi": 216.421656, "zn": 0.011235, "mo": 512.339854, "nsr": 314.680063}, "s3": {"ton": 1122.029971, "cu": 1.579848, "au": 0.593345, "ag": 16.586177, "as_": 174.134924, "bi": 44.4674, "zn": 0.008965, "mo": 475.529242, "nsr": 270.015413}, "pon": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}}, {"dia": 6, "fecha": "06/06/2026", "ghhw": {"ton": 272.783489, "cu": 1.209108, "au": 0.344678, "ag": 16.852739, "as_": 1654.614997, "bi": 551.832906, "zn": 0.023076, "mo": 9.605497, "nsr": 191.149703}, "s1": {"ton": 1200.607995, "cu": 0.963115, "au": 0.684965, "ag": 13.020939, "as_": 276.865211, "bi": 327.302664, "zn": 0.011608, "mo": 493.563119, "nsr": 200.005814}, "s2": {"ton": 1700.07839, "cu": 1.440696, "au": 1.249209, "ag": 20.588218, "as_": 263.489148, "bi": 216.421656, "zn": 0.011235, "mo": 512.339854, "nsr": 314.680063}, "s3": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "pon": {"ton": 480.287288, "cu": 5.1885, "au": 1.163443, "ag": 17.207408, "as_": 1529.962979, "bi": 520.690558, "zn": 0.11083, "mo": 220.042382, "nsr": 759.934226}}, {"dia": 7, "fecha": "07/06/2026", "ghhw": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s1": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s2": {"ton": 1736.09001, "cu": 1.408289, "au": 0.858451, "ag": 19.218021, "as_": 487.964971, "bi": 141.454427, "zn": 0.075827, "mo": 530.257254, "nsr": 275.489827}, "s3": {"ton": 2081.173296, "cu": 1.664507, "au": 0.917163, "ag": 19.663167, "as_": 230.845118, "bi": 149.529095, "zn": 0.010557, "mo": 439.295866, "nsr": 310.499886}, "pon": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}}, {"dia": 8, "fecha": "08/06/2026", "ghhw": {"ton": 205.821115, "cu": 0.827424, "au": 0.396128, "ag": 11.855924, "as_": 1212.209932, "bi": 57.347329, "zn": 0.22396, "mo": 151.038393, "nsr": 148.889949}, "s1": {"ton": 479.577909, "cu": 1.082787, "au": 0.624048, "ag": 16.716528, "as_": 772.605839, "bi": 242.756576, "zn": 0.017741, "mo": 612.54242, "nsr": 214.710298}, "s2": {"ton": 888.367733, "cu": 1.422296, "au": 0.47932, "ag": 15.897099, "as_": 187.140698, "bi": 42.658088, "zn": 0.003889, "mo": 483.990759, "nsr": 240.194153}, "s3": {"ton": 2201.207077, "cu": 1.943304, "au": 1.379987, "ag": 24.486971, "as_": 304.255698, "bi": 283.44517, "zn": 0.018071, "mo": 394.430916, "nsr": 388.274777}, "pon": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}}, {"dia": 9, "fecha": "09/06/2026", "ghhw": {"ton": 230.089164, "cu": 0.730151, "au": 0.285314, "ag": 11.654721, "as_": 643.389787, "bi": 139.006533, "zn": 0.060499, "mo": 141.406762, "nsr": 126.714272}, "s1": {"ton": 1729.934349, "cu": 1.097804, "au": 0.580119, "ag": 13.527823, "as_": 414.709943, "bi": 58.206365, "zn": 0.007587, "mo": 477.27825, "nsr": 207.298796}, "s2": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s3": {"ton": 1100.023833, "cu": 2.243369, "au": 1.456878, "ag": 26.408795, "as_": 331.246501, "bi": 286.161438, "zn": 0.024422, "mo": 332.276597, "nsr": 432.009213}, "pon": {"ton": 491.527877, "cu": 6.335569, "au": 1.875642, "ag": 28.849933, "as_": 1952.760943, "bi": 534.659782, "zn": 0.136464, "mo": 172.831269, "nsr": 971.615409}}, {"dia": 10, "fecha": "10/06/2026", "ghhw": {"ton": 273.411265, "cu": 0.817599, "au": 0.251398, "ag": 16.585799, "as_": 1055.083822, "bi": 489.558803, "zn": 0.013994, "mo": 65.492206, "nsr": 135.727701}, "s1": {"ton": 1520.649711, "cu": 1.023307, "au": 0.732981, "ag": 11.467097, "as_": 701.329666, "bi": 80.099632, "zn": 0.01518, "mo": 313.165105, "nsr": 206.432289}, "s2": {"ton": 853.979102, "cu": 1.308305, "au": 1.107979, "ag": 14.996395, "as_": 543.885822, "bi": 132.744767, "zn": 0.011233, "mo": 301.853641, "nsr": 277.041726}, "s3": {"ton": 1000.00694, "cu": 2.243369, "au": 1.456878, "ag": 26.408795, "as_": 331.246501, "bi": 286.161438, "zn": 0.024422, "mo": 332.276597, "nsr": 432.009213}, "pon": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}}, {"dia": 11, "fecha": "11/06/2026", "ghhw": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s1": {"ton": 699.985172, "cu": 0.984517, "au": 0.703561, "ag": 13.255689, "as_": 274.275204, "bi": 333.740229, "zn": 0.011761, "mo": 483.9845, "nsr": 204.238181}, "s2": {"ton": 488.122268, "cu": 1.308305, "au": 1.107979, "ag": 14.996395, "as_": 543.885822, "bi": 132.744767, "zn": 0.011233, "mo": 301.853641, "nsr": 277.041726}, "s3": {"ton": 2146.179144, "cu": 1.901599, "au": 1.2826, "ag": 22.668089, "as_": 402.895667, "bi": 204.976799, "zn": 0.021978, "mo": 291.198998, "nsr": 370.83944}, "pon": {"ton": 471.911133, "cu": 3.263339, "au": 1.508021, "ag": 30.594196, "as_": 953.879155, "bi": 364.64096, "zn": 0.09515, "mo": 419.548349, "nsr": 567.23979}}, {"dia": 12, "fecha": "12/06/2026", "ghhw": {"ton": 325.534565, "cu": 0.869296, "au": 0.378503, "ag": 15.152507, "as_": 1257.463373, "bi": 121.564707, "zn": 0.083408, "mo": 149.291874, "nsr": 154.759481}, "s1": {"ton": 1716.152135, "cu": 1.048546, "au": 0.75552, "ag": 13.964452, "as_": 262.192138, "bi": 314.302977, "zn": 0.012067, "mo": 469.647945, "nsr": 216.90862}, "s2": {"ton": 429.877801, "cu": 1.330678, "au": 0.912849, "ag": 19.126307, "as_": 403.563496, "bi": 183.692519, "zn": 0.014106, "mo": 223.679004, "nsr": 263.628805}, "s3": {"ton": 1274.288512, "cu": 1.901961, "au": 1.23983, "ag": 23.138479, "as_": 368.649864, "bi": 187.048499, "zn": 0.023478, "mo": 282.340161, "nsr": 367.222019}, "pon": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}}, {"dia": 13, "fecha": "13/06/2026", "ghhw": {"ton": 229.242759, "cu": 0.701542, "au": 0.268259, "ag": 14.693948, "as_": 993.350807, "bi": 174.298668, "zn": 0.117671, "mo": 191.451995, "nsr": 124.957237}, "s1": {"ton": 1509.873663, "cu": 1.05772, "au": 0.812586, "ag": 15.299393, "as_": 479.973822, "bi": 282.456521, "zn": 0.095192, "mo": 417.3718, "nsr": 222.840575}, "s2": {"ton": 2000.04171, "cu": 1.330678, "au": 0.912849, "ag": 19.126307, "as_": 403.563496, "bi": 183.692519, "zn": 0.014106, "mo": 223.679004, "nsr": 263.628805}, "s3": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "pon": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}}, {"dia": 14, "fecha": "14/06/2026", "ghhw": {"ton": 458.235517, "cu": 0.799415, "au": 0.36225, "ag": 18.807997, "as_": 1571.919608, "bi": 492.294404, "zn": 0.046801, "mo": 103.338733, "nsr": 145.677517}, "s1": {"ton": 369.040193, "cu": 1.100198, "au": 0.797435, "ag": 14.536196, "as_": 252.444971, "bi": 298.623335, "zn": 0.012315, "mo": 458.082933, "nsr": 227.129609}, "s2": {"ton": 2291.939362, "cu": 1.228616, "au": 0.841392, "ag": 17.977159, "as_": 384.453095, "bi": 214.287142, "zn": 0.011581, "mo": 262.958025, "nsr": 244.803823}, "s3": {"ton": 281.681466, "cu": 1.517012, "au": 0.959765, "ag": 23.789025, "as_": 1871.526516, "bi": 350.616368, "zn": 0.070341, "mo": 319.403605, "nsr": 296.258866}, "pon": {"ton": 214.059528, "cu": 0.554326, "au": 0.816679, "ag": 11.330014, "as_": 537.720238, "bi": 247.816259, "zn": 0.022353, "mo": 277.607426, "nsr": 155.127638}}, {"dia": 15, "fecha": "15/06/2026", "ghhw": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s1": {"ton": 237.914691, "cu": 0.446227, "au": 0.179571, "ag": 6.904597, "as_": 574.623226, "bi": 18.114347, "zn": 0.009019, "mo": 300.09306, "nsr": 82.712303}, "s2": {"ton": 1900.907831, "cu": 1.245755, "au": 0.842161, "ag": 18.262237, "as_": 397.043262, "bi": 214.343029, "zn": 0.01149, "mo": 255.946511, "nsr": 247.025298}, "s3": {"ton": 1561.668159, "cu": 1.925254, "au": 1.388825, "ag": 20.606798, "as_": 596.952516, "bi": 269.315775, "zn": 0.018193, "mo": 311.43619, "nsr": 382.177371}, "pon": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}}, {"dia": 16, "fecha": "16/06/2026", "ghhw": {"ton": 135.435792, "cu": 1.308901, "au": 0.514283, "ag": 27.599902, "as_": 2013.426389, "bi": 209.246315, "zn": 0.039196, "mo": 199.295323, "nsr": 230.857898}, "s1": {"ton": 258.06389, "cu": 0.568901, "au": 0.346319, "ag": 7.42013, "as_": 714.218291, "bi": 111.726455, "zn": 0.076184, "mo": 90.454908, "nsr": 108.157912}, "s2": {"ton": 2300.021775, "cu": 1.386108, "au": 0.889951, "ag": 19.5181, "as_": 418.63106, "bi": 203.605402, "zn": 0.012227, "mo": 271.57978, "nsr": 269.810805}, "s3": {"ton": 479.25928, "cu": 1.564901, "au": 0.61457, "ag": 21.964707, "as_": 1769.898934, "bi": 183.818461, "zn": 0.026232, "mo": 47.214223, "nsr": 264.011237}, "pon": {"ton": 433.64515, "cu": 2.328144, "au": 1.30283, "ag": 30.588437, "as_": 724.780978, "bi": 347.105457, "zn": 0.132815, "mo": 28.604318, "nsr": 424.77858}}, {"dia": 17, "fecha": "17/06/2026", "ghhw": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s1": {"ton": 189.020745, "cu": 0.357254, "au": 0.211392, "ag": 6.456199, "as_": 625.695887, "bi": 10.004259, "zn": 0.008991, "mo": 317.465125, "nsr": 74.647809}, "s2": {"ton": 2007.484215, "cu": 1.274646, "au": 0.881166, "ag": 16.234087, "as_": 227.838163, "bi": 163.675688, "zn": 0.011241, "mo": 411.850947, "nsr": 256.193851}, "s3": {"ton": 1607.487789, "cu": 2.436332, "au": 1.439762, "ag": 23.722833, "as_": 690.577762, "bi": 341.327686, "zn": 0.02486, "mo": 297.706207, "nsr": 451.580855}, "pon": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}}, {"dia": 18, "fecha": "18/06/2026", "ghhw": {"ton": 434.984975, "cu": 0.71866, "au": 0.432497, "ag": 11.720307, "as_": 1442.469972, "bi": 205.129697, "zn": 0.187284, "mo": 89.380214, "nsr": 137.19376}, "s1": {"ton": 248.485334, "cu": 0.848287, "au": 0.366198, "ag": 12.469811, "as_": 1158.540792, "bi": 25.51726, "zn": 0.025657, "mo": 435.567604, "nsr": 155.871274}, "s2": {"ton": 2011.632358, "cu": 1.358249, "au": 0.871714, "ag": 17.084508, "as_": 223.794405, "bi": 108.984491, "zn": 0.010878, "mo": 380.628436, "nsr": 265.545301}, "s3": {"ton": 700.035814, "cu": 2.268778, "au": 1.163514, "ag": 21.749125, "as_": 721.708896, "bi": 283.963447, "zn": 0.028417, "mo": 207.811102, "nsr": 402.975169}, "pon": {"ton": 217.909618, "cu": 1.747704, "au": 1.6328, "ag": 25.076833, "as_": 1364.274753, "bi": 245.952383, "zn": 0.052123, "mo": 141.891337, "nsr": 381.183222}}, {"dia": 19, "fecha": "19/06/2026", "ghhw": {"ton": 647.929523, "cu": 0.76566, "au": 0.403953, "ag": 17.500832, "as_": 1615.539082, "bi": 311.087871, "zn": 0.2129, "mo": 78.037644, "nsr": 143.908626}, "s1": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s2": {"ton": 1299.981933, "cu": 1.447553, "au": 0.871539, "ag": 19.27672, "as_": 335.831341, "bi": 118.308481, "zn": 0.011393, "mo": 289.177158, "nsr": 275.986535}, "s3": {"ton": 1651.562073, "cu": 1.937033, "au": 0.946199, "ag": 19.871676, "as_": 752.579961, "bi": 173.206738, "zn": 0.033032, "mo": 141.631116, "nsr": 339.968007}, "pon": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}}, {"dia": 20, "fecha": "20/06/2026", "ghhw": {"ton": 135.026154, "cu": 1.222908, "au": 0.446728, "ag": 28.7243, "as_": 2073.355253, "bi": 193.063722, "zn": 0.036384, "mo": 214.347593, "nsr": 215.404018}, "s1": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s2": {"ton": 1703.130449, "cu": 1.429005, "au": 0.81671, "ag": 18.821897, "as_": 488.419207, "bi": 101.512, "zn": 0.01538, "mo": 282.859821, "nsr": 268.372773}, "s3": {"ton": 1966.318773, "cu": 1.567801, "au": 0.815207, "ag": 19.35438, "as_": 421.421099, "bi": 50.62482, "zn": 0.023513, "mo": 235.187754, "nsr": 284.628795}, "pon": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}}, {"dia": 21, "fecha": "21/06/2026", "ghhw": {"ton": 202.935868, "cu": 0.7637, "au": 0.942934, "ag": 12.722843, "as_": 1006.199447, "bi": 69.244418, "zn": 0.685894, "mo": 62.994478, "nsr": 188.087663}, "s1": {"ton": 257.917534, "cu": 1.075376, "au": 0.326691, "ag": 15.062111, "as_": 2143.425519, "bi": 23.804434, "zn": 0.034973, "mo": 356.539492, "nsr": 180.379111}, "s2": {"ton": 1088.909149, "cu": 1.31652, "au": 0.573967, "ag": 17.677414, "as_": 670.89463, "bi": 39.860204, "zn": 0.040653, "mo": 128.977016, "nsr": 228.640437}, "s3": {"ton": 2041.438226, "cu": 1.619935, "au": 0.895266, "ag": 20.216692, "as_": 249.072225, "bi": 27.320507, "zn": 0.014492, "mo": 302.071253, "nsr": 300.300493}, "pon": {"ton": 221.399082, "cu": 4.849987, "au": 4.307339, "ag": 61.866955, "as_": 2523.238596, "bi": 135.283638, "zn": 0.086357, "mo": 81.389752, "nsr": 1025.318561}}, {"dia": 22, "fecha": "22/06/2026", "ghhw": {"ton": 593.768951, "cu": 0.816768, "au": 0.527803, "ag": 15.277641, "as_": 1168.490803, "bi": 205.428552, "zn": 0.628013, "mo": 70.382223, "nsr": 159.791658}, "s1": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s2": {"ton": 1325.298119, "cu": 1.248849, "au": 0.45281, "ag": 18.004355, "as_": 808.264878, "bi": 18.736922, "zn": 0.037756, "mo": 173.422924, "nsr": 210.813188}, "s3": {"ton": 1817.541756, "cu": 1.682335, "au": 0.91815, "ag": 21.718462, "as_": 666.373135, "bi": 80.668267, "zn": 0.028087, "mo": 273.121507, "nsr": 310.418102}, "pon": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}}, {"dia": 23, "fecha": "23/06/2026", "ghhw": {"ton": 474.227336, "cu": 0.569975, "au": 0.427061, "ag": 11.012007, "as_": 881.475763, "bi": 202.635411, "zn": 0.369543, "mo": 256.876211, "nsr": 121.539491}, "s1": {"ton": 191.897822, "cu": 1.059525, "au": 0.494992, "ag": 12.898224, "as_": 1078.405396, "bi": 33.054004, "zn": 0.025647, "mo": 453.469242, "nsr": 194.041143}, "s2": {"ton": 800.043167, "cu": 1.272594, "au": 0.418679, "ag": 16.976961, "as_": 950.45199, "bi": 14.312197, "zn": 0.025318, "mo": 211.682963, "nsr": 210.867304}, "s3": {"ton": 2179.65679, "cu": 1.722863, "au": 0.914996, "ag": 20.553368, "as_": 281.878627, "bi": 26.28929, "zn": 0.015309, "mo": 286.566606, "nsr": 314.618653}, "pon": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}}, {"dia": 24, "fecha": "24/06/2026", "ghhw": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s1": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s2": {"ton": 1011.566695, "cu": 1.373924, "au": 0.426015, "ag": 16.845667, "as_": 960.372771, "bi": 13.801436, "zn": 0.02452, "mo": 243.147141, "nsr": 224.638749}, "s3": {"ton": 2309.326862, "cu": 1.730503, "au": 0.887308, "ag": 22.346937, "as_": 860.21698, "bi": 81.190684, "zn": 0.018113, "mo": 199.711568, "nsr": 312.378185}, "pon": {"ton": 202.676138, "cu": 5.703568, "au": 6.894823, "ag": 93.720581, "as_": 1674.528111, "bi": 383.7168, "zn": 0.142062, "mo": 114.684927, "nsr": 1383.21311}}, {"dia": 25, "fecha": "25/06/2026", "ghhw": {"ton": 796.079482, "cu": 0.777992, "au": 0.536091, "ag": 14.717781, "as_": 969.524657, "bi": 168.992353, "zn": 0.394425, "mo": 123.24737, "nsr": 156.501613}, "s1": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s2": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s3": {"ton": 1700.283736, "cu": 1.798853, "au": 0.994206, "ag": 24.079305, "as_": 598.767517, "bi": 125.350415, "zn": 0.01451, "mo": 181.117258, "nsr": 331.077888}, "pon": {"ton": 1299.543313, "cu": 1.430702, "au": 1.609436, "ag": 24.073458, "as_": 1602.04203, "bi": 354.704677, "zn": 0.064168, "mo": 275.796134, "nsr": 342.406421}}, {"dia": 26, "fecha": "26/06/2026", "ghhw": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s1": {"ton": 191.5456, "cu": 0.513381, "au": 0.320395, "ag": 7.879088, "as_": 866.830611, "bi": 64.926373, "zn": 0.012938, "mo": 378.409522, "nsr": 105.964145}, "s2": {"ton": 468.795739, "cu": 1.311026, "au": 0.689725, "ag": 20.425327, "as_": 1956.297725, "bi": 240.35434, "zn": 0.028048, "mo": 78.731234, "nsr": 239.014252}, "s3": {"ton": 1599.958333, "cu": 1.949423, "au": 1.008073, "ag": 24.768554, "as_": 704.614113, "bi": 75.865149, "zn": 0.016101, "mo": 174.208432, "nsr": 351.196107}, "pon": {"ton": 1300.024798, "cu": 1.430702, "au": 1.609436, "ag": 24.073458, "as_": 1602.04203, "bi": 354.704677, "zn": 0.064168, "mo": 275.796134, "nsr": 342.406421}}, {"dia": 27, "fecha": "27/06/2026", "ghhw": {"ton": 481.065931, "cu": 0.564197, "au": 0.401078, "ag": 8.576841, "as_": 765.865718, "bi": 179.924572, "zn": 0.717842, "mo": 144.314729, "nsr": 114.279107}, "s1": {"ton": 286.294247, "cu": 0.982162, "au": 0.608804, "ag": 14.578895, "as_": 1301.192751, "bi": 194.705297, "zn": 0.032938, "mo": 190.292991, "nsr": 189.730378}, "s2": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s3": {"ton": 1992.923123, "cu": 1.830042, "au": 0.927312, "ag": 23.3827, "as_": 830.139262, "bi": 67.299524, "zn": 0.015064, "mo": 175.402215, "nsr": 328.368155}, "pon": {"ton": 1000.300257, "cu": 1.430702, "au": 1.609436, "ag": 24.073458, "as_": 1602.04203, "bi": 354.704677, "zn": 0.064168, "mo": 275.796134, "nsr": 342.406421}}, {"dia": 28, "fecha": "28/06/2026", "ghhw": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s1": {"ton": 778.016758, "cu": 0.874668, "au": 0.690723, "ag": 14.569682, "as_": 1149.159114, "bi": 243.752337, "zn": 0.013473, "mo": 191.025776, "nsr": 183.751994}, "s2": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s3": {"ton": 1199.956875, "cu": 1.733127, "au": 0.861749, "ag": 22.25764, "as_": 932.042791, "bi": 60.345799, "zn": 0.014222, "mo": 176.371348, "nsr": 309.836021}, "pon": {"ton": 1700.086963, "cu": 1.430702, "au": 1.609436, "ag": 24.073458, "as_": 1602.04203, "bi": 354.704677, "zn": 0.064168, "mo": 275.796134, "nsr": 342.406421}}, {"dia": 29, "fecha": "29/06/2026", "ghhw": {"ton": 443.929712, "cu": 0.444503, "au": 0.27946, "ag": 8.580022, "as_": 515.409203, "bi": 121.409452, "zn": 0.747311, "mo": 297.546756, "nsr": 92.291348}, "s1": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s2": {"ton": 1219.974801, "cu": 1.238901, "au": 0.616788, "ag": 18.394475, "as_": 1262.042785, "bi": 52.803507, "zn": 0.010874, "mo": 180.69399, "nsr": 224.565763}, "s3": {"ton": 387.497649, "cu": 1.733127, "au": 0.861749, "ag": 22.25764, "as_": 932.042791, "bi": 60.345799, "zn": 0.014222, "mo": 176.371348, "nsr": 309.836021}, "pon": {"ton": 1699.886541, "cu": 1.430702, "au": 1.609436, "ag": 24.073458, "as_": 1602.04203, "bi": 354.704677, "zn": 0.064168, "mo": 275.796134, "nsr": 342.406421}}, {"dia": 30, "fecha": "30/06/2026", "ghhw": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s1": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "s2": {"ton": 1472.531933, "cu": 1.238901, "au": 0.616788, "ag": 18.394475, "as_": 1262.042785, "bi": 52.803507, "zn": 0.010874, "mo": 180.69399, "nsr": 224.565763}, "s3": {"ton": 0.0, "cu": 0.0, "au": 0.0, "ag": 0.0, "as_": 0.0, "bi": 0.0, "zn": 0.0, "mo": 0.0, "nsr": 0.0}, "pon": {"ton": 2349.390593, "cu": 1.430702, "au": 1.609436, "ag": 24.073458, "as_": 1602.04203, "bi": 354.704677, "zn": 0.064168, "mo": 275.796134, "nsr": 342.406421}}];
 var SEC_IDS = ["ghhw", "s1", "s2", "s3", "pon"];
 var SEC_DEFS = {"ghhw": {"ton": 7276, "cu": 0.794, "au": 0.422, "ag": 14.68, "as_": 800, "bi": 200, "zn": 0.01, "mo": 100, "nsr": 148.4}, "s1": {"ton": 21678, "cu": 0.804, "au": 0.525, "ag": 11.36, "as_": 472, "bi": 182, "zn": 0.02, "mo": 492, "nsr": 164.9}, "s2": {"ton": 32270, "cu": 1.331, "au": 0.786, "ag": 18.06, "as_": 520, "bi": 130, "zn": 0.01, "mo": 320, "nsr": 253.8}, "s3": {"ton": 36708, "cu": 1.834, "au": 1.02, "ag": 21.81, "as_": 526, "bi": 140, "zn": 0.02, "mo": 514, "nsr": 338.5}, "pon": {"ton": 12775, "cu": 2.023, "au": 1.66, "ag": 25.16, "as_": 286, "bi": 338, "zn": 0.02, "mo": 514, "nsr": 420.1}};
+var PLAN_PLANTA = [];
 var diasParo = {};
-var RES=[], ACUM=[], ACUM_EXT=[], CH={};
+var diasExcepcion = {};
+var excDiaActual = null;
+var RES=[],ACUM=[],ACUM_EXT=[],CH={};
 
 
-function gv(id){ var e=document.getElementById(id); return e?parseFloat(e.value)||0:0; }
-function sv(id,v){ var e=document.getElementById(id); if(e)e.value=v; }
-function sh(id,v){ var e=document.getElementById(id); if(e)e.textContent=v; }
-function getP(){ return {au:gv('p-au')||3930, cu:gv('p-cu')||4.85, ag:gv('p-ag')||45.20, mo:gv('p-mo')||20}; }
+function gv(id){var e=document.getElementById(id);return e?parseFloat(e.value)||0:0;}
+function sv(id,v){var e=document.getElementById(id);if(e)e.value=v;}
+function sh(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+function getP(){return{au:gv('p-au')||3930,cu:gv('p-cu')||4.85,ag:gv('p-ag')||45.20,mo:gv('p-mo')||20};}
 
 function calcGEO(cu,au,ag,ton){
   var P=getP();
-  return (au*ton/31.1035) + (ton*(cu/100)*2204.622*P.cu/P.au) + (ag*ton/31.1035*P.ag/P.au);
-}
-
-function updK0(){
-  var tot=0; SEC_IDS.forEach(function(id){ tot+=gv(id+'-ton'); });
-  sh('k0', tot.toLocaleString('es-MX',{maximumFractionDigits:0}));
-}
-
-function calcNsr(sid){
-  var cu=gv(sid+'-cu'), au=gv(sid+'-au'), ag=gv(sid+'-ag');
-  sv(sid+'-nsr', (cu*57.376+au*39.746+ag*0.365).toFixed(2));
-}
-
-function toggleParo(d){
-  if(diasParo[d]) delete diasParo[d]; else diasParo[d]=true;
-  var btn=document.getElementById('dia-'+d);
-  if(btn) btn.className='dia-btn'+(diasParo[d]?' paro':'');
-  var ps=Object.keys(diasParo).map(Number).sort(function(a,b){return a-b;});
-  var el=document.getElementById('paro-sum');
-  if(el) el.innerHTML = ps.length===0 ? 'Ning\u00fan d\u00eda marcado' : 'Paros: <span>'+ps.join(', ')+'</span>';
+  return (au*ton/31.1035)+(ton*(cu/100)*2204.622*P.cu/P.au)+(ag*ton/31.1035*P.ag/P.au);
 }
 
 function updGhhwPct(){
-  var pct=parseFloat(document.getElementById('ghhw-pct').value);
-  var detail=document.getElementById('ghhw-pct-detail');
-  if(!detail) return;
-  if(isNaN(pct)||pct>=100) detail.textContent='Sin límite — se usa todo el GHHW disponible del plan';
-  else if(pct<=0) detail.textContent='GHHW no participa en el blend este mes';
+  var pct=gv('ghhw-pct');
+  var d=document.getElementById('ghhw-pct-detail');if(!d)return;
+  if(pct>=100){d.textContent='Sin l\u00edmite \u2014 usa todo el GHHW disponible';}
+  else if(pct<=0){d.textContent='GHHW no participa este mes';}
   else{
-    var totalGhhw=PLAN&&PLAN.length?PLAN.reduce(function(a,r){return a+(r.ghhw?r.ghhw.ton:0);},0):0;
-    var actDays=PLAN&&PLAN.length?PLAN.filter(function(r){return !diasParo[r.dia];}).length:30;
-    if(actDays===0) actDays=PLAN.length||30;
-    var obligacionTotal=totalGhhw*(pct/100);
-    var dailyFixed=actDays>0?obligacionTotal/actDays:0;
-    var tpdVal=parseFloat(document.getElementById('inp-tpd').value)||3653;
-    var ghhwDailyTon=tpdVal*(pct/100);
-    detail.innerHTML=
-      'Ton/día planta: <span style="color:var(--blue)">'+Math.round(tpdVal).toLocaleString('es-MX')+'t</span>'
-      +' &times; '+pct+'% = <span style="color:#fff;font-weight:600">'+Math.round(ghhwDailyTon).toLocaleString('es-MX')+'t GHHW fijas por día</span>'
-      +'<br><span style="color:var(--mut);font-size:10px">Si no hay stock suficiente ese día, GHHW = 0 y otros sectores cubren el 100%</span>';
+    var tpdV=gv('inp-tpd')||3653;
+    var daily=(tpdV*pct/100).toFixed(0);
+    d.innerHTML='Ton/d\u00eda &times; '+pct+'% = <span style="color:#9b7fe8;font-weight:600">'+daily+'t GHHW fijas/d\u00eda</span><br><span style="color:var(--mut);font-size:10px">Si stock insuficiente ese d\u00eda, GHHW=0 y otros sectores cubren el total</span>';
   }
 }
 
-function refreshGhhwDisplay(){ updGhhwPct(); }
-
-function limpiarStock0(){
-  SEC_IDS.forEach(function(sid){
-    ['ton','cu','au','ag','as_','bi','zn','mo','nsr'].forEach(function(f){ sv(sid+'-'+f,0); });
-  });
-  updK0();
+// Exception modal
+function openExcModal(d){
+  excDiaActual=d;
+  document.getElementById('exc-title').textContent='D\u00eda '+d+' \u2014 Excepci\u00f3n GHHW';
+  var inp=document.getElementById('exc-pct-input');
+  inp.value=diasExcepcion[d]!==undefined?diasExcepcion[d]:'';
+  document.getElementById('exc-modal').classList.add('open');
+  setTimeout(function(){inp.focus();},100);
+}
+function closeExcModal(){document.getElementById('exc-modal').classList.remove('open');excDiaActual=null;}
+function saveExcDay(){
+  if(excDiaActual===null)return;
+  var pct=parseFloat(document.getElementById('exc-pct-input').value);
+  if(isNaN(pct)||pct<0||pct>100){alert('Ingresa un % v\u00e1lido entre 0 y 100');return;}
+  diasExcepcion[excDiaActual]=pct;
+  var b=document.getElementById('dia-'+excDiaActual);
+  if(b){b.className='dia-btn excepcion';b.title=pct+'% GHHW';}
+  closeExcModal();updParoSum();
+}
+function removeExcDay(){
+  if(excDiaActual===null)return;
+  delete diasExcepcion[excDiaActual];
+  var b=document.getElementById('dia-'+excDiaActual);
+  if(b){b.className='dia-btn'+(diasParo[excDiaActual]?' paro':'');b.title='';}
+  closeExcModal();updParoSum();
 }
 
+function toggleParo(d){
+  if(diasParo[d])delete diasParo[d];else diasParo[d]=true;
+  var b=document.getElementById('dia-'+d);
+  if(b) b.className='dia-btn'+(diasParo[d]?' paro':diasExcepcion[d]!==undefined?' excepcion':'');
+  updParoSum();
+}
+function updParoSum(){
+  var ps=Object.keys(diasParo).map(Number).sort(function(a,b){return a-b;});
+  var ex=Object.keys(diasExcepcion).map(Number).sort(function(a,b){return a-b;});
+  var el=document.getElementById('paro-sum');if(!el)return;
+  var txt='';
+  if(ps.length>0) txt+='Paros: <span>'+ps.join(', ')+'</span>';
+  if(ex.length>0){
+    if(txt)txt+=' &nbsp;|&nbsp; ';
+    txt+='Excepciones: <span style="color:var(--blue)">'+ex.map(function(d){return d+'('+diasExcepcion[d]+'%)';}).join(', ')+'</span>';
+  }
+  if(!txt)txt='Clic izquierdo=paro &nbsp;|&nbsp; Clic derecho=excepci\u00f3n % GHHW';
+  el.innerHTML=txt;
+}
+
+function limpiarStock0(){
+  SEC_IDS.forEach(function(sid){['ton','cu','au','ag','as_','bi','zn','mo','nsr'].forEach(function(f){sv(sid+'-'+f,0);});});
+  updK0();
+}
 function gSt(){
   return SEC_IDS.map(function(sid){
-    return {id:sid, ton:gv(sid+'-ton'), cu:gv(sid+'-cu'), au:gv(sid+'-au'), ag:gv(sid+'-ag'),
-      as_:gv(sid+'-as_'), bi:gv(sid+'-bi'), zn:gv(sid+'-zn'), mo:gv(sid+'-mo'), nsr:gv(sid+'-nsr')};
+    return{id:sid,ton:gv(sid+'-ton'),cu:gv(sid+'-cu'),au:gv(sid+'-au'),ag:gv(sid+'-ag'),
+      as_:gv(sid+'-as_'),bi:gv(sid+'-bi'),zn:gv(sid+'-zn'),mo:gv(sid+'-mo'),nsr:gv(sid+'-nsr')};
   });
+}
+function updK0(){
+  var tot=gSt().reduce(function(a,x){return a+x.ton;},0);
+  sh('k0',tot.toLocaleString('es-MX',{maximumFractionDigits:0}));
+}
+function calcNsr(sid){
+  var cu=gv(sid+'-cu'),au=gv(sid+'-au'),ag=gv(sid+'-ag');
+  sv(sid+'-nsr',(cu*57.376+au*39.746+ag*0.365).toFixed(2));
 }
 
 // Populate plan table on load
 (function(){
-  var tb=document.getElementById('tbody-plan'); if(!tb)return;
+  var tb=document.getElementById('tbody-plan');if(!tb)return;
   PLAN.forEach(function(r){
     var tot=SEC_IDS.reduce(function(a,s){return a+(r[s]?r[s].ton:0);},0);
     var tr=document.createElement('tr');
@@ -357,15 +412,156 @@ function gSt(){
             +'<td>'+(sd.zn||0).toFixed(3)+'</td><td>'+(sd.mo||0).toFixed(0)+'</td>';
     });
     cells+='<td style="font-weight:600">'+tot.toFixed(0)+'</td>';
-    tr.innerHTML=cells; tb.appendChild(tr);
+    tr.innerHTML=cells;tb.appendChild(tr);
   });
   var extTot=PLAN.reduce(function(a,p){return a+SEC_IDS.reduce(function(b,s){return b+(p[s]?p[s].ton:0);},0);},0);
-  sh('kex', extTot.toLocaleString('es-MX',{maximumFractionDigits:0}));
-  refreshGhhwDisplay();
-  refreshGhhwDisplay();
+  sh('kex',extTot.toLocaleString('es-MX',{maximumFractionDigits:0}));
   updK0();
 })();
 
+// ── PLAN EXTRACCION UPLOAD ────────────────────────────────────────
+var COL_BASE={ghhw:2,s1:11,s2:20,s3:29,pon:38};
+function hDrop(e){e.preventDefault();document.getElementById('uz').classList.remove('drag');var f=e.dataTransfer.files[0];if(f)hFile(f);}
+function hFile(file){
+  var r=new FileReader();
+  r.onload=function(ev){
+    try{
+      var wb=XLSX.read(ev.target.result,{type:'array',cellDates:true,raw:false});
+      var shName=null;
+      wb.SheetNames.forEach(function(n){if(n.toLowerCase().replace(/\s/g,'').indexOf('stockdetalle')>=0)shName=n;});
+      if(!shName){var best=null,bestCnt=0;wb.SheetNames.forEach(function(n){var raw2=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:null,raw:true});var cnt=0;for(var i=0;i<Math.min(40,raw2.length);i++){var v=raw2[i]?raw2[i][1]:null;if(v instanceof Date||(typeof v==='number'&&v>40000&&v<60000))cnt++;}if(cnt>bestCnt){bestCnt=cnt;best=n;}});if(best&&bestCnt>=5)shName=best;}
+      if(!shName)shName=wb.SheetNames[0];
+      var ws=wb.Sheets[shName];
+      var raw=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
+      parseStockDetalle(raw,file.name,shName,wb.SheetNames);
+    }catch(err){alert('Error al leer el archivo: '+err.message);}
+  };
+  r.readAsArrayBuffer(file);
+}
+function isDateVal(v){
+  if(!v&&v!==0)return false;
+  if(v instanceof Date)return true;
+  if(typeof v==='number'&&v>40000&&v<60000)return true;
+  var s=String(v).replace(/^'/,'').trim();
+  if(/^\d{4}[-\/]\d{2}[-\/]\d{2}/.test(s))return true;
+  return false;
+}
+function fmtDateVal(v){
+  if(v instanceof Date)return('0'+v.getDate()).slice(-2)+'/'+('0'+(v.getMonth()+1)).slice(-2)+'/'+v.getFullYear();
+  if(typeof v==='number'&&v>40000){try{var d=XLSX.SSF.parse_date_code(v);if(d)return('0'+d.d).slice(-2)+'/'+('0'+d.m).slice(-2)+'/'+d.y;}catch(e){}}
+  var s=String(v).replace(/^'/,'').trim();
+  var m=s.match(/^(\d{4})[-\/](\d{2})[-\/](\d{2})/);if(m)return m[3]+'/'+m[2]+'/'+m[1];
+  return s;
+}
+function parseStockDetalle(raw,fileName,shName,sheetNames){
+  var tn=function(v){if(v===null||v===undefined)return 0;var n=parseFloat(v);return isNaN(n)?0:n;};
+  var sectorBases={ghhw:null,s1:null,s2:null,s3:null,pon:null};
+  var dataStart=-1;
+  for(var i=0;i<Math.min(60,raw.length);i++){
+    var row=raw[i];if(!row)continue;
+    for(var j=0;j<row.length;j++){
+      var v=String(row[j]||'').toLowerCase().replace(/\s+/g,'');
+      if(v.indexOf('ghhw')>=0&&sectorBases.ghhw===null)sectorBases.ghhw=j;
+      if((v.indexOf('0.0%')>=0||v.indexOf('0%-->1')>=0||v.indexOf('stock-0')>=0)&&sectorBases.s1===null)sectorBases.s1=j;
+      if((v.indexOf('1.3%')>=0||v.indexOf('1.00%')>=0||v.indexOf('1%-->1.5')>=0)&&sectorBases.s2===null)sectorBases.s2=j;
+      if((v.indexOf('>1.6%')>=0||v.indexOf('>1.5%')>=0||v.indexOf('>1.50')>=0||v.indexOf('>1.60')>=0)&&sectorBases.s3===null)sectorBases.s3=j;
+      if(v.indexOf('poniente')>=0&&sectorBases.pon===null)sectorBases.pon=j;
+    }
+    if(dataStart<0&&isDateVal(row[1]))dataStart=i;
+  }
+  if(sectorBases.ghhw===null)sectorBases.ghhw=2;
+  if(sectorBases.s1===null)sectorBases.s1=11;
+  if(sectorBases.s2===null)sectorBases.s2=20;
+  if(sectorBases.s3===null)sectorBases.s3=29;
+  if(dataStart<0){alert('No se encontraron fechas. Hojas: '+(sheetNames||[]).join(', '));return;}
+  var newPlan=[];var dia=1;
+  for(var i=dataStart;i<raw.length;i++){
+    var row=raw[i];if(!row||!isDateVal(row[1]))continue;
+    var r={dia:dia,fecha:fmtDateVal(row[1])};
+    var readSec=function(base){if(base===null)return{ton:0,cu:0,au:0,ag:0,as_:0,bi:0,zn:0,mo:0,nsr:0};return{ton:tn(row[base]),cu:tn(row[base+1]),au:tn(row[base+2]),ag:tn(row[base+3]),as_:tn(row[base+4]),bi:tn(row[base+5]),zn:tn(row[base+6]),mo:tn(row[base+7]),nsr:tn(row[base+8])};};
+    r.ghhw=readSec(sectorBases.ghhw);r.s1=readSec(sectorBases.s1);r.s2=readSec(sectorBases.s2);r.s3=readSec(sectorBases.s3);r.pon=readSec(sectorBases.pon);
+    newPlan.push(r);dia++;
+  }
+  while(newPlan.length>0){var last=newPlan[newPlan.length-1];var tot=SEC_IDS.reduce(function(a,s){return a+(last[s]?last[s].ton:0);},0);if(tot>80000)newPlan.pop();else break;}
+  if(!newPlan.length){alert('No se leyeron d\u00edas del plan.');return;}
+  PLAN=newPlan;
+  var uz=document.getElementById('uz');uz.classList.add('ok');
+  document.getElementById('uz-i').textContent='\u2713';
+  document.getElementById('uz-t').textContent=fileName;
+  var extTot=PLAN.reduce(function(a,p){return a+SEC_IDS.reduce(function(b,s){return b+(p[s]?p[s].ton:0);},0);},0);
+  document.getElementById('uz-s').textContent='\u2713 '+newPlan.length+' d\u00edas | Total: '+extTot.toLocaleString('es-MX',{maximumFractionDigits:0})+'t';
+  sh('kex',extTot.toLocaleString('es-MX',{maximumFractionDigits:0}));
+  var ps=document.getElementById('plan-status');ps.innerHTML='\u2713 Plan cargado: '+newPlan.length+' d\u00edas';ps.style.display='block';
+  var tb=document.getElementById('tbody-plan');tb.innerHTML='';
+  PLAN.forEach(function(r){
+    var tot=SEC_IDS.reduce(function(a,s){return a+(r[s]?r[s].ton:0);},0);
+    var tr=document.createElement('tr');
+    var cells='<td style="color:#fff;font-weight:600">'+r.dia+'</td><td style="color:var(--blue)">'+r.fecha+'</td>';
+    SEC_IDS.forEach(function(s){var sd=r[s]||{};cells+='<td>'+(sd.ton||0).toFixed(0)+'</td><td>'+(sd.cu||0).toFixed(3)+'</td><td>'+(sd.au||0).toFixed(3)+'</td><td>'+(sd.ag||0).toFixed(2)+'</td><td>'+(sd.as_||0).toFixed(0)+'</td><td>'+(sd.bi||0).toFixed(0)+'</td><td>'+(sd.zn||0).toFixed(3)+'</td><td>'+(sd.mo||0).toFixed(0)+'</td>';});
+    cells+='<td style="font-weight:600">'+tot.toFixed(0)+'</td>';
+    tr.innerHTML=cells;tb.appendChild(tr);
+  });
+}
+
+// ── PLAN PLANTA UPLOAD ────────────────────────────────────────────
+function hDropPlanta(e){e.preventDefault();document.getElementById('uz-planta').classList.remove('drag');var f=e.dataTransfer.files[0];if(f)hFilePlanta(f);}
+function hFilePlanta(file){
+  var r=new FileReader();
+  r.onload=function(ev){
+    try{
+      var wb=XLSX.read(ev.target.result,{type:'array',cellDates:true,raw:false});
+      var shName=wb.SheetNames.indexOf('Hoja2')>=0?'Hoja2':wb.SheetNames[0];
+      var ws=wb.Sheets[shName];
+      var raw=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
+      parsePlanPlanta(raw,file.name,shName);
+    }catch(err){alert('Error al leer Plan de Planta: '+err.message);}
+  };
+  r.readAsArrayBuffer(file);
+}
+function parsePlanPlanta(raw,fileName,shName){
+  // Simple format: col A=fecha, col B=ton, col C=%GHHW
+  // Data starts at row 3 (index 2), skipping 2 header rows
+  var tn=function(v){if(v===null||v===undefined)return 0;var n=parseFloat(v);return isNaN(n)?0:n;};
+  var fmtD=function(v){
+    if(v instanceof Date)return('0'+v.getDate()).slice(-2)+'/'+('0'+(v.getMonth()+1)).slice(-2)+'/'+v.getFullYear();
+    if(typeof v==='number'&&v>40000){try{var d=XLSX.SSF.parse_date_code(v);if(d)return('0'+d.d).slice(-2)+'/'+('0'+d.m).slice(-2)+'/'+d.y;}catch(e){}}
+    return String(v||'');
+  };
+  var isD=function(v){
+    if(v instanceof Date)return true;
+    if(typeof v==='number'&&v>40000&&v<60000)return true;
+    return false;
+  };
+
+  // Find data start: first row where col A (index 0) is a date
+  var dataStart=-1;
+  for(var i=0;i<Math.min(30,raw.length);i++){
+    if(raw[i]&&isD(raw[i][0])){dataStart=i;break;}
+  }
+  if(dataStart<0){alert('No se leyeron fechas en el Plan de Planta.\nVerifica que col A tenga fechas reales.');return;}
+
+  PLAN_PLANTA=[];
+  for(var i=dataStart;i<raw.length;i++){
+    var row=raw[i];if(!row||!isD(row[0]))continue;
+    var ton=tn(row[1]);
+    var pct=tn(row[2]);
+    if(ton<=0)continue; // skip paros
+    PLAN_PLANTA.push({fecha:fmtD(row[0]),ton:ton,pct_ghhw:pct});
+  }
+
+  if(!PLAN_PLANTA.length){alert('No se leyeron d\u00edas del Plan de Planta.\nVerifica que col B tenga toneladas > 0.');return;}
+
+  var uz=document.getElementById('uz-planta');uz.classList.add('ok');
+  document.getElementById('uz-planta-i').textContent='\u2713';
+  document.getElementById('uz-planta-t').textContent=fileName;
+  var totTon=Math.round(PLAN_PLANTA.reduce(function(a,x){return a+x.ton;},0));
+  document.getElementById('uz-planta-s').textContent='\u2713 '+PLAN_PLANTA.length+' d\u00edas | '+totTon.toLocaleString('es-MX')+'t total';
+  var st=document.getElementById('planta-status');
+  st.innerHTML='\u2713 Plan Planta: '+PLAN_PLANTA.length+' d\u00edas activos';
+  st.style.display='block';
+}
+
+// ── CALCULAR ─────────────────────────────────────────────────────
 function calcular(){
   var st0=gSt();
   var totSI=st0.reduce(function(a,x){return a+x.ton;},0);
@@ -373,21 +569,25 @@ function calcular(){
   var N=PLAN.length;
   var hasSt0=totSI>0;
   var cuBase=0;
-  if(hasSt0){
-    cuBase=st0.reduce(function(a,x){return a+x.cu*x.ton;},0)/totSI;
-  } else {
-    var d1=PLAN[0]; var d1t=SEC_IDS.reduce(function(a,s){return a+(d1[s]?d1[s].ton:0);},0);
-    cuBase=d1t>0?SEC_IDS.reduce(function(a,s){return a+(d1[s]?d1[s].cu*(d1[s].ton):0);},0)/d1t:0;
-  }
+  if(hasSt0){cuBase=st0.reduce(function(a,x){return a+x.cu*x.ton;},0)/totSI;}
+  else{var d1=PLAN[0];var d1t=SEC_IDS.reduce(function(a,s){return a+(d1[s]?d1[s].ton:0);},0);cuBase=d1t>0?SEC_IDS.reduce(function(a,s){return a+(d1[s]?d1[s].cu*(d1[s].ton):0);},0)/d1t:0;}
   var cuMax=cuBase;
   st0.forEach(function(x){if(x.cu>cuMax)cuMax=x.cu;});
   PLAN.forEach(function(p){SEC_IDS.forEach(function(s){if(p[s]&&p[s].cu>cuMax)cuMax=p[s].cu;});});
-
   var activeDays=[];
   for(var di=0;di<N;di++){if(!diasParo[PLAN[di].dia])activeDays.push(di);}
   var nActive=activeDays.length;
+  var MIN_TON=25;
 
-  // Build ACUM_EXT
+  // GHHW global fixed: tpd * globalPct%
+  var ghhwGlobalPct=gv('ghhw-pct');if(isNaN(ghhwGlobalPct))ghhwGlobalPct=100;
+  var ghhwGlobalFixed=ghhwGlobalPct<100?(tpd*(ghhwGlobalPct/100)):null;
+
+  // Plan Planta lookup by fecha
+  var plantaMap={};
+  PLAN_PLANTA.forEach(function(p){plantaMap[p.fecha]=p;});
+
+  // Acumulado extraccion
   var eT=0,eCu=0,eAu=0,eAg=0,eAs=0,eBi=0,eZn=0,eMo=0,eNs=0;
   ACUM_EXT=[];
   PLAN.forEach(function(r){
@@ -403,19 +603,31 @@ function calcular(){
       moDia:moD,moAcum:eT>0?eMo/eT:0,nsrDia:nsD,nsrAcum:eT>0?eNs/eT:0,bySec:bySec});
   });
 
-  var st=st0.map(function(x){return {id:x.id,rem:x.ton,cu:x.cu,au:x.au,ag:x.ag,as_:x.as_,bi:x.bi,zn:x.zn,mo:x.mo,nsr:x.nsr};});
+  // Blending
+  var st=st0.map(function(x){return{id:x.id,rem:x.ton,cu:x.cu,au:x.au,ag:x.ag,as_:x.as_,bi:x.bi,zn:x.zn,mo:x.mo,nsr:x.nsr};});
   ACUM=[];RES=[];
   var prevCu=cuBase,activeIdx=0;
-
-  // GHHW fixed daily tonnage = total GHHW in plan * user% / active days
-  var ghhwPctVal2=parseFloat(document.getElementById('ghhw-pct').value);
-  if(isNaN(ghhwPctVal2)) ghhwPctVal2=100;
-  var totalGhhwPlan=PLAN.reduce(function(a,r){return a+(r.ghhw?r.ghhw.ton:0);},0);
-  var ghhwDailyFixed=(ghhwPctVal2<100) ? (tpd*(ghhwPctVal2/100)) : null;
+  var ghhwIdx=SEC_IDS.indexOf('ghhw');
 
   for(var di=0;di<N;di++){
     var ext=PLAN[di];
-    var isParo=!!diasParo[ext.dia];
+    var plantaDay=plantaMap[ext.fecha]||null;
+    // Paro: manually marked OR (Plan Planta loaded AND that day has ton=0)
+    // If Plan Planta not loaded, never auto-paro — use tpd for all days
+    var isParo=!!diasParo[ext.dia]||(PLAN_PLANTA.length>0&&plantaDay&&plantaDay.ton<=0);
+    var tonDia=plantaDay?plantaDay.ton:tpd;
+
+    // Per-day GHHW %: 1) exception day, 2) Plan Planta day %, 3) global fixed
+    var ghhwTodayFixed=ghhwGlobalFixed; // default: global
+    if(diasExcepcion[ext.dia]!==undefined){
+      // Exception day: use exception %
+      ghhwTodayFixed=tonDia*(diasExcepcion[ext.dia]/100);
+    } else if(plantaDay&&plantaDay.pct_ghhw>0){
+      // Plan Planta specifies % for this day
+      ghhwTodayFixed=tonDia*(plantaDay.pct_ghhw/100);
+    }
+
+    // Add extraction to stock
     var addExt=(di>0)||(!hasSt0);
     if(addExt){
       st.forEach(function(sx,i){
@@ -432,108 +644,85 @@ function calcular(){
       });
     }
     var totR=st.reduce(function(a,x){return a+x.rem;},0);
+
     if(isParo){
       RES.push({dia:ext.dia,fecha:ext.fecha,ton:0,cu:0,au:0,ag:0,as_:0,bi:0,zn:0,mo:0,nsr:0,geo:0,
-        seg:st.map(function(x){return {id:x.id,ton:0,cu:x.cu,au:x.au,ag:x.ag,as_:x.as_,bi:x.bi,zn:x.zn,mo:x.mo,nsr:x.nsr};}),isDia1:false,isParo:true});
+        seg:st.map(function(x){return{id:x.id,ton:0,cu:x.cu,au:x.au,ag:x.ag,as_:x.as_,bi:x.bi,zn:x.zn,mo:x.mo,nsr:x.nsr};}),isDia1:false,isParo:true});
       ACUM.push({dia:ext.dia,fecha:ext.fecha,sec:st.map(function(x){return Object.assign({},x);}),total:totR,cuPond:totR>0?st.reduce(function(a,x){return a+x.cu*x.rem;},0)/totR:0});
       continue;
     }
     if(totR<1)break;
-    var tonDia=Math.min(tpd,totR);
+    tonDia=Math.min(tonDia,totR);
+
     var tPos=nActive>1?activeIdx/(nActive-1):1;
     var cuTgt=Math.max(cuBase+(cuMax-cuBase)*Math.pow(tPos,1.5),prevCu);
-    var cuMx=0;st.forEach(function(x){if(x.rem>0&&x.cu>cuMx)cuMx=x.cu;});
-    if(cuMx<0.001)cuMx=0.001;
+    var cuMx=0;st.forEach(function(x){if(x.rem>0&&x.cu>cuMx)cuMx=x.cu;});if(cuMx<0.001)cuMx=0.001;
     if(cuTgt>cuMx)cuTgt=cuMx;
+
     var lo=0,hi=1,bW=st.map(function(){return 0;});
     for(var it=0;it<80;it++){
       var al=(lo+hi)/2;
       var w=st.map(function(x){return x.rem<=0?0:(x.rem/totR)*(1-al)+(x.cu/cuMx)*al;});
-      var ws=w.reduce(function(a,b){return a+b;},0)||1;
-      w=w.map(function(v){return v/ws;});
-      if(w.reduce(function(a,v,i){return a+v*st[i].cu;},0)<cuTgt)lo=al;else hi=al;
-      bW=w;
+      var ws2=w.reduce(function(a,b){return a+b;},0)||1;w=w.map(function(v){return v/ws2;});
+      if(w.reduce(function(a,v,i){return a+v*st[i].cu;},0)<cuTgt)lo=al;else hi=al;bW=w;
     }
-    var MIN_TON=25;var ghhwIdx=SEC_IDS.indexOf('ghhw');
 
-    // If GHHW fixed daily amount is set, force it before bisection affects distribution
-    if(ghhwDailyFixed!==null && ghhwIdx>=0){
+    var tonS;
+    if(ghhwTodayFixed!==null&&ghhwIdx>=0){
       var ghhwAvail=Math.max(0,st[ghhwIdx].rem-MIN_TON);
-      if(ghhwAvail>=ghhwDailyFixed){
-        // Enough GHHW stock: use fixed amount, others fill remaining
-        var ghhwFixed=ghhwDailyFixed;
+      if(ghhwAvail>=ghhwTodayFixed){
+        // Use fixed GHHW, distribute rest to others
+        var ghhwFixed=ghhwTodayFixed;
         var remaining=tonDia-ghhwFixed;
-        var tonS=bW.map(function(p,i){
-          if(i===ghhwIdx) return ghhwFixed;
-          if(st[i].rem<=MIN_TON) return 0;
-          return Math.min(p*remaining, st[i].rem-MIN_TON);
-        });
+        tonS=bW.map(function(p,i){if(i===ghhwIdx)return ghhwFixed;if(st[i].rem<=MIN_TON)return 0;return Math.min(p*remaining,st[i].rem-MIN_TON);});
         var ot=tonS.reduce(function(a,v,i){return i!==ghhwIdx?a+v:a;},0)||1;
-        tonS=tonS.map(function(v,i){
-          if(i===ghhwIdx) return ghhwFixed;
-          return Math.min((v/ot)*remaining, Math.max(0,st[i].rem-MIN_TON));
-        });
+        tonS=tonS.map(function(v,i){if(i===ghhwIdx)return ghhwFixed;return Math.min((v/ot)*remaining,Math.max(0,st[i].rem-MIN_TON));});
+        tonS[ghhwIdx]=ghhwFixed;
       } else {
-        // Not enough GHHW: skip it entirely, others cover full tonDia
-        var tonS=bW.map(function(p,i){
-          if(i===ghhwIdx) return 0;
-          if(st[i].rem<=MIN_TON) return 0;
-          return Math.min(p*tonDia, st[i].rem-MIN_TON);
-        });
+        // Not enough GHHW — skip it, others fill full tonDia
+        tonS=bW.map(function(p,i){if(i===ghhwIdx)return 0;if(st[i].rem<=MIN_TON)return 0;return Math.min(p*tonDia,st[i].rem-MIN_TON);});
         var ot2=tonS.reduce(function(a,b){return a+b;},0)||1;
-        tonS=tonS.map(function(v,i){
-          if(i===ghhwIdx) return 0;
-          return Math.min((v/ot2)*tonDia, Math.max(0,st[i].rem-MIN_TON));
-        });
+        tonS=tonS.map(function(v,i){if(i===ghhwIdx)return 0;return Math.min((v/ot2)*tonDia,Math.max(0,st[i].rem-MIN_TON));});
       }
     } else {
-      // Normal distribution — no GHHW restriction
-      var tonS=bW.map(function(p,i){
-        if(st[i].rem<=MIN_TON) return 0;
-        var maxTake=st[i].rem-MIN_TON;
-        return Math.min(p*tonDia,maxTake);
-      });
-      var sumS=tonS.reduce(function(a,b){return a+b;},0)||1;
-      tonS=tonS.map(function(v){return v/sumS*tonDia;});
+      tonS=bW.map(function(p,i){if(st[i].rem<=MIN_TON)return 0;return Math.min(p*tonDia,st[i].rem-MIN_TON);});
+      var ss=tonS.reduce(function(a,b){return a+b;},0)||1;tonS=tonS.map(function(v){return v/ss*tonDia;});
     }
+
     var avg=function(f){return tonS.reduce(function(a,v,i){return a+v*st[i][f];},0)/tonDia;};
     var bCu=avg('cu'),bAu=avg('au'),bAg=avg('ag'),bAs=avg('as_'),bBi=avg('bi'),bZn=avg('zn'),bMo=avg('mo'),bNsr=avg('nsr');
     var geo=calcGEO(bCu,bAu,bAg,tonDia);
-    var seg=st.map(function(x,i){return {id:x.id,ton:tonS[i],cu:x.cu,au:x.au,ag:x.ag,as_:x.as_,bi:x.bi,zn:x.zn,mo:x.mo,nsr:x.nsr};});
+    var seg=st.map(function(x,i){return{id:x.id,ton:tonS[i],cu:x.cu,au:x.au,ag:x.ag,as_:x.as_,bi:x.bi,zn:x.zn,mo:x.mo,nsr:x.nsr};});
     tonS.forEach(function(v,i){st[i].rem=Math.max(0,st[i].rem-v);});
     prevCu=bCu;activeIdx++;
     RES.push({dia:ext.dia,fecha:ext.fecha,ton:tonDia,cu:bCu,au:bAu,ag:bAg,as_:bAs,bi:bBi,zn:bZn,mo:bMo,nsr:bNsr,geo:geo,seg:seg,isDia1:(activeIdx===1),isParo:false});
     var totPost=st.reduce(function(a,x){return a+x.rem;},0);
     ACUM.push({dia:ext.dia,fecha:ext.fecha,sec:st.map(function(x){return Object.assign({},x);}),total:totPost,cuPond:totPost>0?st.reduce(function(a,x){return a+x.cu*x.rem;},0)/totPost:0});
   }
-  if(!RES.length){alert('Sin resultados.');return;}
+
+  if(!RES.length){alert('No hay resultados.');return;}
   var aR=RES.filter(function(r){return !r.isParo;});
   var tA=aR.reduce(function(a,x){return a+x.ton;},0);
   var totGeo=aR.reduce(function(a,x){return a+x.geo;},0);
-  sh('kd',aR.length); sh('kci',aR.length>0?aR[0].cu.toFixed(4):'--');
+  sh('kd',aR.length);
+  sh('kci',aR.length>0?aR[0].cu.toFixed(4):'--');
   sh('kcf',aR.length>0?aR[aR.length-1].cu.toFixed(4):'--');
+  sh('k-au',tA>0?(aR.reduce(function(a,x){return a+x.au*x.ton;},0)/tA).toFixed(3):'--');
+  sh('k-ag',tA>0?(aR.reduce(function(a,x){return a+x.ag*x.ton;},0)/tA).toFixed(2):'--');
   sh('k-geo',totGeo.toLocaleString('es-MX',{maximumFractionDigits:0}));
-  sh('k-au', tA>0?(aR.reduce(function(a,x){return a+x.au*x.ton;},0)/tA).toFixed(3):'--');
-  sh('k-ag', tA>0?(aR.reduce(function(a,x){return a+x.ag*x.ton;},0)/tA).toFixed(2):'--');
-  sh('k-au', tA>0?(aR.reduce(function(a,x){return a+x.au*x.ton;},0)/tA).toFixed(3):'--');
-  sh('k-ag', tA>0?(aR.reduce(function(a,x){return a+x.ag*x.ton;},0)/tA).toFixed(2):'--');
   sh('k-nsr',tA>0?(aR.reduce(function(a,x){return a+x.nsr*x.ton;},0)/tA).toFixed(1):'--');
   renderAE();renderAL();renderAP();
   document.getElementById('btn-xls').style.display='block';
 }
 
+// ── RENDER ACUMULADO EXTRACCION ──
 function renderAE(){
   var tb=document.getElementById('tbody-ae');tb.innerHTML='';
   var cuAA=[],auAA=[],agAA=[],tkA=[];
   ACUM_EXT.forEach(function(r){
     cuAA.push(+r.cuAcum.toFixed(4));auAA.push(+r.auAcum.toFixed(4));agAA.push(+r.agAcum.toFixed(3));tkA.push(+(r.tonAcum/1000).toFixed(2));
     var tr=document.createElement('tr');
-    var sc='';
-    r.bySec.forEach(function(b,i){
-      sc+='<td'+(i>0?' class="bl"':'')+'>'+b.ton.toFixed(0)+'</td>'
-        +'<td>'+b.cu.toFixed(3)+'</td><td>'+b.au.toFixed(3)+'</td><td>'+b.ag.toFixed(2)+'</td>'
-        +'<td>'+b.as_.toFixed(0)+'</td><td>'+b.bi.toFixed(0)+'</td><td>'+b.zn.toFixed(3)+'</td><td>'+b.mo.toFixed(0)+'</td><td>'+b.nsr.toFixed(1)+'</td>';
-    });
+    var sc='';r.bySec.forEach(function(b,i){sc+='<td'+(i>0?' class="bl"':'')+'>'+b.ton.toFixed(0)+'</td><td>'+b.cu.toFixed(3)+'</td><td>'+b.au.toFixed(3)+'</td><td>'+b.ag.toFixed(2)+'</td><td>'+b.as_.toFixed(0)+'</td><td>'+b.bi.toFixed(0)+'</td><td>'+b.zn.toFixed(3)+'</td><td>'+b.mo.toFixed(0)+'</td><td>'+b.nsr.toFixed(1)+'</td>';});
     tr.innerHTML='<td style="color:#fff;font-weight:600">'+r.dia+'</td><td style="color:var(--blue)">'+r.fecha+'</td>'
       +'<td>'+r.tonDia.toFixed(0)+'</td><td style="font-weight:600">'+r.tonAcum.toFixed(0)+'</td>'
       +'<td>'+r.cuDia.toFixed(4)+'</td><td style="color:var(--blue);font-weight:600">'+r.cuAcum.toFixed(4)+'</td>'
@@ -546,8 +735,7 @@ function renderAE(){
       +'<td>'+r.nsrDia.toFixed(1)+'</td><td style="color:var(--pur)">'+r.nsrAcum.toFixed(1)+'</td>'+sc;
     tb.appendChild(tr);
   });
-  document.getElementById('ae-e').style.display='none';
-  document.getElementById('ae-c').style.display='block';
+  document.getElementById('ae-e').style.display='none';document.getElementById('ae-c').style.display='block';
   var lbs=ACUM_EXT.map(function(x){return String(x.dia);});
   if(CH.ae)CH.ae.destroy();
   CH.ae=new Chart(document.getElementById('ch-ae'),{type:'line',data:{labels:lbs,datasets:[
@@ -557,30 +745,18 @@ function renderAE(){
     {label:'Ton/1k',data:tkA,borderColor:'#9b7fe8',tension:0.3,pointRadius:2,borderWidth:1.5,borderDash:[6,2],yAxisID:'y2'},
   ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
     plugins:{legend:{labels:{color:'#4a7fa5',font:{size:11},boxWidth:10},display:true}},
-    scales:{
-      x:{ticks:{color:'#4a7fa5',font:{size:10},autoSkip:true,maxTicksLimit:16},grid:{color:'rgba(26,48,80,.6)'}},
+    scales:{x:{ticks:{color:'#4a7fa5',font:{size:10},autoSkip:true,maxTicksLimit:16},grid:{color:'rgba(26,48,80,.6)'}},
       y:{ticks:{color:'#4a7fa5',font:{size:10},callback:function(v){return v.toFixed(3);}},grid:{color:'rgba(26,48,80,.6)'},title:{display:true,text:'Cu%/Au/Ag',color:'#4a7fa5',font:{size:10}}},
-      y2:{position:'right',ticks:{color:'#4a7fa5',font:{size:10},callback:function(v){return v.toFixed(1)+'k';}},grid:{display:false}}
-    }}});
+      y2:{position:'right',ticks:{color:'#4a7fa5',font:{size:10},callback:function(v){return v.toFixed(1)+'k';}},grid:{display:false}}}}});
 }
 
-function segCell(sg,i){
-  return '<td'+(i>0?' class="bl"':'')+'>'+sg.ton.toFixed(0)+'</td>'
-    +'<td>'+sg.cu.toFixed(4)+'</td><td>'+sg.au.toFixed(3)+'</td><td>'+sg.ag.toFixed(2)+'</td>'
-    +'<td>'+sg.as_.toFixed(0)+'</td><td>'+sg.bi.toFixed(0)+'</td><td>'+sg.zn.toFixed(3)+'</td><td>'+sg.mo.toFixed(0)+'</td><td>'+sg.nsr.toFixed(1)+'</td>';
-}
+function segCell(sg,i){return'<td'+(i>0?' class="bl"':'')+'>'+sg.ton.toFixed(0)+'</td><td>'+sg.cu.toFixed(4)+'</td><td>'+sg.au.toFixed(3)+'</td><td>'+sg.ag.toFixed(2)+'</td><td>'+sg.as_.toFixed(0)+'</td><td>'+sg.bi.toFixed(0)+'</td><td>'+sg.zn.toFixed(3)+'</td><td>'+sg.mo.toFixed(0)+'</td><td>'+sg.nsr.toFixed(1)+'</td>';}
 
 function renderAL(){
   var tb=document.getElementById('tbody-al');tb.innerHTML='';
   RES.forEach(function(r){
     var tr=document.createElement('tr');
-    if(r.isParo){
-      tr.className='tr-paro';
-      tr.innerHTML='<td style="color:var(--acc);font-weight:600">'+r.dia+'</td><td style="color:var(--acc)">'+r.fecha+'</td>'
-        +'<td colspan="10" style="text-align:center"><span class="bdg bdg-paro">\u25a4 PARO</span></td>'
-        +'<td colspan="'+(SEC_IDS.length*9+1)+'"></td>';
-      tb.appendChild(tr);return;
-    }
+    if(r.isParo){tr.className='tr-paro';tr.innerHTML='<td style="color:var(--acc);font-weight:600">'+r.dia+'</td><td style="color:var(--acc)">'+r.fecha+'</td><td colspan="10" style="text-align:center"><span class="bdg bdg-paro">\u25a4 PARO</span></td><td colspan="'+(SEC_IDS.length*9+1)+'"></td>';tb.appendChild(tr);return;}
     if(r.isDia1)tr.className='tr-d1';
     var bdg=r.cu>=1.5?'<span class="bdg bhi">Alto</span>':r.cu>=1.0?'<span class="bdg bmd">Medio</span>':'<span class="bdg blo">Bajo</span>';
     var seg='';r.seg.forEach(function(sg,i){seg+=segCell(sg,i);});
@@ -594,19 +770,12 @@ function renderAL(){
       +seg+'<td>'+bdg+'</td>';
     tb.appendChild(tr);
   });
-  var aR=RES.filter(function(r){return !r.isParo;});
-  var tA=aR.reduce(function(a,x){return a+x.ton;},0);
+  var aR=RES.filter(function(r){return !r.isParo;});var tA=aR.reduce(function(a,x){return a+x.ton;},0);
   var trT=document.createElement('tr');trT.className='tr-tot';
-  var sT='';
-  SEC_IDS.forEach(function(_,i){sT+='<td'+(i>0?' class="bl"':'')+'>'+aR.reduce(function(a,r){return a+(r.seg[i]?r.seg[i].ton:0);},0).toFixed(0)+'</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>';});
-  trT.innerHTML='<td>TOTAL</td><td></td><td>'+tA.toFixed(0)+'</td>'
-    +'<td>'+(tA>0?(aR.reduce(function(a,x){return a+x.cu*x.ton;},0)/tA).toFixed(4):'0')+'</td>'
-    +'<td></td><td></td><td></td><td></td><td></td><td></td><td></td>'
-    +'<td style="color:var(--pur);font-weight:600">'+aR.reduce(function(a,x){return a+x.geo;},0).toLocaleString('es-MX',{maximumFractionDigits:0})+'</td>'
-    +sT+'<td></td>';
+  var sT='';SEC_IDS.forEach(function(_,i){sT+='<td'+(i>0?' class="bl"':'')+'>'+aR.reduce(function(a,r){return a+(r.seg[i]?r.seg[i].ton:0);},0).toFixed(0)+'</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>';});
+  trT.innerHTML='<td>TOTAL</td><td></td><td>'+tA.toFixed(0)+'</td><td>'+(tA>0?(aR.reduce(function(a,x){return a+x.cu*x.ton;},0)/tA).toFixed(4):'0')+'</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td style="color:var(--pur);font-weight:600">'+aR.reduce(function(a,x){return a+x.geo;},0).toLocaleString('es-MX',{maximumFractionDigits:0})+'</td>'+sT+'<td></td>';
   tb.appendChild(trT);
-  document.getElementById('al-e').style.display='none';
-  document.getElementById('al-c').style.display='block';
+  document.getElementById('al-e').style.display='none';document.getElementById('al-c').style.display='block';
 }
 
 function renderAP(){
@@ -625,7 +794,7 @@ function renderAP(){
     cuAA.push(+cuA.toFixed(4));auAA.push(+auA.toFixed(4));agAA.push(+agA.toFixed(3));
     tAcA.push(+tAc.toFixed(0));stTA.push(stRow?+stRow.total.toFixed(0):0);
     var tr=document.createElement('tr');if(r.isParo)tr.className='tr-paro';
-    var remC=stRow?stRow.sec.map(function(x){var v=x.rem||0;return '<td style="'+(v<=0?'color:var(--amber)':'')+'">'+( v>0?v.toFixed(0):'25*')+'</td>';}).join(''):'';
+    var remC=stRow?stRow.sec.map(function(x){return'<td>'+(x.rem>0?x.rem.toFixed(0):'25*')+'</td>';}).join(''):'';
     tr.innerHTML='<td style="color:'+(r.isParo?'var(--acc)':'#fff')+';font-weight:600">'+r.dia+'</td>'
       +'<td style="color:var(--blue)">'+r.fecha+'</td>'
       +'<td>'+(r.isParo?'<span class="bdg bdg-paro">PARO</span>':'Activo')+'</td>'
@@ -641,8 +810,7 @@ function renderAP(){
       +remC+'<td style="color:var(--blue);font-weight:600">'+(stRow?stRow.total.toFixed(0):'--')+'</td>';
     tb.appendChild(tr);
   });
-  document.getElementById('ap-e').style.display='none';
-  document.getElementById('ap-c').style.display='block';
+  document.getElementById('ap-e').style.display='none';document.getElementById('ap-c').style.display='block';
   if(CH.ap)CH.ap.destroy();
   CH.ap=new Chart(document.getElementById('ch-ap'),{type:'line',data:{labels:lbs,datasets:[
     {label:'Cu% acum',data:cuAA,borderColor:'#4a9fd4',backgroundColor:'rgba(74,159,212,0.08)',fill:true,tension:0.4,pointRadius:2,borderWidth:2,yAxisID:'y'},
@@ -650,272 +818,50 @@ function renderAP(){
     {label:'Ag acum (g/t)',data:agAA,borderColor:'#2ecc8a',tension:0.4,pointRadius:2,borderWidth:1.5,borderDash:[2,2],yAxisID:'y'},
   ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
     plugins:{legend:{labels:{color:'#4a7fa5',font:{size:11},boxWidth:10},display:true}},
-    scales:{
-      x:{ticks:{color:'#4a7fa5',font:{size:10},autoSkip:true,maxTicksLimit:16},grid:{color:'rgba(26,48,80,.6)'}},
-      y:{ticks:{color:'#4a7fa5',font:{size:10},callback:function(v){return v.toFixed(3);}},grid:{color:'rgba(26,48,80,.6)'},title:{display:true,text:'Cu%/Au/Ag',color:'#4a7fa5',font:{size:10}}}
-    }}});
+    scales:{x:{ticks:{color:'#4a7fa5',font:{size:10},autoSkip:true,maxTicksLimit:16},grid:{color:'rgba(26,48,80,.6)'}},
+      y:{ticks:{color:'#4a7fa5',font:{size:10},callback:function(v){return v.toFixed(3);}},grid:{color:'rgba(26,48,80,.6)'},title:{display:true,text:'Cu%/Au/Ag',color:'#4a7fa5',font:{size:10}}}}}});
   if(CH.ap2)CH.ap2.destroy();
   CH.ap2=new Chart(document.getElementById('ch-ap2'),{type:'line',data:{labels:lbs,datasets:[
     {label:'Ton alim acum',data:tAcA,borderColor:'#e85d2e',backgroundColor:'rgba(232,93,46,0.06)',fill:true,tension:0.3,pointRadius:2,borderWidth:2,yAxisID:'y'},
     {label:'Stock restante',data:stTA,borderColor:'#4a9fd4',tension:0.3,pointRadius:2,borderWidth:2,borderDash:[5,3],yAxisID:'y'},
   ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
     plugins:{legend:{labels:{color:'#4a7fa5',font:{size:11},boxWidth:10},display:true}},
-    scales:{
-      x:{ticks:{color:'#4a7fa5',font:{size:10},autoSkip:true,maxTicksLimit:16},grid:{color:'rgba(26,48,80,.6)'}},
-      y:{ticks:{color:'#4a7fa5',font:{size:10},callback:function(v){return v.toLocaleString();}},grid:{color:'rgba(26,48,80,.6)'}}
-    }}});
+    scales:{x:{ticks:{color:'#4a7fa5',font:{size:10},autoSkip:true,maxTicksLimit:16},grid:{color:'rgba(26,48,80,.6)'}},
+      y:{ticks:{color:'#4a7fa5',font:{size:10},callback:function(v){return v.toLocaleString();}},grid:{color:'rgba(26,48,80,.6)'}}}}});
 }
 
 function exportXL(){
-  if(!RES.length){alert('Genera primero.');return;}
-  var wb2=XLSX.utils.book_new();
-  var mes=document.getElementById('sel-mes').value,ano=document.getElementById('sel-ano').value;
-  var h0=['DIA','FECHA','TON DIA','TON ACUM','Cu% DIA','Cu% ACUM','Au DIA','Au ACUM','Ag DIA','Ag ACUM','As','AsACUM','Bi','BiACUM','Zn%','ZnACUM','Mo','MoACUM','NSR','NSRACUM']
+  if(!RES.length){alert('Genera el blending primero.');return;}
+  var wb2=XLSX.utils.book_new();var mes=document.getElementById('sel-mes').value,ano=document.getElementById('sel-ano').value;
+  var h0=['DIA','FECHA','TON DIA','TON ACUM','Cu% DIA','Cu% ACUM','Au DIA','Au ACUM','Ag DIA','Ag ACUM','As','AsA','Bi','BiA','Zn%','ZnA','Mo','MoA','NSR','NSRA']
     .concat(SEC_IDS.reduce(function(a,s){return a.concat([s+' ton',s+' Cu%',s+' Au',s+' Ag',s+' As',s+' Bi',s+' Zn%',s+' Mo',s+' NSR']);},[]));
   var r0=[h0];
-  ACUM_EXT.forEach(function(r){
-    r0.push([r.dia,r.fecha,+r.tonDia.toFixed(2),+r.tonAcum.toFixed(2),+r.cuDia.toFixed(4),+r.cuAcum.toFixed(4),+r.auDia.toFixed(4),+r.auAcum.toFixed(4),+r.agDia.toFixed(3),+r.agAcum.toFixed(3),+r.asDia.toFixed(1),+r.asAcum.toFixed(1),+r.biDia.toFixed(1),+r.biAcum.toFixed(1),+r.znDia.toFixed(4),+r.znAcum.toFixed(4),+r.moDia.toFixed(1),+r.moAcum.toFixed(1),+r.nsrDia.toFixed(2),+r.nsrAcum.toFixed(2)]
-      .concat(r.bySec.reduce(function(a,b){return a.concat([+b.ton.toFixed(2),+b.cu.toFixed(4),+b.au.toFixed(4),+b.ag.toFixed(3),+b.as_.toFixed(1),+b.bi.toFixed(1),+b.zn.toFixed(4),+b.mo.toFixed(1),+b.nsr.toFixed(2)]);},[])));
-  });
+  ACUM_EXT.forEach(function(r){r0.push([r.dia,r.fecha,+r.tonDia.toFixed(2),+r.tonAcum.toFixed(2),+r.cuDia.toFixed(4),+r.cuAcum.toFixed(4),+r.auDia.toFixed(4),+r.auAcum.toFixed(4),+r.agDia.toFixed(3),+r.agAcum.toFixed(3),+r.asDia.toFixed(1),+r.asAcum.toFixed(1),+r.biDia.toFixed(1),+r.biAcum.toFixed(1),+r.znDia.toFixed(4),+r.znAcum.toFixed(4),+r.moDia.toFixed(1),+r.moAcum.toFixed(1),+r.nsrDia.toFixed(2),+r.nsrAcum.toFixed(2)].concat(r.bySec.reduce(function(a,b){return a.concat([+b.ton.toFixed(2),+b.cu.toFixed(4),+b.au.toFixed(4),+b.ag.toFixed(3),+b.as_.toFixed(1),+b.bi.toFixed(1),+b.zn.toFixed(4),+b.mo.toFixed(1),+b.nsr.toFixed(2)]);},[])));});
   XLSX.utils.book_append_sheet(wb2,XLSX.utils.aoa_to_sheet(r0),'Acumulado Extraccion');
   var h2=['DIA','FECHA','ESTADO','TON','Cu%','Au','Ag','As','Bi','Zn%','Mo','NSR','GEO']
     .concat(SEC_IDS.reduce(function(a,s){return a.concat([s+' ton',s+' Cu%',s+' Au',s+' Ag',s+' As',s+' Bi',s+' Zn%',s+' Mo',s+' NSR']);},[])).concat(['LEY']);
   var r2=[h2];
-  RES.forEach(function(r){
-    r2.push([r.dia,r.fecha,r.isParo?'PARO':'Activo',+r.ton.toFixed(2),+r.cu.toFixed(4),+r.au.toFixed(4),+r.ag.toFixed(4),+r.as_.toFixed(1),+r.bi.toFixed(1),+r.zn.toFixed(4),+r.mo.toFixed(1),+r.nsr.toFixed(2),+r.geo.toFixed(0)]
-      .concat(r.seg.reduce(function(a,sg){return a.concat([+sg.ton.toFixed(2),+sg.cu.toFixed(4),+sg.au.toFixed(4),+sg.ag.toFixed(4),+sg.as_.toFixed(1),+sg.bi.toFixed(1),+sg.zn.toFixed(4),+sg.mo.toFixed(1),+sg.nsr.toFixed(2)]);},[])).concat([r.isParo?'PARO':r.cu>=1.5?'Alto':r.cu>=1.0?'Medio':'Bajo']));
-  });
+  RES.forEach(function(row){r2.push([row.dia,row.fecha,row.isParo?'PARO':'Activo',+row.ton.toFixed(2),+row.cu.toFixed(4),+row.au.toFixed(4),+row.ag.toFixed(4),+row.as_.toFixed(1),+row.bi.toFixed(1),+row.zn.toFixed(4),+row.mo.toFixed(1),+row.nsr.toFixed(2),+row.geo.toFixed(0)].concat(row.seg.reduce(function(a,sg){return a.concat([+sg.ton.toFixed(2),+sg.cu.toFixed(4),+sg.au.toFixed(4),+sg.ag.toFixed(4),+sg.as_.toFixed(1),+sg.bi.toFixed(1),+sg.zn.toFixed(4),+sg.mo.toFixed(1),+sg.nsr.toFixed(2)]);},[])).concat([row.isParo?'PARO':row.cu>=1.5?'Alto':row.cu>=1.0?'Medio':'Bajo']));});
   XLSX.utils.book_append_sheet(wb2,XLSX.utils.aoa_to_sheet(r2),'Alimentacion Planta');
   XLSX.writeFile(wb2,'Blending_'+mes+'_'+ano+'.xlsx');
 }
 
-function sTab(id,el){
-  document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active');});
-  document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active');});
-  document.getElementById('tab-'+id).classList.add('active');
-  el.classList.add('active');
-}
+function sTab(id,el){document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active');});document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active');});document.getElementById('tab-'+id).classList.add('active');el.classList.add('active');}
 
 function resetAll(){
-  SEC_IDS.forEach(function(sid){
-    var def=SEC_DEFS[sid];
-    ['ton','cu','au','ag','as_','bi','zn','mo','nsr'].forEach(function(f){
-      sv(sid+'-'+f, def[f]!==undefined?def[f]:0);
-    });
-  });
-  diasParo={};RES=[];ACUM=[];ACUM_EXT=[];
-  for(var d=1;d<=30;d++){var b=document.getElementById('dia-'+d);if(b)b.className='dia-btn';}
-  var ps=document.getElementById('paro-sum');if(ps)ps.innerHTML='Ning\u00fan d\u00eda marcado';
+  SEC_IDS.forEach(function(sid){var def=SEC_DEFS[sid];['ton','cu','au','ag','as_','bi','zn','mo','nsr'].forEach(function(f){sv(sid+'-'+f,def[f]!==undefined?def[f]:0);});});
+  diasParo={};diasExcepcion={};PLAN_PLANTA=[];RES=[];ACUM=[];ACUM_EXT=[];
+  for(var d=1;d<=30;d++){var b=document.getElementById('dia-'+d);if(b){b.className='dia-btn';b.title='';}}
+  ['uz','uz-planta'].forEach(function(id){var u=document.getElementById(id);if(u)u.classList.remove('ok');});
+  ['plan-status','planta-status'].forEach(function(id){var e=document.getElementById(id);if(e)e.style.display='none';});
   ['ae-e','al-e','ap-e'].forEach(function(id){var e=document.getElementById(id);if(e)e.style.display='block';});
   ['ae-c','al-c','ap-c'].forEach(function(id){var e=document.getElementById(id);if(e)e.style.display='none';});
   document.getElementById('btn-xls').style.display='none';
   ['kd','kci','kcf','k-au','k-ag','k-geo','k-nsr'].forEach(function(id){sh(id,'--');});
-  sv('ghhw-pct',100);updGhhwPct();
-  updK0();
+  sv('ghhw-pct',100);updGhhwPct();updParoSum();updK0();
 }
 
-// ── EXCEL UPLOAD ─────────────────────────────────────────────────
-// Column map for Stock Detalle sheet (0-indexed):
-// Col 1=fecha, GHHW=2-10, S1=11-19, S2=20-28, S3=29-37, PON=38-46
-// Fields per sector: ton,cu,au,ag,as_,bi,zn,mo,nsr = offsets 0-8
-var COL_BASE = {ghhw:2, s1:11, s2:20, s3:29, pon:38};
-
-function hDrop(e){
-  e.preventDefault();
-  document.getElementById('uz').classList.remove('drag');
-  var f=e.dataTransfer.files[0];
-  if(f) hFile(f);
-}
-
-function hFile(file){
-  var r=new FileReader();
-  r.onload=function(ev){
-    try{
-      var wb=XLSX.read(ev.target.result,{type:'array',cellDates:true,raw:false});
-      // Find Stock Detalle sheet - try multiple strategies
-      var shName=null;
-      // Strategy 1: exact or near match
-      wb.SheetNames.forEach(function(n){
-        var nl=n.toLowerCase().replace(/\s+/g,'');
-        if(nl.indexOf('stockdetalle')>=0||nl.indexOf('stock_detalle')>=0||nl.indexOf('detalle')>=0) shName=n;
-      });
-      // Strategy 2: pick the sheet with the most date-like values in col B
-      if(!shName){
-        var bestSheet=null,bestCount=0;
-        wb.SheetNames.forEach(function(n){
-          var ws2=wb.Sheets[n];
-          var raw2=XLSX.utils.sheet_to_json(ws2,{header:1,defval:null,raw:true});
-          var cnt=0;
-          for(var i=0;i<Math.min(40,raw2.length);i++){
-            var v=raw2[i]?raw2[i][1]:null;
-            if(v instanceof Date) cnt++;
-            else if(typeof v==='number'&&v>40000&&v<60000) cnt++;
-            else if(typeof v==='string'&&/^\d{4}-\d{2}-\d{2}/.test(v)) cnt++;
-          }
-          if(cnt>bestCount){bestCount=cnt;bestSheet=n;}
-        });
-        if(bestSheet&&bestCount>=5) shName=bestSheet;
-      }
-      if(!shName) shName=wb.SheetNames[0];
-      var ws=wb.Sheets[shName];
-      var raw=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
-      parseStockDetalle(raw, file.name, shName, wb.SheetNames);
-    }catch(err){
-      alert('Error al leer el archivo: '+err.message);
-    }
-  };
-  r.readAsArrayBuffer(file);
-}
-
-function parseStockDetalle(raw, fileName, shName, wb_sheets_ref){
-  if(!wb_sheets_ref) wb_sheets_ref=[];
-
-  var tn=function(v){if(v===null||v===undefined||v==='')return 0;var n=parseFloat(v);return isNaN(n)?0:n;};
-
-  var fmtDate=function(v){
-    if(v instanceof Date) return ('0'+v.getDate()).slice(-2)+'/'+('0'+(v.getMonth()+1)).slice(-2)+'/'+v.getFullYear();
-    if(typeof v==='number' && v>40000 && v<60000){
-      try{var d=XLSX.SSF.parse_date_code(v);if(d)return ('0'+d.d).slice(-2)+'/'+('0'+d.m).slice(-2)+'/'+d.y;}catch(e){}
-    }
-    if(typeof v==='string'||typeof v==='number'){
-      var s=String(v).trim().replace(/^'/,'');
-      var m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);
-      if(m) return m[3]+'/'+m[2]+'/'+m[1];
-      var m2=s.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
-      if(m2) return v;
-    }
-    return String(v||'');
-  };
-
-  var isDate=function(v){
-    if(!v && v!==0) return false;
-    if(v instanceof Date) return true;
-    if(typeof v==='number' && v>40000 && v<60000) return true;
-    var s=String(v).trim().replace(/^'/,'');
-    if(/^\d{4}[-\/]\d{2}[-\/]\d{2}/.test(s)) return true;
-    if(/^\d{1,2}[-\/]\d{1,2}[-\/]\d{4}/.test(s)) return true;
-    return false;
-  };
-
-  var fmtDate=function(v){
-    if(v instanceof Date){
-      return ('0'+v.getDate()).slice(-2)+'/'+('0'+(v.getMonth()+1)).slice(-2)+'/'+v.getFullYear();
-    }
-    var s=String(v).trim().replace(/^'/,'');
-    // YYYY-MM-DD
-    var m=s.match(/^(\d{4})[-\/](\d{2})[-\/](\d{2})/);
-    if(m) return m[3]+'/'+m[2]+'/'+m[1];
-    // M/D/YYYY or D/M/YYYY
-    var m2=s.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/);
-    if(m2) return ('0'+m2[1]).slice(-2)+'/'+('0'+m2[2]).slice(-2)+'/'+m2[3];
-    // numeric serial
-    if(typeof v==='number' && v>40000){
-      try{var d=XLSX.SSF.parse_date_code(v);if(d)return ('0'+d.d).slice(-2)+'/'+('0'+d.m).slice(-2)+'/'+d.y;}catch(e){}
-    }
-    return s;
-  };
-
-  // Step 1: Find sector column bases by scanning row 2 for sector group headers
-  // Also find the data start row (first row where col 1 is a date)
-  var sectorBases={ghhw:null,s1:null,s2:null,s3:null,pon:null};
-  var dataStart=-1;
-
-  for(var i=0;i<Math.min(60,raw.length);i++){
-    var row=raw[i];
-    if(!row) continue;
-    // Check for sector headers in any column
-    for(var j=0;j<row.length;j++){
-      var v=String(row[j]||'').toLowerCase().replace(/\s+/g,'');
-      if(v.indexOf('ghhw')>=0 && sectorBases.ghhw===null) sectorBases.ghhw=j;
-      if((v.indexOf('0.0%')>=0||v.indexOf('stock1')>=0||v.indexOf('0%-->1')>=0||v.indexOf('stock-0')>=0) && sectorBases.s1===null) sectorBases.s1=j;
-      if((v.indexOf('1.3%')>=0||v.indexOf('1.00%')>=0||v.indexOf('stock2')>=0||v.indexOf('1%-->1.5')>=0) && sectorBases.s2===null) sectorBases.s2=j;
-      if((v.indexOf('>1.6%')>=0||v.indexOf('>1.5%')>=0||v.indexOf('stock3')>=0||v.indexOf('>1.50')>=0||v.indexOf('>1.60')>=0) && sectorBases.s3===null) sectorBases.s3=j;
-      if(v.indexOf('poniente')>=0 && sectorBases.pon===null) sectorBases.pon=j;
-    }
-    // Find data start
-    if(dataStart<0 && isDate(row[1])) dataStart=i;
-  }
-
-  // Fallback to known column positions if auto-detect fails
-  if(sectorBases.ghhw===null) sectorBases.ghhw=2;
-  if(sectorBases.s1===null)   sectorBases.s1=11;
-  if(sectorBases.s2===null)   sectorBases.s2=20;
-  if(sectorBases.s3===null)   sectorBases.s3=29;
-  // pon stays null if not found (no Poniente in some files)
-
-  if(dataStart<0){
-    alert('No se encontraron fechas en la hoja "'+shName+'".\nHojas disponibles: '+wb_sheets_ref.join(', '));
-    return;
-  }
-
-  // Step 2: Read data rows
-  var newPlan=[];
-  var dia=1;
-  for(var i=dataStart;i<raw.length;i++){
-    var row=raw[i];
-    if(!row) continue; var rv1=row[1]; if(!isDate(rv1)) continue;
-    var fechaStr=fmtDate(rv1);
-    var r={dia:dia, fecha:fechaStr};
-    // Read each sector
-    var readSec=function(base){
-      if(base===null) return {ton:0,cu:0,au:0,ag:0,as_:0,bi:0,zn:0,mo:0,nsr:0};
-      return {ton:tn(row[base]),cu:tn(row[base+1]),au:tn(row[base+2]),ag:tn(row[base+3]),
-              as_:tn(row[base+4]),bi:tn(row[base+5]),zn:tn(row[base+6]),mo:tn(row[base+7]),nsr:tn(row[base+8])};
-    };
-    r.ghhw=readSec(sectorBases.ghhw);
-    r.s1=readSec(sectorBases.s1);
-    r.s2=readSec(sectorBases.s2);
-    r.s3=readSec(sectorBases.s3);
-    r.pon=readSec(sectorBases.pon); // zeros if no Poniente
-    newPlan.push(r);
-    dia++;
-  }
-
-  // Remove total rows (abnormally high tonnage)
-  while(newPlan.length>0){
-    var last=newPlan[newPlan.length-1];
-    var tot=SEC_IDS.reduce(function(a,s){return a+(last[s]?last[s].ton:0);},0);
-    if(tot>80000) newPlan.pop(); else break;
-  }
-
-  if(!newPlan.length){
-    alert('No se leyeron d\u00edas del plan. Verifica que el archivo tenga la hoja "Stock Detalle".');
-    return;
-  }
-
-  // Update global PLAN
-  PLAN=newPlan;
-
-  // Update UI
-  var uz=document.getElementById('uz');uz.classList.add('ok');
-  document.getElementById('uz-i').textContent='\u2713';
-  document.getElementById('uz-t').textContent=fileName;
-  document.getElementById('uz-s').textContent='\u2713 '+newPlan.length+' d\u00edas le\u00eddos de "'+shName+'"';
-
-  var extTot=PLAN.reduce(function(a,p){return a+SEC_IDS.reduce(function(b,s){return b+(p[s]?p[s].ton:0);},0);},0);
-  var st=document.getElementById('plan-status');
-  st.innerHTML='<span style="color:var(--green);font-weight:600">\u2713 Plan cargado: '+newPlan.length+' d\u00edas</span> &mdash; Extracci\u00f3n total: '+extTot.toLocaleString('es-MX',{maximumFractionDigits:0})+' t';
-  st.style.display='block';
-  sh('kex', extTot.toLocaleString('es-MX',{maximumFractionDigits:0}));
-
-  // Refresh plan table
-  var tb=document.getElementById('tbody-plan');tb.innerHTML='';
-  PLAN.forEach(function(r){
-    var tot=SEC_IDS.reduce(function(a,s){return a+(r[s]?r[s].ton:0);},0);
-    var tr=document.createElement('tr');
-    var cells='<td style="color:#fff;font-weight:600">'+r.dia+'</td><td style="color:var(--blue)">'+r.fecha+'</td>';
-    SEC_IDS.forEach(function(s){
-      var sd=r[s]||{};
-      cells+='<td>'+(sd.ton||0).toFixed(0)+'</td><td>'+(sd.cu||0).toFixed(3)+'</td>'
-            +'<td>'+(sd.au||0).toFixed(3)+'</td><td>'+(sd.ag||0).toFixed(2)+'</td>'
-            +'<td>'+(sd.as_||0).toFixed(0)+'</td><td>'+(sd.bi||0).toFixed(0)+'</td>'
-            +'<td>'+(sd.zn||0).toFixed(3)+'</td><td>'+(sd.mo||0).toFixed(0)+'</td>';
-    });
-    cells+='<td style="font-weight:600">'+tot.toFixed(0)+'</td>';
-    tr.innerHTML=cells; tb.appendChild(tr);
-  });
-  document.getElementById('plan-tw').style.display='block';
-}
+updK0();updGhhwPct();
 
 </script>
 </body>
