@@ -242,7 +242,7 @@ hr.div{border:none;border-top:1px solid var(--border);margin:1.25rem 0}
     <div class="filter-label">Año</div>
     <select class="filter-select" id="fil-year" onchange="applyFilters()">
       <option value="">Todos</option>
-      <option value="2026" selected>2026</option>
+      <option value="2026">2026</option>
     </select>
   </div>
   <div class="filter-group">
@@ -251,7 +251,7 @@ hr.div{border:none;border-top:1px solid var(--border);margin:1.25rem 0}
       <option value="">Todos</option>
       <option value="01">Enero</option><option value="02">Febrero</option>
       <option value="03">Marzo</option><option value="04">Abril</option>
-      <option value="05" selected>Mayo</option><option value="06">Junio</option>
+      <option value="05">Mayo</option><option value="06">Junio</option>
       <option value="07">Julio</option><option value="08">Agosto</option>
       <option value="09">Septiembre</option><option value="10">Octubre</option>
       <option value="11">Noviembre</option><option value="12">Diciembre</option>
@@ -570,22 +570,46 @@ function clearFilters(){
 /* ═══ STOCK CALC ═══ */
 function calcSR(){
   const map={};
-  STOCKS.forEach(s=>map[s]={ext:0,ali:0,mCu:0,mAu:0,mAg:0});
+  STOCKS.forEach(s=>map[s]={ext:0,ali:0,mCu:0,mAu:0,mAg:0,mCuAli:0,mAuAli:0,mAgAli:0});
+  // Acumular extracción con su metal
   STATE.extraccion.forEach(r=>{
-    if(!map[r.stock])map[r.stock]={ext:0,ali:0,mCu:0,mAu:0,mAg:0};
-    map[r.stock].ext+=r.ton; map[r.stock].mCu+=r.ton*r.cu/100;
-    map[r.stock].mAu+=r.ton*r.au; map[r.stock].mAg+=r.ton*r.ag;
+    if(!map[r.stock])map[r.stock]={ext:0,ali:0,mCu:0,mAu:0,mAg:0,mCuAli:0,mAuAli:0,mAgAli:0};
+    map[r.stock].ext+=r.ton;
+    map[r.stock].mCu+=r.ton*r.cu/100;
+    map[r.stock].mAu+=r.ton*r.au;
+    map[r.stock].mAg+=r.ton*r.ag;
   });
+  // Acumular alimentación — el metal que salió = toneladas alimentadas * ley ponderada del stock
   STATE.alimentacion.forEach(r=>{
     const p={STOCK1:r.s1,STOCK2:r.s2,STOCK3:r.s3,STOCK4:r.s4,GHHW:r.sg};
-    STOCKS.forEach(s=>{if(!map[s])map[s]={ext:0,ali:0,mCu:0,mAu:0,mAg:0};map[s].ali+=r.ton*(p[s]||0)/100;});
+    STOCKS.forEach(s=>{
+      if(!map[s])map[s]={ext:0,ali:0,mCu:0,mAu:0,mAg:0,mCuAli:0,mAuAli:0,mAgAli:0};
+      const tonAli=r.ton*(p[s]||0)/100;
+      map[s].ali+=tonAli;
+      // Metal alimentado = toneladas alimentadas * ley ponderada actual del stock
+      const leyActCu=map[s].ext>0?map[s].mCu/map[s].ext*100:0;
+      const leyActAu=map[s].ext>0?map[s].mAu/map[s].ext:0;
+      const leyActAg=map[s].ext>0?map[s].mAg/map[s].ext:0;
+      map[s].mCuAli+=tonAli*leyActCu/100;
+      map[s].mAuAli+=tonAli*leyActAu;
+      map[s].mAgAli+=tonAli*leyActAg;
+    });
   });
   const res={};
   STOCKS.forEach(s=>{
     const v=map[s];
-    res[s]={ext:v.ext,ali:v.ali,inv:v.ext-v.ali,
-      leyCu:v.ext>0?v.mCu/v.ext*100:0,leyAu:v.ext>0?v.mAu/v.ext:0,
-      leyAg:v.ext>0?v.mAg/v.ext:0,metalCu:(v.ext-v.ali)>0?(v.ext>0?v.mCu/v.ext*(v.ext-v.ali)/100:0):0};
+    const inv=v.ext-v.ali;
+    // Metal en inventario = metal extraído - metal alimentado
+    const mCuInv=Math.max(0,v.mCu-v.mCuAli);
+    const mAuInv=Math.max(0,v.mAu-v.mAuAli);
+    const mAgInv=Math.max(0,v.mAg-v.mAgAli);
+    res[s]={
+      ext:v.ext, ali:v.ali, inv:inv,
+      leyCu:inv>0?mCuInv/inv*100:0,
+      leyAu:inv>0?mAuInv/inv:0,
+      leyAg:inv>0?mAgInv/inv:0,
+      metalCu:mCuInv
+    };
   });
   return res;
 }
@@ -610,8 +634,10 @@ function renderDash(){
   const totExt=filtExt.reduce((a,r)=>a+r.ton,0);
   const totAli=filtAli.reduce((a,r)=>a+r.ton,0);
   const totMet=filtExt.reduce((a,r)=>a+r.ton*r.cu/100,0);
-  const leyP=totExt>0?totMet/totExt*100:0;
+  // Ley Cu e inventario vienen del Stock Real (inventario físico actual)
   const totInv=STOCKS.reduce((a,s)=>a+Math.max(0,sr[s].inv),0);
+  const totMetInv=STOCKS.reduce((a,s)=>a+Math.max(0,sr[s].metalCu),0);
+  const leyP=totInv>0?totMetInv/totInv*100:0;
   const fechas=[...new Set(filtExt.map(r=>r.fecha))].sort();
 
   document.getElementById('dash-kpis').innerHTML=[
@@ -716,6 +742,8 @@ function renderAli(){
 
 /* ═══ STOCK REAL ═══ */
 function renderStock(){
+  // Stock Real usa TODOS los datos (sin filtro de fecha) para inventario correcto
+  // pero muestra la info actualizada
   const sr=calcSR();
   document.getElementById('stk-ts').textContent='Actualizado: '+now();
   let html='',totE=0,totA=0,totM=0;
@@ -1346,6 +1374,21 @@ cs.onload=()=>{applyFilters();};
 document.head.appendChild(cs);
 document.getElementById('e-fecha').value=now();
 document.getElementById('a-fecha').value=now();
+// Setear filtros al mes y año actuales
+(function(){
+  const d=new Date();
+  const yr=d.getFullYear().toString();
+  const mo=String(d.getMonth()+1).padStart(2,'0');
+  const yrSel=document.getElementById('fil-year');
+  const moSel=document.getElementById('fil-month');
+  if(yrSel){
+    // Agregar año actual si no existe
+    let found=false;
+    for(let opt of yrSel.options){ if(opt.value===yr){opt.selected=true;found=true;break;} }
+    if(!found){ const opt=document.createElement('option'); opt.value=yr; opt.textContent=yr; opt.selected=true; yrSel.appendChild(opt); }
+  }
+  if(moSel){ for(let opt of moSel.options){ if(opt.value===mo){opt.selected=true;break;} } }
+})();
 updFooter();
 setInterval(updFooter,60000);
 </script>
