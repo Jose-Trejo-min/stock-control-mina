@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desarrollo Acumulado 2026 | Mina Aranzazú</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#2D3D70; --navy-d:#1a2744; --coral:#EB614E; --coral-d:#E05A2B;
+    --teal:#00A195; --teal-d:#008076; --green:#4e9a2f; --wine:#a14068;
+    --grey-l:#eceef2; --ink:#2c3340; --muted:#6b7280;
+    --line:#e3e6ec; --bg:#f3f4f7; --card:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Montserrat",system-ui,sans-serif;font-size:14px;line-height:1.45}
+  .wrap{max-width:1200px;margin:0 auto;padding:26px 22px 60px}
+  .eyebrow{letter-spacing:.2em;font-size:11px;color:var(--teal-d);text-transform:uppercase;font-weight:700}
+  h1.page{font-size:32px;margin:4px 0 2px;color:var(--navy);font-weight:800;letter-spacing:-.02em}
+  .subttl{font-size:13.5px;color:var(--muted);margin-bottom:18px}
+  .subttl b{color:var(--ink)}
+
+  .mcbar{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-left:4px solid var(--wine);border-radius:10px;padding:12px 18px;margin-bottom:22px;flex-wrap:wrap}
+  .mcbar .mc-txt{font-size:13px;color:var(--ink);font-weight:600}
+  .mcbar .mc-sub{font-size:11.5px;color:var(--muted);font-weight:500}
+  .switch{position:relative;display:inline-block;width:46px;height:24px}
+  .switch input{opacity:0;width:0;height:0}
+  .sl{position:absolute;cursor:pointer;inset:0;background:#c3c8d4;border-radius:24px;transition:.2s}
+  .sl:before{content:"";position:absolute;height:18px;width:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+  .switch input:checked + .sl{background:var(--wine)}
+  .switch input:checked + .sl:before{transform:translateX(22px)}
+  .mc-state{margin-left:auto;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;background:#eef1f6;color:var(--navy)}
+  .mc-state.off{background:#fbe9ef;color:var(--wine)}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:0 1px 2px rgba(20,30,60,.04);position:relative;overflow:hidden}
+  .kpi:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--navy)}
+  .kpi.k-real:before{background:var(--teal)}
+  .kpi.k-var:before{background:var(--coral)}
+  .kpi .k-l{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .kpi .k-v{font-size:25px;font-weight:800;color:var(--navy);margin:5px 0 1px;letter-spacing:-.01em}
+  .kpi .k-s{font-size:12px;color:var(--muted);font-weight:500}
+  .kpi .k-v.pos{color:var(--green)} .kpi .k-v.neg{color:var(--wine)}
+  @media(max-width:860px){.kpis{grid-template-columns:repeat(2,1fr)}}
+
+  .maincasc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 26px 18px;margin-bottom:22px;box-shadow:0 1px 3px rgba(20,30,60,.05)}
+  .maincasc h2{margin:0 0 2px;font-size:17px;color:var(--navy);font-weight:700}
+  .maincasc .mc-delta{font-size:12.5px;color:var(--muted);margin-bottom:14px;display:block}
+  .maincasc-box{position:relative;height:340px}
+  .mc-legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--muted)}
+  .mc-legend span{display:inline-flex;align-items:center;gap:6px}
+  .mc-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+  .verdict{margin-top:16px;padding:16px 18px;border-radius:10px;background:linear-gradient(135deg,#f0f7ee,#e8f4f2);border:1px solid #cfe6dd;font-size:13px;line-height:1.6;color:var(--ink)}
+  .verdict h4{margin:0 0 8px;font-size:14px;color:var(--teal-d);font-weight:800;letter-spacing:.01em}
+  .verdict b{color:var(--navy)}
+  .verdict .big{font-size:15px;font-weight:800;color:var(--green)}
+  .verdict .rows{margin-top:10px;display:grid;gap:5px}
+  .verdict .vrow{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dashed #cfe0da}
+  .verdict .vrow:last-child{border-bottom:none}
+  .verdict .vrow span:last-child{font-weight:700;white-space:nowrap}
+  .val-save{color:var(--green)} .val-over{color:var(--wine)} .val-neutral{color:var(--navy)}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px 16px;margin-bottom:20px;box-shadow:0 1px 2px rgba(20,30,60,.04)}
+  .panel h2{font-size:16px;margin:0 0 3px;color:var(--navy);font-weight:700}
+  .panel .delta{display:block;font-size:12.5px;color:var(--muted);margin-bottom:14px}
+  .chart-box{position:relative;height:400px;width:100%}
+
+  .tabs{display:flex;flex-wrap:wrap;gap:4px;border-bottom:2px solid var(--line);margin:0 0 18px}
+  .tab-btn{background:none;border:none;padding:11px 18px;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;font-family:inherit}
+  .tab-btn:hover{color:var(--navy)}
+  .tab-btn.active{color:var(--coral);border-bottom-color:var(--coral)}
+  .tab-pane{display:none} .tab-pane.active{display:block}
+  .pane-note{font-size:12.5px;color:var(--muted);background:#f4f6fa;border-left:3px solid var(--teal);padding:10px 14px;border-radius:0 6px 6px 0;margin:0 0 16px;line-height:1.55}
+
+  .subtabs{display:flex;gap:6px;margin:0 0 14px;flex-wrap:wrap}
+  .subtab{background:#eef1f6;border:1px solid var(--line);border-radius:20px;padding:6px 16px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit}
+  .subtab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .unit-toggle{display:inline-flex;background:#eef1f6;border-radius:20px;padding:3px;margin-left:auto}
+  .unit-toggle button{background:none;border:none;padding:6px 16px;border-radius:18px;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer;font-family:inherit}
+  .unit-toggle button.active{background:var(--teal);color:#fff}
+  .toolbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{padding:7px 9px;text-align:right;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left}
+  thead th{background:var(--grey-l);color:var(--navy);font-weight:700;font-size:11px;border-bottom:2px solid #d3d8e2}
+  tbody tr:hover{background:#fafbfd}
+  .obra-row{font-weight:700;background:#eef1f6;cursor:pointer}
+  .obra-row:hover{background:#e6ebf4}
+  .obra-row td:first-child:before{content:"\25B8 ";color:var(--coral);font-size:10px}
+  .obra-row.open td:first-child:before{content:"\25BE "}
+  .clase-row{font-size:12px;color:#3a4358;background:#f7f9fc}
+  .clase-row td:first-child{padding-left:24px}
+  tfoot td{font-weight:800;background:var(--navy);color:#fff;border:none}
+  .pos{color:var(--green);font-weight:600} .neg{color:var(--wine);font-weight:600}
+  .tag{display:inline-block;font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px;letter-spacing:.04em;margin-left:5px}
+  .tag.nuevo{background:#e0f5f2;color:var(--teal-d)}
+  .tag.sinej{background:#fdeee6;color:var(--coral-d)}
+  .tag.mc{background:#fbe9ef;color:var(--wine)}
+
+  .sim-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+  @media(max-width:820px){.sim-cards{grid-template-columns:1fr}}
+  .sim-c{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:15px 18px;position:relative;overflow:hidden}
+  .sim-c:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--wine)}
+  .sim-c.hl:before{background:var(--coral)}
+  .sim-c.ok:before{background:var(--teal)}
+  .sim-c .sc-l{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .sim-c .sc-v{font-size:22px;font-weight:800;color:var(--navy);margin:5px 0 2px}
+  .sim-c .sc-s{font-size:11.5px;color:var(--muted)}
+  .sim-box{position:relative;height:300px;margin-top:6px}
+  .insight{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:6px}
+  .ins-card{background:#f8fafc;border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:0 8px 8px 0;padding:13px 16px}
+  .ins-card.warn{border-left-color:var(--coral)}
+  .ins-card h4{margin:0 0 5px;font-size:13px;color:var(--navy);font-weight:700}
+  .ins-card p{margin:0;font-size:12.5px;color:var(--ink);line-height:1.55}
+  .ins-card b{color:var(--coral-d)} .ins-card.warn b{color:var(--wine)}
+  @media(max-width:720px){.insight{grid-template-columns:1fr}}
+
+  .foot{font-size:11px;color:var(--muted);margin-top:24px;text-align:center;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Mina Aranzaz&uacute; &middot; Aura Minerals</div>
+  <h1 class="page">Desarrollo &mdash; Acumulado 2026</h1>
+  <div class="subttl">Per&iacute;odo <b>Enero&ndash;Junio 2026</b> (H1 completo) &middot; OPEX + CAPEX &middot; Real vs Budget &middot; Fuente: Base Cominvi (est. 348&ndash;365 + MC) y Budget 2026</div>
+
+  <div class="mcbar">
+    <label class="switch"><input type="checkbox" id="mcToggle"><span class="sl"></span></label>
+    <div>
+      <div class="mc-txt" id="mcTxt">Incluyendo metros del Minero Continuo (MC)</div>
+      <div class="mc-sub">El MC es cuota fija: sus metros no reflejan ahorro/sobrecosto variable. Se muestra siempre como efecto aparte en la cascada; act&iacute;valo para sacarlo tambi&eacute;n de tablas y comparativos.</div>
+    </div>
+    <span class="mc-state" id="mcState">CON MC</span>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="k-l">Metros ejecutados</div><div class="k-v" id="kMlReal">&mdash;</div><div class="k-s" id="kMlBud">&mdash;</div></div>
+    <div class="kpi k-real"><div class="k-l">Costo real</div><div class="k-v" id="kCReal">&mdash;</div><div class="k-s" id="kCBud">&mdash;</div></div>
+    <div class="kpi k-var"><div class="k-l">Variaci&oacute;n vs budget</div><div class="k-v" id="kVar">&mdash;</div><div class="k-s" id="kVarPct">&mdash;</div></div>
+    <div class="kpi"><div class="k-l">PU promedio</div><div class="k-v" id="kPu">&mdash;</div><div class="k-s" id="kPuBud">&mdash;</div></div>
+  </div>
+
+  <div class="maincasc">
+    <h2>Cascada general &mdash; descomposici&oacute;n del ahorro</h2>
+    <span class="mc-delta">Del <b>Budget</b> al <b>Real</b>, separando los tres efectos: <b>precio</b> (PU real vs budget), <b>cantidad</b> de metros convencionales, y <b>Minero Continuo</b> (cuota fija, aislado).</span>
+    <div class="maincasc-box"><canvas id="mainCasc"></canvas></div>
+    <div class="mc-legend">
+      <span><i style="background:#2D3D70"></i> Budget / Real</span>
+      <span><i style="background:#4e9a2f"></i> Baja costo (ahorro)</span>
+      <span><i style="background:#EB614E"></i> Sube costo</span>
+      <span><i style="background:#a14068"></i> Minero Continuo</span>
+    </div>
+    <div class="verdict" id="verdict"></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="t-obra">Por obra &rarr; clase</button>
+    <button class="tab-btn" data-tab="t-comp">Comparativo por clase</button>
+    <button class="tab-btn" data-tab="t-sim">Balance real</button>
+    <button class="tab-btn" data-tab="t-graf">Gr&aacute;ficos</button>
+    <button class="tab-btn" data-tab="t-hall">Hallazgos</button>
+  </div>
+
+  <div class="tab-pane active" id="t-obra">
+    <div class="panel">
+      <h2>Desglose por obra y clase &mdash; segregado Primario / Secundario</h2>
+      <span class="delta">Primario = cuenta 110205, Secundario = 110206. Clic en una obra para ver sus clases geot&eacute;cnicas.</span>
+      <div class="subtabs">
+        <button class="subtab active" data-view="Primario">Primario (110205)</button>
+        <button class="subtab" data-view="Secundario">Secundario (110206)</button>
+        <button class="subtab" data-view="Ambos">Ambos (total)</button>
+      </div>
+      <div class="pane-note" id="segNote"></div>
+      <div style="overflow-x:auto">
+      <table>
+        <thead><tr>
+          <th>Obra / Clase</th>
+          <th>ml Bud</th><th>ml Real</th><th>&Delta; ml</th>
+          <th>PU Bud</th><th>PU Real</th><th>&Delta; PU</th>
+          <th>$ Bud</th><th>$ Real</th><th>&Delta; $</th>
+        </tr></thead>
+        <tbody id="tblBody"></tbody>
+        <tfoot id="tblFoot"></tfoot>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-pane" id="t-comp">
+    <div class="panel">
+      <h2>Comparativo por clase geot&eacute;cnica &mdash; Budget vs Real</h2>
+      <span class="delta">Cu&aacute;nto se hizo de cada clase (II a V) contra lo presupuestado. Alterna entre metros y costo, y filtra por tipo de desarrollo.</span>
+      <div class="toolbar">
+        <button class="subtab active" data-compview="Primario">Primario</button>
+        <button class="subtab" data-compview="Secundario">Secundario</button>
+        <button class="subtab" data-compview="Ambos">Ambos</button>
+        <span class="unit-toggle">
+          <button id="unitMl" class="active">Metros</button>
+          <button id="unitCost">Costo $</button>
+        </span>
+      </div>
+      <div class="chart-box"><canvas id="compChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="tab-pane" id="t-sim">
+    <div class="panel">
+      <h2>Balance real del ahorro &mdash; visi&oacute;n consolidada</h2>
+      <span class="delta">El beneficio total del desarrollo convencional: el ahorro por eficiencia de precio m&aacute;s el avance de obra conseguido por encima del plan. Ambos suman. La cuota fija del MC queda fuera (costo hundido).</span>
+      <div class="pane-note">Referencia de PU: promedio real del <b>4.5&times;4.5 secundario</b> = <b id="simPuRef">&mdash;</b>/ml (la secci&oacute;n lineal equivalente al 4.5&times;4.5 del MC). Metros no performados = budget MC &minus; real MC.</div>
+      <div class="sim-cards" id="simCards"></div>
+      <div class="sim-box"><canvas id="simChart"></canvas></div>
+      <div class="verdict" id="simVerdict" style="margin-top:18px"></div>
+    </div>
+  </div>
+
+  <div class="tab-pane" id="t-graf">
+    <div class="panel">
+      <h2>Metros por obra &mdash; Budget vs Real</h2>
+      <span class="delta">Avance f&iacute;sico por obra en metros lineales.</span>
+      <div class="chart-box"><canvas id="chMl"></canvas></div>
+    </div>
+    <div class="panel">
+      <h2>Primario vs Secundario &mdash; costo Budget vs Real</h2>
+      <span class="delta">D&oacute;nde se concentra el ahorro: primario (110205) vs secundario (110206).</span>
+      <div class="chart-box"><canvas id="chTipo"></canvas></div>
+    </div>
+  </div>
+
+  <div class="tab-pane" id="t-hall">
+    <div class="panel">
+      <h2>Hallazgos del per&iacute;odo</h2>
+      <span class="delta">Lectura ejecutiva de las desviaciones m&aacute;s relevantes.</span>
+      <div class="insight" id="insBox"></div>
+    </div>
+  </div>
+
+  <div class="foot">Dashboard Desarrollo Acumulado 2026 &middot; datos consolidados de bases oficiales &middot; per&iacute;odo contable decenal contra budget mensual calendario Ene&ndash;Jun.</div>
+</div>
+
+<script>
+const DES = [{"obra": "4.0 x 4.0", "clases": [{"n": "Clase II", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 249.01, "cB": 387443.6, "mlR": 239.86, "cR": 362339.71}}]}, {"n": "Clase III", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 243.01, "cB": 429751.04, "mlR": 47.72, "cR": 81933.81}}]}, {"n": "Clase IV (inc. A y B)", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 149.18, "cB": 321623.3, "mlR": 80.42, "cR": 168409.45}}]}, {"n": "Clase V", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 40.93, "cB": 103926.36, "mlR": 50.13, "cR": 123565.44}}]}], "mc": false}, {"obra": "4.0 x 4.0 (MC)", "clases": [{"n": "Clase II", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}, {"n": "Clase III", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}, {"n": "Clase IV (inc. A y B)", "tipos": [{"t": "Secundario", "mc": {"mlB": 14.8, "cB": 8732.59, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}, {"n": "Clase V", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}], "mc": true}, {"obra": "4.5 x 4.5", "clases": [{"n": "Clase II", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 509.5, "cB": 817307.63, "mlR": 410.89, "cR": 641205.72}}]}, {"n": "Clase III", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 280.86, "cB": 510032.6, "mlR": 339.2, "cR": 599820.93}}]}, {"n": "Clase IV (inc. A y B)", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 408.03999999999996, "cB": 844953.2, "mlR": 240.07, "cR": 499794.53}}]}, {"n": "Clase V", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 42.39, "cB": 97710.4, "mlR": 187.37, "cR": 452908.89}}]}], "mc": false}, {"obra": "4.5 x 4.5 (Mc)", "clases": [{"n": "Clase II", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}, {"n": "Clase III", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}, {"n": "Clase IV (inc. A y B)", "tipos": [{"t": "Secundario", "mc": {"mlB": 152.47, "cB": 89967.83, "mlR": 44.42, "cR": 87789.68}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}, {"n": "Clase V", "tipos": [{"t": "Secundario", "mc": {"mlB": 99.73, "cB": 58848.7, "mlR": 65.0, "cR": 87546.78}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}], "mc": true}, {"obra": "4.5 x 5.0", "clases": [{"n": "Clase II", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 31.24, "cR": 52229.22}}]}, {"n": "Clase III", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 44.51, "cR": 94332.27}}]}, {"n": "Clase IV (inc. A y B)", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 34.86, "cB": 100919.49, "mlR": 41.41, "cR": 97472.93}}]}, {"n": "Clase V", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 153.71, "cB": 444909.31, "mlR": 16.52, "cR": 46423.35}}]}], "mc": false}, {"obra": "5.0 x 5.0", "clases": [{"n": "Clase II", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}, {"n": "Clase III", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}, {"n": "Clase IV (inc. A y B)", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}, {"n": "Clase V", "tipos": [{"t": "Secundario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}], "mc": false}, {"obra": "Acceso", "clases": [{"n": "Clase II", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 43.65, "cB": 76110.45, "mlR": 47.84, "cR": 80981.16}}]}, {"n": "Clase III", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 7.65, "cR": 14591.0}}]}, {"n": "Clase IV (inc. A y B)", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}, {"n": "Clase V", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}], "mc": false}, {"obra": "Carcamo", "clases": [{"n": "Clase II", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 35.13, "cB": 64193.71, "mlR": 26.99, "cR": 46099.98}}]}, {"n": "Clase III", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 7.4, "cB": 15156.35, "mlR": 7.23, "cR": 12575.51}}]}, {"n": "Clase IV (inc. A y B)", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 1.22, "cB": 2896.88, "mlR": 4.66, "cR": 9462.08}}]}, {"n": "Clase V", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 2.29, "cR": 5535.37}}]}], "mc": false}, {"obra": "Cargadero", "clases": [{"n": "Clase II", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 209.28, "cB": 362761.37, "mlR": 152.64, "cR": 256876.33}}]}, {"n": "Clase III", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 15.22, "cB": 29927.09, "mlR": 86.47, "cR": 165066.91}}]}, {"n": "Clase IV (inc. A y B)", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 8.5, "cB": 19467.64, "mlR": 7.43, "cR": 16513.03}}]}, {"n": "Clase V", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 3.7, "cB": 9902.05, "mlR": 0.0, "cR": 0.0}}]}], "mc": false}, {"obra": "Contra Frente", "clases": [{"n": "Clase II", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 502.72, "cB": 989651.15, "mlR": 406.97, "cR": 776367.3}}]}, {"n": "Clase III", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 66.6, "cB": 146460.16, "mlR": 380.57, "cR": 812535.98}}]}, {"n": "Clase IV (inc. A y B)", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 4.86, "cR": 11855.44}}]}, {"n": "Clase V", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 5.59, "cR": 15452.55}}]}], "mc": false}, {"obra": "Crucero Trans", "clases": [{"n": "Clase II", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 2.12, "cR": 3202.54}}]}], "mc": false}, {"obra": "Crucero Ventilación", "clases": [{"n": "Clase II", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 171.9, "cB": 279053.63, "mlR": 337.12, "cR": 537835.64}}]}, {"n": "Clase III", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 131.17, "cR": 245700.98}}]}, {"n": "Clase IV (inc. A y B)", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 13.38, "cR": 28043.68}}]}, {"n": "Clase V", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 5.34, "cR": 12907.79}}]}], "mc": false}, {"obra": "Nicho", "clases": [{"n": "Clase III", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 8.88, "cR": 10685.66}}]}], "mc": false}, {"obra": "Nicho CF", "clases": [{"n": "Clase II", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 1.38, "cR": 1502.46}}]}, {"n": "Clase III", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 25.29, "cR": 30130.75}}]}, {"n": "Clase IV (inc. A y B)", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}, {"n": "Clase V", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}], "mc": false}, {"obra": "Nicho OP", "clases": [{"n": "Clase II", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}, {"n": "Clase III", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 4.68, "cR": 5316.76}}]}, {"n": "Clase IV (inc. A y B)", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}, {"n": "Clase V", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}], "mc": false}, {"obra": "Nicho RP", "clases": [{"n": "Clase II", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 3.0, "cR": 3266.22}}]}, {"n": "Clase III", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 3.19, "cR": 4234.88}}]}, {"n": "Clase IV (inc. A y B)", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}, {"n": "Clase V", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}], "mc": false}, {"obra": "Pileta", "clases": [{"n": "Clase II", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 23.42, "cR": 40102.77}}]}, {"n": "Clase III", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 1.73, "cR": 3302.48}}]}], "mc": false}, {"obra": "Rampa", "clases": [{"n": "Clase II", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 318.37, "cR": 606351.58}}]}, {"n": "Clase III", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 819.68, "cB": 1798808.18, "mlR": 289.38, "cR": 616559.42}}]}, {"n": "Clase IV (inc. A y B)", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 16.55, "cR": 40450.85}}]}, {"n": "Clase V", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}], "mc": false}, {"obra": "Subestación", "clases": [{"n": "Clase II", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 15.19, "cB": 26331.15, "mlR": 3.47, "cR": 5839.63}}]}, {"n": "Clase III", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 26.68, "cR": 50930.79}}]}, {"n": "Clase IV (inc. A y B)", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}, {"n": "Clase V", "tipos": [{"t": "Primario", "mc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}, "nomc": {"mlB": 0.0, "cB": 0.0, "mlR": 0.0, "cR": 0.0}}]}], "mc": false}];
+// datalabels: registrado global pero desactivado por defecto; se activa por gráfica
+if(window.ChartDataLabels){Chart.register(ChartDataLabels);Chart.defaults.set('plugins.datalabels',{display:false});}
+const nf=(n,d=0)=>Number(n).toLocaleString("es-MX",{minimumFractionDigits:d,maximumFractionDigits:d});
+const money=n=>{const s=n<0?"-":"";return s+"$"+nf(Math.abs(n));};
+const CLASE_ORDER=["Clase II","Clase III","Clase IV (inc. A y B)","Clase V","Sin clase"];
+let EXCL_MC=false;
+
+function pick(node){
+  const a={mlB:node.nomc.mlB,mlR:node.nomc.mlR,cB:node.nomc.cB,cR:node.nomc.cR};
+  if(!EXCL_MC){a.mlB+=node.mc.mlB;a.mlR+=node.mc.mlR;a.cB+=node.mc.cB;a.cR+=node.mc.cR;}
+  return a;
+}
+function claseAgg(clase, tf){
+  let o={mlB:0,mlR:0,cB:0,cR:0};
+  clase.tipos.forEach(tp=>{ if(tf&&tf!=="Ambos"&&tp.t!==tf) return;
+    const a=pick(tp); o.mlB+=a.mlB;o.mlR+=a.mlR;o.cB+=a.cB;o.cR+=a.cR;});
+  return o;
+}
+function obraAgg(g, tf){let o={mlB:0,mlR:0,cB:0,cR:0};
+  g.clases.forEach(c=>{const a=claseAgg(c,tf);o.mlB+=a.mlB;o.mlR+=a.mlR;o.cB+=a.cB;o.cR+=a.cR;});return o;}
+function totalAgg(tf){let o={mlB:0,mlR:0,cB:0,cR:0};
+  DES.forEach(g=>{const a=obraAgg(g,tf);o.mlB+=a.mlB;o.mlR+=a.mlR;o.cB+=a.cB;o.cR+=a.cR;});return o;}
+
+// separa componentes MC / no-MC (ignora EXCL_MC: siempre calcula ambos para la cascada)
+function splitMC(tf){
+  let n={mlB:0,mlR:0,cB:0,cR:0}, m={mlB:0,mlR:0,cB:0,cR:0};
+  DES.forEach(g=>g.clases.forEach(c=>c.tipos.forEach(tp=>{
+    if(tf&&tf!=="Ambos"&&tp.t!==tf) return;
+    n.mlB+=tp.nomc.mlB;n.mlR+=tp.nomc.mlR;n.cB+=tp.nomc.cB;n.cR+=tp.nomc.cR;
+    m.mlB+=tp.mc.mlB;m.mlR+=tp.mc.mlR;m.cB+=tp.mc.cB;m.cR+=tp.mc.cR;
+  })));
+  return {nomc:n, mc:m};
+}
+
+// ==== KPIs ====
+function renderKPIs(){
+  const T=totalAgg("Ambos");
+  const puB=T.mlB>0?T.cB/T.mlB:0, puR=T.mlR>0?T.cR/T.mlR:0, vTot=T.cR-T.cB;
+  document.getElementById("kMlReal").textContent=nf(T.mlR,0)+" ml";
+  document.getElementById("kMlBud").textContent="budget "+nf(T.mlB,0)+" ml ("+(T.mlR>=T.mlB?"+":"")+nf(T.mlR-T.mlB,0)+")";
+  document.getElementById("kCReal").textContent=money(T.cR);
+  document.getElementById("kCBud").textContent="budget "+money(T.cB);
+  const kv=document.getElementById("kVar"); kv.textContent=(vTot>=0?"+":"")+money(vTot); kv.className="k-v "+(vTot<0?"pos":"neg");
+  document.getElementById("kVarPct").textContent=nf(vTot/T.cB*100,1)+"% vs budget";
+  document.getElementById("kPu").textContent="$"+nf(puR,0)+"/ml";
+  document.getElementById("kPuBud").textContent="budget $"+nf(puB,0)+"/ml";
+}
+
+// ==== CASCADA general 3 efectos ====
+let mainCascChart=null;
+function computeEffects(){
+  const s=splitMC("Ambos");
+  const n=s.nomc, m=s.mc;
+  const puBn=n.mlB>0?n.cB/n.mlB:0, puRn=n.mlR>0?n.cR/n.mlR:0;
+  const efPrecio=(puRn-puBn)*n.mlR;
+  const efCant=(n.mlR-n.mlB)*puBn;
+  const efMC=m.cR-m.cB;
+  const budTotal=n.cB+m.cB, realTotal=n.cR+m.cR;
+  return {budTotal,realTotal,efPrecio,efCant,efMC,n,m,puBn,puRn};
+}
+function drawMainCasc(){
+  const e=computeEffects();
+  // secuencia: Budget -> +efCant -> +efPrecio -> +efMC -> Real
+  const b=e.budTotal;
+  const p1=b+e.efPrecio;
+  const p2=p1+e.efCant;
+  const p3=p2+e.efMC; // = real
+  const bars=[
+    [0,b],
+    [Math.min(b,p1),Math.max(b,p1)],
+    [Math.min(p1,p2),Math.max(p1,p2)],
+    [Math.min(p2,p3),Math.max(p2,p3)],
+    [0,e.realTotal]
+  ];
+  const colors=["#2D3D70",
+    e.efPrecio<0?"#4e9a2f":"#EB614E",
+    e.efCant<0?"#4e9a2f":"#EB614E",
+    "#a14068",
+    "#00A195"];
+  if(mainCascChart) mainCascChart.destroy();
+  mainCascChart=new Chart(document.getElementById("mainCasc"),{type:"bar",
+    data:{labels:["Budget","Efecto precio\n(PU)","Efecto cantidad\n(metros conv.)","Minero Continuo\n(cuota fija)","Real"],
+      datasets:[{data:bars,backgroundColor:colors,borderRadius:4,barPercentage:0.62,
+        datalabels:{display:true,anchor:"end",align:"end",offset:2,
+          color:"#2c3340",font:{family:"Montserrat",weight:"700",size:10.5},
+          formatter:(v,ctx)=>{const i=ctx.dataIndex;
+            if(i===0)return money(e.budTotal);
+            if(i===1)return (e.efPrecio>=0?"+":"")+money(e.efPrecio);
+            if(i===2)return (e.efCant>=0?"+":"")+money(e.efCant);
+            if(i===3)return (e.efMC>=0?"+":"")+money(e.efMC);
+            return money(e.realTotal);}}}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{
+        const i=ctx.dataIndex;
+        if(i===0)return "Budget total: "+money(e.budTotal);
+        if(i===1)return "Efecto precio: "+(e.efPrecio>=0?"+":"")+money(e.efPrecio)+"  (PU $"+nf(e.puBn,0)+"->$"+nf(e.puRn,0)+")";
+        if(i===2)return "Efecto cantidad: "+(e.efCant>=0?"+":"")+money(e.efCant)+"  ("+(e.n.mlR-e.n.mlB>=0?"+":"")+nf(e.n.mlR-e.n.mlB,0)+" ml)";
+        if(i===3)return "Minero Continuo: "+(e.efMC>=0?"+":"")+money(e.efMC);
+        return "Real total: "+money(e.realTotal);
+      }}}},
+      scales:{x:{ticks:{font:{family:"Montserrat",size:10.5}}},
+        y:{ticks:{font:{family:"Montserrat",size:10},callback:v=>"$"+nf(v/1000)+"k"},grace:"6%"}}}});
+  drawVerdict(e);
+}
+function drawVerdict(e){
+  const ahorroConv=e.efPrecio+e.efCant;       // variacion convencional
+  const varTotal=e.realTotal-e.budTotal;
+  const cls=v=>v<0?"val-save":(v>0?"val-over":"val-neutral");
+  const sign=v=>(v>=0?"+":"")+money(v);
+  const html=`
+    <h4>Lectura del ahorro</h4>
+    <p>La variaci&oacute;n total del per&iacute;odo es <b class="${cls(varTotal)}">${sign(varTotal)}</b> vs budget. Pero conviene separar de d&oacute;nde viene, porque no todo lo que "sube" es malo:</p>
+    <div class="rows">
+      <div class="vrow"><span>Efecto <b>precio</b> (PU baj&oacute; de $${nf(e.puBn,0)} a $${nf(e.puRn,0)}/ml)</span><span class="${cls(e.efPrecio)}">${sign(e.efPrecio)}</span></div>
+      <div class="vrow"><span>Efecto <b>cantidad</b> (${e.n.mlR-e.n.mlB>=0?"+":""}${nf(e.n.mlR-e.n.mlB,0)} ml m&aacute;s de desarrollo)</span><span class="${cls(e.efCant)}">${sign(e.efCant)}</span></div>
+      <div class="vrow"><span>Efecto <b>Minero Continuo</b> (cuota fija)</span><span class="${cls(e.efMC)}">${sign(e.efMC)}</span></div>
+    </div>
+    <p style="margin-top:12px">El <b>ahorro genuino</b> es el <b class="big">${money(Math.abs(e.efPrecio))}</b> del efecto precio: se est&aacute; ejecutando cada metro m&aacute;s barato que lo presupuestado. El efecto cantidad (${sign(e.efCant)}) <b>no es un sobrecosto real</b>: significa que se hicieron <b>${nf(e.n.mlR-e.n.mlB,0)} metros m&aacute;s</b> de desarrollo &mdash; es avance de obra adicional, no ineficiencia. Y el Minero Continuo aporta ${sign(e.efMC)} por ser cuota fija, independiente de los metros. <b>Neto: descontando el avance extra y la cuota fija del MC, la operaci&oacute;n de desarrollo est&aacute; ${e.efPrecio<0?"por debajo de costo unitario presupuestado":"sobre el costo unitario"}.</b></p>`;
+  document.getElementById("verdict").innerHTML=html;
+}
+
+// ==== TABLA obra->clase ====
+let SEG="Primario";
+function celPct(v){return v===null?"&mdash;":`<span class="${v<0?'pos':'neg'}">${v>0?"+":""}${nf(v,0)}%</span>`;}
+function fmtDelta(v){return `<span class="${v<0?'pos':'neg'}">${v>0?"+":""}${nf(v)}</span>`;}
+function rowCells(a){
+  const dMl=a.mlR-a.mlB, vq=a.mlB>0?(a.mlR-a.mlB)/a.mlB*100:null;
+  const puB=a.mlB>0?a.cB/a.mlB:0, puR=a.mlR>0?a.cR/a.mlR:0;
+  const dPu=(puB>0&&puR>0)?(puR-puB)/puB*100:null;
+  return `<td>${nf(a.mlB,1)}</td><td>${nf(a.mlR,1)}</td><td>${vq===null?fmtDelta(dMl):celPct(vq)}</td>
+    <td>${puB>0?"$"+nf(puB,0):"&mdash;"}</td><td>${puR>0?"$"+nf(puR,0):"&mdash;"}</td><td>${celPct(dPu)}</td>
+    <td>${nf(a.cB)}</td><td>${nf(a.cR)}</td><td>${fmtDelta(a.cR-a.cB)}</td>`;
+}
+function buildTable(){
+  const note={Primario:"Mostrando solo <b>Desarrollo Primario</b> (cuenta 110205).",
+    Secundario:"Mostrando solo <b>Desarrollo Secundario</b> (cuenta 110206).",
+    Ambos:"Mostrando el <b>total</b> (primario + secundario)."}[SEG];
+  document.getElementById("segNote").innerHTML=note;
+  let html="";
+  const obras=DES.map(g=>({g,a:obraAgg(g,SEG)})).filter(x=>x.a.mlB>0||x.a.mlR>0).sort((x,y)=>y.a.cR-x.a.cR);
+  obras.forEach(({g,a},gi)=>{
+    let tag="";
+    if(a.mlB===0&&a.mlR>0) tag='<span class="tag nuevo">nuevo</span>';
+    else if(a.mlR===0&&a.mlB>0) tag='<span class="tag sinej">sin ejec.</span>';
+    if(g.mc) tag+='<span class="tag mc">MC</span>';
+    html+=`<tr class="obra-row" data-g="${gi}"><td>${g.obra}${tag}</td>${rowCells(a)}</tr>`;
+    const clases=g.clases.map(c=>({c,ca:claseAgg(c,SEG)})).filter(x=>x.ca.mlB>0||x.ca.mlR>0)
+      .sort((x,y)=>CLASE_ORDER.indexOf(x.c.n)-CLASE_ORDER.indexOf(y.c.n));
+    clases.forEach(({c,ca})=>{html+=`<tr class="clase-row" data-parent="${gi}" style="display:none"><td>${c.n}</td>${rowCells(ca)}</tr>`;});
+  });
+  document.getElementById("tblBody").innerHTML=html;
+  const T=totalAgg(SEG);
+  const puB=T.mlB>0?T.cB/T.mlB:0,puR=T.mlR>0?T.cR/T.mlR:0,vT=T.cR-T.cB,dMlT=T.mlR-T.mlB;
+  document.getElementById("tblFoot").innerHTML=`<tr><td>TOTAL ${SEG.toUpperCase()}</td>
+    <td>${nf(T.mlB,1)}</td><td>${nf(T.mlR,1)}</td><td>${(dMlT>=0?"+":"")+nf(dMlT,0)}</td>
+    <td>$${nf(puB,0)}</td><td>$${nf(puR,0)}</td><td>${puB>0?nf((puR-puB)/puB*100,1)+"%":"&mdash;"}</td>
+    <td>${nf(T.cB)}</td><td>${nf(T.cR)}</td><td>${(vT>=0?"+":"")+nf(vT)}</td></tr>`;
+  document.querySelectorAll(".obra-row").forEach(row=>row.addEventListener("click",()=>{
+    const gi=row.dataset.g; const open=row.classList.toggle("open");
+    document.querySelectorAll(`.clase-row[data-parent="${gi}"]`).forEach(cr=>cr.style.display=open?"table-row":"none");
+  }));
+}
+
+// ==== COMPARATIVO por clase (toggle metros/costo) ====
+let COMPVIEW="Primario", COMPUNIT="ml", compChart=null;
+function buildComp(){
+  const byclase={};
+  DES.forEach(g=>g.clases.forEach(c=>{
+    const a=claseAgg(c,COMPVIEW);
+    if(!byclase[c.n]) byclase[c.n]={mlB:0,mlR:0,cB:0,cR:0};
+    byclase[c.n].mlB+=a.mlB;byclase[c.n].mlR+=a.mlR;byclase[c.n].cB+=a.cB;byclase[c.n].cR+=a.cR;
+  }));
+  const clases=Object.keys(byclase).filter(n=>byclase[n].mlB>0||byclase[n].mlR>0)
+    .sort((a,b)=>CLASE_ORDER.indexOf(a)-CLASE_ORDER.indexOf(b));
+  const isML=COMPUNIT==="ml";
+  const budData=clases.map(n=>isML?byclase[n].mlB:byclase[n].cB);
+  const realData=clases.map(n=>isML?byclase[n].mlR:byclase[n].cR);
+  if(compChart) compChart.destroy();
+  compChart=new Chart(document.getElementById("compChart"),{type:"bar",
+    data:{labels:clases,datasets:[
+      {label:"Budget",data:budData,backgroundColor:"#2D3D70",borderRadius:4},
+      {label:"Real",data:realData,backgroundColor:"#00A195",borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:"top",labels:{font:{family:"Montserrat",size:12}}},
+        datalabels:{display:true,anchor:"end",align:"end",offset:1,rotation:-90,
+          color:"#2c3340",font:{family:"Montserrat",weight:"600",size:9.5},
+          formatter:v=>isML?nf(v,0):"$"+nf(v/1000)+"k"},
+        tooltip:{callbacks:{label:ctx=>{
+          const base=ctx.dataset.label+": ";
+          if(isML)return base+nf(ctx.parsed.y,1)+" ml";
+          return base+money(ctx.parsed.y);
+        },afterBody:items=>{
+          const i=items[0].dataIndex; const c=byclase[clases[i]];
+          if(isML){const d=c.mlR-c.mlB; return "Δ "+(d>=0?"+":"")+nf(d,1)+" ml";}
+          const d=c.cR-c.cB; return "Δ "+(d>=0?"+":"")+money(d);
+        }}}},
+      scales:{x:{ticks:{font:{family:"Montserrat",size:12}}},
+        y:{ticks:{font:{family:"Montserrat"},callback:v=>isML?nf(v)+" ml":"$"+nf(v/1000)+"k"},grace:"5%"}}}});
+}
+
+// ==== GRÁFICOS ====
+let chMl=null,chTipo=null;
+function buildCharts(){
+  const obras=DES.map(g=>({obra:g.obra,...obraAgg(g,"Ambos")})).filter(o=>o.mlB>0||o.mlR>0).sort((a,b)=>b.mlR-a.mlR);
+  const labels=obras.map(o=>o.obra);
+  const baseOpts=(unit)=>({responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:"top",labels:{font:{family:"Montserrat",size:12}}},
+      tooltip:{callbacks:{label:c=>c.dataset.label+": "+(unit==="$"?"$"+nf(c.parsed.y):nf(c.parsed.y,1)+" ml")}}},
+    scales:{x:{ticks:{font:{family:"Montserrat",size:10},maxRotation:60,minRotation:45}},
+      y:{ticks:{font:{family:"Montserrat"},callback:v=>unit==="$"?"$"+nf(v/1000)+"k":nf(v)}}}});
+  if(chMl)chMl.destroy();
+  chMl=new Chart(document.getElementById("chMl"),{type:"bar",
+    data:{labels,datasets:[
+      {label:"Budget",data:obras.map(o=>o.mlB),backgroundColor:"#2D3D70",borderRadius:3},
+      {label:"Real",data:obras.map(o=>o.mlR),backgroundColor:"#00A195",borderRadius:3}]},options:baseOpts("ml")});
+  const P=totalAgg("Primario"), S=totalAgg("Secundario");
+  if(chTipo)chTipo.destroy();
+  chTipo=new Chart(document.getElementById("chTipo"),{type:"bar",
+    data:{labels:["Primario (110205)","Secundario (110206)"],datasets:[
+      {label:"Budget",data:[P.cB,S.cB],backgroundColor:"#2D3D70",borderRadius:4},
+      {label:"Real",data:[P.cR,S.cR],backgroundColor:"#EB614E",borderRadius:4}]},
+    options:{...baseOpts("$"),plugins:{...baseOpts("$").plugins,
+      datalabels:{display:true,anchor:"end",align:"end",offset:2,
+        color:"#2c3340",font:{family:"Montserrat",weight:"700",size:11},
+        formatter:v=>"$"+nf(v/1000)+"k"}},
+      scales:{x:{ticks:{font:{family:"Montserrat",size:12}}},y:{ticks:{font:{family:"Montserrat"},callback:v=>"$"+nf(v/1000)+"k"},grace:"8%"}}}});
+}
+
+// ==== HALLAZGOS ====
+function buildInsights(){
+  const obras=DES.map(g=>({obra:g.obra,...obraAgg(g,"Ambos"),mc:g.mc}));
+  const cards=[];
+  const e=computeEffects();
+  cards.push({warn:false,t:"El avance extra no es sobrecosto",
+    p:`Se hicieron <b>${nf(e.n.mlR-e.n.mlB,0)} ml m\u00e1s</b> de desarrollo convencional que el budget, lo que suma ${money(e.efCant)} por cantidad. No es ineficiencia: es obra adicional avanzada. El ahorro por precio (${money(e.efPrecio)}) s\u00ed es eficiencia real.`});
+  const P=totalAgg("Primario"), S=totalAgg("Secundario");
+  cards.push({warn:false,t:"Primario vs Secundario",
+    p:`<b>Primario</b> (110205): ${(P.cR-P.cB>=0?"+":"")+money(P.cR-P.cB)} vs budget. <b>Secundario</b> (110206): ${(S.cR-S.cB>=0?"+":"")+money(S.cR-S.cB)}. El ahorro se concentra en ${Math.abs(S.cR-S.cB)>Math.abs(P.cR-P.cB)?"secundario":"primario"}.`});
+  const over=obras.filter(o=>o.mlB>0&&o.mlR>o.mlB*1.2).sort((a,b)=>(b.mlR-b.mlB)-(a.mlR-a.mlB))[0];
+  if(over) cards.push({warn:true,t:`${over.obra}: sobre-ejecuci\u00f3n`,
+    p:`<b>${nf(over.mlR,0)} ml</b> vs <b>${nf(over.mlB,0)} ml</b> budget (${nf((over.mlR-over.mlB)/over.mlB*100,0)}% m\u00e1s).`});
+  cards.push({warn:false,t:"Efecto Minero Continuo",
+    p:`El MC aporta ${(e.efMC>=0?"+":"")+money(e.efMC)} a la variaci\u00f3n. Al ser <b>cuota fija</b>, su costo no baja aunque se hagan menos metros: por eso se aisla del an\u00e1lisis de eficiencia.`});
+  document.getElementById("insBox").innerHTML=cards.map(c=>
+    `<div class="ins-card ${c.warn?'warn':''}"><h4>${c.t}</h4><p>${c.p}</p></div>`).join("");
+}
+
+// ==== BALANCE NETO REAL (reemplaza simulación) ====
+let simChart=null;
+function buildSim(){
+  // PU referencia: promedio real 4.5x4.5 secundario (nomc) — el MC es un 4.5x4.5 (Mc)
+  let mlRef=0,cRef=0;
+  DES.forEach(g=>{ if(g.obra!=="4.5 x 4.5") return;
+    g.clases.forEach(c=>c.tipos.forEach(t=>{ if(t.t!=="Secundario") return;
+      mlRef+=t.nomc.mlR; cRef+=t.nomc.cR; }));});
+  const puRef=mlRef>0?cRef/mlRef:0;
+
+  // MC budget/real (metros no performados)
+  let mcB=0,mcR=0,mcCr=0;
+  DES.forEach(g=>{ if(!g.mc) return;
+    g.clases.forEach(c=>c.tipos.forEach(t=>{ mcB+=t.mc.mlB; mcR+=t.mc.mlR; mcCr+=t.mc.cR; }));});
+  const faltante=mcB-mcR;
+  const costoReconv=faltante*puRef;   // sobrecosto: reconvertir a lineal lo que MC no hizo
+
+  // Desarrollo convencional (no-MC): efecto precio y cantidad
+  let n={mlB:0,mlR:0,cB:0,cR:0};
+  DES.forEach(g=>g.clases.forEach(c=>c.tipos.forEach(t=>{
+    n.mlB+=t.nomc.mlB;n.mlR+=t.nomc.mlR;n.cB+=t.nomc.cB;n.cR+=t.nomc.cR;})));
+  const puBn=n.mlB>0?n.cB/n.mlB:0, puRn=n.mlR>0?n.cR/n.mlR:0;
+  const efPrecio=(puRn-puBn)*n.mlR;
+  const efCant=(n.mlR-n.mlB)*puBn;
+  const metrosExtra=n.mlR-n.mlB;
+
+  // MC budget de costo (informativo)
+  let mcCb=0;
+  DES.forEach(g=>{ if(!g.mc) return;
+    g.clases.forEach(c=>c.tipos.forEach(t=>{ mcCb+=t.mc.cB; }));});
+  const efMCval=mcCr-mcCb;
+
+  // === BALANCE DE AHORRO + BENEFICIO (sin doble conteo) ===
+  // Para poder SUMAR el ahorro de precio y el avance extra sin contar metros dos veces,
+  // el ahorro de precio se mide sobre los metros del BUDGET (los planeados), y el avance
+  // extra son los metros ADICIONALES valorizados a PU real (obra nueva conseguida).
+  //   ahorroPrecio(budget) - avanceExtra(real) = ahorro contable convencional  (consistente)
+  const ahorroPrecioBud=(puBn-puRn)*n.mlB;      // + = ahorro por eficiencia sobre lo planeado
+  const avanceExtra=(n.mlR-n.mlB)*puRn;         // + = valor de los metros de más (a PU real)
+  const ahorroBeneficioTotal=ahorroPrecioBud+avanceExtra;
+  const varContableConv=n.cR-n.cB;              // control: -(ahorroPrecioBud - avanceExtra)
+  const varContableTotal=(n.cR+mcCr)-(n.cB+mcCb); // incluye MC
+
+  document.getElementById("simPuRef").textContent="$"+nf(puRef,0);
+  document.getElementById("simCards").innerHTML=`
+    <div class="sim-c ok"><div class="sc-l">Ahorro por precio</div><div class="sc-v" style="color:var(--green)">${money(ahorroPrecioBud)}</div><div class="sc-s">eficiencia de PU $${nf(puBn,0)} &rarr; $${nf(puRn,0)}/ml sobre los ${nf(n.mlB,0)} ml planeados</div></div>
+    <div class="sim-c ok"><div class="sc-l">Avance extra (ahorro)</div><div class="sc-v" style="color:var(--green)">${money(avanceExtra)}</div><div class="sc-s">${metrosExtra>=0?"+":""}${nf(metrosExtra,0)} ml m&aacute;s de obra conseguida &times; PU real $${nf(puRn,0)}/ml</div></div>
+    <div class="sim-c ok"><div class="sc-l">Ahorro + beneficio total</div><div class="sc-v" style="color:var(--green)">${money(ahorroBeneficioTotal)}</div><div class="sc-s">eficiencia + avance, desarrollo convencional (sin MC)</div></div>`;
+
+  // waterfall creciente: ahorro precio + avance extra = total
+  const p1=ahorroPrecioBud;
+  const p2=p1+avanceExtra;
+  const bars=[
+    [0,p1],
+    [p1,p2],
+    [0,ahorroBeneficioTotal]
+  ];
+  if(simChart) simChart.destroy();
+  simChart=new Chart(document.getElementById("simChart"),{type:"bar",
+    data:{labels:["Ahorro por precio\n(eficiencia)","Avance extra\n(+"+nf(metrosExtra,0)+" ml)","AHORRO +\nBENEFICIO TOTAL"],
+      datasets:[{data:bars,backgroundColor:["#4e9a2f","#00A195","#008076"],borderRadius:4,barPercentage:0.6,
+        datalabels:{display:true,anchor:"end",align:"end",offset:2,
+          color:"#2c3340",font:{family:"Montserrat",weight:"700",size:11},
+          formatter:(v,ctx)=>{const i=ctx.dataIndex;
+            if(i===0)return money(ahorroPrecioBud);
+            if(i===1)return money(avanceExtra);
+            return money(ahorroBeneficioTotal);}}}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{
+        const i=ctx.dataIndex;
+        if(i===0)return "Ahorro por precio: "+money(ahorroPrecioBud);
+        if(i===1)return "Avance extra: "+money(avanceExtra);
+        return "Ahorro + beneficio total: "+money(ahorroBeneficioTotal);
+      }}}},
+      scales:{x:{ticks:{font:{family:"Montserrat",size:10.5}}},
+        y:{ticks:{font:{family:"Montserrat",size:10},callback:v=>"$"+nf(v/1000)+"k"},grace:"8%"}}}});
+
+  document.getElementById("simVerdict").innerHTML=`
+    <h4>Balance real del ahorro</h4>
+    <p>El desarrollo convencional gener&oacute; dos beneficios que suman: se ejecut&oacute; cada metro m&aacute;s barato que budget, y adem&aacute;s se avanz&oacute; obra por encima de lo planeado. Ambos son ahorro real para la operaci&oacute;n.</p>
+    <div class="rows">
+      <div class="vrow"><span><b>Ahorro por precio</b> (PU $${nf(puBn,0)} &rarr; $${nf(puRn,0)}/ml sobre lo planeado)</span><span class="val-save">${money(ahorroPrecioBud)}</span></div>
+      <div class="vrow"><span><b>Avance extra</b> (${metrosExtra>=0?"+":""}${nf(metrosExtra,0)} ml adicionales de obra conseguida)</span><span class="val-save">${money(avanceExtra)}</span></div>
+      <div class="vrow" style="border-top:2px solid var(--navy);margin-top:4px;padding-top:8px"><span><b>AHORRO + BENEFICIO TOTAL</b></span><span class="val-save" style="font-size:16px">${money(ahorroBeneficioTotal)}</span></div>
+    </div>
+    <p style="margin-top:12px">El beneficio real del desarrollo convencional en Ene&ndash;Jun es de <b class="big">${money(ahorroBeneficioTotal)}</b>: <b>${money(ahorroPrecioBud)}</b> por eficiencia de precio y <b>${money(avanceExtra)}</b> por los <b>${nf(metrosExtra,0)} ml de avance adicional</b> (de los cuales ${nf(faltante,1)} ml suplieron al Minero Continuo que no perform&oacute;). Sin doble conteo: el ahorro de precio se mide sobre los metros planeados y el avance extra son los metros de m&aacute;s, valorizados por separado. <span style="color:var(--muted)">Para referencia, la variaci&oacute;n contable pura (real vs budget, incluyendo la cuota fija del MC de ${money(efMCval)}) es ${money(varContableTotal)} &mdash; menor, porque el cierre compara peso contra peso sin valorizar el avance de obra como beneficio.</span></p>`;
+
+}
+
+// ==== refresh ====
+function refreshAll(){
+  renderKPIs(); drawMainCasc(); buildTable();
+  if(compBuilt) buildComp();
+  if(simBuilt) buildSim();
+  if(chartsBuilt) buildCharts();
+  buildInsights();
+}
+
+// listeners
+document.getElementById("mcToggle").addEventListener("change",function(){
+  EXCL_MC=this.checked;
+  document.getElementById("mcTxt").textContent=EXCL_MC?"Excluyendo metros del Minero Continuo (MC) de tablas y comparativos":"Incluyendo metros del Minero Continuo (MC)";
+  const st=document.getElementById("mcState"); st.textContent=EXCL_MC?"SIN MC":"CON MC"; st.className="mc-state"+(EXCL_MC?" off":"");
+  refreshAll();
+});
+document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",function(){
+  document.querySelectorAll("[data-view]").forEach(x=>x.classList.remove("active"));
+  this.classList.add("active"); SEG=this.dataset.view; buildTable();
+}));
+document.querySelectorAll("[data-compview]").forEach(b=>b.addEventListener("click",function(){
+  document.querySelectorAll("[data-compview]").forEach(x=>x.classList.remove("active"));
+  this.classList.add("active"); COMPVIEW=this.dataset.compview; buildComp();
+}));
+document.getElementById("unitMl").addEventListener("click",function(){
+  document.getElementById("unitMl").classList.add("active");document.getElementById("unitCost").classList.remove("active");
+  COMPUNIT="ml"; buildComp();
+});
+document.getElementById("unitCost").addEventListener("click",function(){
+  document.getElementById("unitCost").classList.add("active");document.getElementById("unitMl").classList.remove("active");
+  COMPUNIT="cost"; buildComp();
+});
+
+// tabs
+let compBuilt=false, chartsBuilt=false, simBuilt=false;
+document.querySelectorAll(".tab-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".tab-pane").forEach(p=>p.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(btn.dataset.tab).classList.add("active");
+    if(btn.dataset.tab==="t-comp"&&!compBuilt){buildComp();compBuilt=true;}
+    if(btn.dataset.tab==="t-sim"&&!simBuilt){buildSim();simBuilt=true;}
+    if(btn.dataset.tab==="t-graf"&&!chartsBuilt){buildCharts();chartsBuilt=true;}
+  });
+});
+
+// init
+renderKPIs(); drawMainCasc(); buildTable(); buildInsights();
+</script>
+</body>
+</html>
