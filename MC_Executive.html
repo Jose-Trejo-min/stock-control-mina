@@ -95,19 +95,19 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:-app
     <div class="kk"><div class="kl">Costo real (junio)</div><div class="kv kr" id="k1">$3,250/m</div><div class="ks" id="k1s">Budget: $2,352/m</div></div>
     <div class="kk"><div class="kl">Metros facturados</div><div class="kv ka" id="k2">109.5 m</div><div class="ks" id="k2s">2 meses cerrados</div></div>
     <div class="kk"><div class="kl">Gasto acumulado</div><div class="kv" id="k3">$351K</div><div class="ks" id="k3s">May&ndash;Jun</div></div>
-    <div class="kk"><div class="kl">Julio proyectado</div><div class="kv kb" id="k4">~86 m</div><div class="ks" id="k4s">47.1 m al 17-jul</div></div>
+    <div class="kk"><div class="kl">Último mes cerrado</div><div class="kv kb" id="k4">92 m</div><div class="ks" id="k4s">Julio cerrado</div></div>
   </div>
   <div class="g2">
     <div class="card"><div class="ct">Costo real por mes (US$/m)</div><div class="cs">Del Excel &mdash; gasto total / metros</div>
       <div class="leg"><div class="li"><div class="ld" style="background:#d63b3a"></div>Real</div><div class="li"><div class="ld" style="background:#1a6bc9"></div>Budget</div><div class="li"><div class="ld" style="background:#888"></div>B&amp;V</div></div>
       <div class="cw" style="height:200px"><canvas id="c1"></canvas></div></div>
-    <div class="card"><div class="ct">Metros por mes &mdash; tendencia</div><div class="cs">+46% may&rarr;jun &middot; julio proyectado con ritmo al 17</div>
-      <div class="leg"><div class="li"><div class="ld" style="background:rgba(26,107,201,.2);border:.5px solid #1a6bc9"></div>Plan (117)</div><div class="li"><div class="ld" style="background:#d63b3a"></div>Real</div><div class="li"><div class="ld" style="background:rgba(26,107,201,.5)"></div>Jul proyecci&oacute;n</div></div>
+    <div class="card"><div class="ct">Metros por mes &mdash; tendencia</div><div class="cs">Mayo &rarr; Junio &rarr; Julio, meses cerrados</div>
+      <div class="leg"><div class="li"><div class="ld" style="background:rgba(26,107,201,.2);border:.5px solid #1a6bc9"></div>Plan (117)</div><div class="li"><div class="ld" style="background:#d63b3a"></div>Real</div><div class="li"><div class="ld" style="background:rgba(26,107,201,.5)"></div>Meses cerrados</div></div>
       <div class="cw" style="height:200px"><canvas id="c2"></canvas></div></div>
   </div>
   <div class="card"><div class="ct">Gasto acumulado vs. lo que costar&iacute;a con Budget y B&amp;V</div><div class="cs" id="c10s">Mismos metros, tres costos</div>
     <div class="cw" style="height:170px"><canvas id="c10"></canvas></div></div>
-  <div class="card"><div class="ct">Escenario de cierre anual</div><div class="cs">Incluye mayo y junio reales (ya gastados) + julio proyecci&oacute;n + ago&ndash;dic</div>
+  <div class="card"><div class="ct">Escenario de cierre anual</div><div class="cs">Incluye los meses ya cerrados (reales) + proyecci&oacute;n ago&ndash;dic a budget de metros</div>
     <div id="anual-wrap" style="margin:6px 0"></div>
     <div id="anual-meta" style="margin-top:10px"></div></div>
   <div class="card"><div class="ct">Meta de ahorro anual vs. Budget</div><div class="cs">Ingresa tu meta y el dashboard calcula los metros necesarios</div>
@@ -167,7 +167,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:-app
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;padding-top:12px;border-top:.5px solid var(--bd)">
       <div style="font-size:12px;color:var(--t2)"><strong style="color:var(--t1)">Mayo</strong><br>Operativo: 6 picas / 44.4m = <strong style="color:var(--gr)">0.14/m</strong><br><span style="color:var(--bl);font-size:11px">+76 cambio planeado</span></div>
       <div style="font-size:12px;color:var(--t2)"><strong style="color:var(--t1)">Junio</strong><br>50 picas / 66.1m = <strong style="color:var(--am)">0.76/m</strong></div>
-      <div style="font-size:12px;color:var(--t2)"><strong style="color:var(--t1)">Julio (al 17)</strong><br><span id="p-jul">72 picas / 47.1m = 1.53/m</span></div>
+      <div style="font-size:12px;color:var(--t2)"><strong style="color:var(--t1)">Julio</strong><br><span id="p-jul">96 picas / 73.3m</span></div>
     </div></div>
   <div class="card"><div class="ct">Acumulado operativo (sin 76 planeadas)</div><div class="cs">Tendencia hacia 0.52/m</div><div class="cw" style="height:210px"><canvas id="c8"></canvas></div></div>
 </div>
@@ -178,11 +178,10 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:-app
   <div class="slabel">Escenarios</div>
   <div class="scards" id="sim-escs"></div>
   <div class="card"><div class="ct">Ajusta el escenario</div><div class="cs">Fijos constantes. Variable escala con metros.</div>
+    <div class="btnrow" id="btnrow-meses"></div>
     <div class="btnrow">
-      <button class="btn" id="btn-real" onclick="setM(D.mBase)">Junio real</button>
       <button class="btn" onclick="setM(D.umbralBv)">Igualar B&amp;V</button>
       <button class="btn" onclick="setM(D.umbralBdg)">Igualar budget</button>
-      <button class="btn" onclick="setM(D.julProy)">Jul proyecci&oacute;n</button>
     </div>
     <div class="slrow"><label>Metros por mes</label><input type="range" id="sl-sim" min="20" max="300" step="1" value="117"><span class="slval"><span id="sv-sim">117</span> m</span></div>
     <div class="res4">
@@ -227,28 +226,30 @@ html,body{min-height:100vh;background:var(--bg);color:var(--t1);font-family:-app
 <script>
 var dk=matchMedia('(prefers-color-scheme:dark)').matches,SF=dk?'#191918':'#fff',GR=dk?'#2a2a28':'#e8e6e0',TK='#9a9894';
 var D={
-  budCu:2352,realCu:3283,bvCu:2548,
-  bud:{renta:590,svc:166,spilling:135,rezagado:312,ancla:547,malla:120,concreto:357,energia:76,picas:49,diesel:0,explosivo:0},
-  real:{renta:1578,svc:435,spilling:0,rezagado:370,ancla:555,malla:103,concreto:104,energia:77,picas:45,diesel:9,explosivo:0},
-  bv:{renta:2177,svc:0,spilling:164,rezagado:0,ancla:0,malla:0,concreto:0,energia:0,picas:0,diesel:0,explosivo:207},
-  metros:[44.5,65],mesLbls:['Mayo','Junio'],
-  /* COSTOS REALES del Excel (OPEX+CAPEX totales por mes) */
-  costoRealMes:[139808,211261],
-  cuRealMes:[3142,3250],
-  julM:47.1,julDias:17,gastoTotal:351069,
-  rentaMes:86786,svcMes:31825,
-  fijoMes:0,varM:1050,mBase:65,julProy:0,
+  budCu:2349,realCu:2771,bvCu:2548,
+  bud:{renta:590,svc:153,spilling:150,rezagado:309,ancla:545,malla:120,zarpeo:356,energia:76,picas:49,diesel:0,explosivo:0},
+  real:{renta:1285,svc:392,spilling:0,rezagado:368,ancla:597,malla:120,zarpeo:135,energia:42,picas:70,diesel:5,explosivo:0},
+  bv:{renta:2177,svc:0,spilling:164,rezagado:0,ancla:0,malla:0,zarpeo:0,energia:0,picas:0,diesel:0,explosivo:207},
+  metros:[44.5,66,92.12],mesLbls:['Mayo','Junio','Julio'],
+  /* CU real por mes, tomado de Resumen (fila Real All-in de la tabla Escenario) */
+  cuRealMes:[2821,3481,2771],
+  costoRealMes:[125535,229746,255301],
+  gastoTotal:610582,
+  hasPartialMonth:false, julM:0,julDias:0,julProy:0,
+  rentaMes:86786,svcMes:31687,
+  fijoMes:0,varM:1050,mBase:92.12,
   umbralBv:0,umbralBdg:0,
-  absM:[[86786,15810,5372,3618,22469,4185,6218,0,191,530,0],[86786,31825,15449,36870,38350,7049,5182,0,4775,424,0]]
+  absM:[[86786,0,0,3618,22469,4185,6218,0,191,530,0],[86786,47700,0,36870,38350,7049,5182,0,4776,0,0]]
 };
 function recalc(){
   D.fijoMes=D.rentaMes+D.svcMes;
   D.mBase=D.metros[D.metros.length-1]||65;
-  D.julProy=Math.round(D.julM/D.julDias*31);
+  /* Variable/m derivado del último mes cerrado: (costoTotal - fijo)/metros */
+  var lastCosto=D.costoRealMes[D.costoRealMes.length-1],lastM=D.mBase;
+  if(lastM>0){D.varM=Math.max(200,Math.round((lastCosto-D.fijoMes)/lastM));}
+  D.julProy=D.hasPartialMonth?Math.round(D.julM/D.julDias*31):0;
   D.umbralBv=Math.ceil(D.fijoMes/(D.bvCu-D.varM));
   D.umbralBdg=Math.ceil(D.fijoMes/(D.budCu-D.varM));
-  /* Recalcular CU real por mes si tenemos los datos */
-  D.cuRealMes=D.metros.map(function(m,i){return m>0&&D.costoRealMes[i]?Math.round(D.costoRealMes[i]/m):0;});
 }
 recalc();
 function costMC(m){return Math.round(D.fijoMes/m+D.varM);}
@@ -257,35 +258,36 @@ var CH={};
 function mkC(id,cfg){if(CH[id])CH[id].destroy();CH[id]=new Chart(document.getElementById(id),cfg);return CH[id];}
 function lDs(d,c,dash){return{data:d,borderColor:c,borderWidth:2,borderDash:dash||[],pointRadius:0,fill:false,tension:0.25};}
 var xs=Array.from({length:28},function(_,i){return(i+1)*10+10;});
-var cN=['Renta','Svc.t\u00e9c.','Spilling','Rezagado','Ancla','Malla','Concreto','Energ\u00eda','Picas','Diesel','Explosivo'];
+var cN=['Renta','Svc.t\u00e9c.','Spilling','Rezagado','Ancla','Malla','Zarpeo','Energ\u00eda','Picas','Diesel','Explosivo'];
 var cT=['fijo','fijo','var','var','var','var','var','var','var','var','var'];
 var cCo=['#d63b3a','#c98500','#1a6bc9','#0e8f62','#9b59b6','#2c3e50','#888','#6b8e23','#27ae60','#95a5a6','#e67e22'];
 
 function render(){recalc();rResumen();rCostos();rEstructura();rPicas();rSimulador();rOportunidades();rDatos();}
 
 function rResumen(){
-  var rc=D.realCu,bc=D.budCu,bv=D.bvCu,mb=D.mBase,jm=D.julM,jp=D.julProy;
+  var rc=D.realCu,bc=D.budCu,bv=D.bvCu,mb=D.mBase;
   var cuBase=D.cuRealMes[D.cuRealMes.length-1]||rc;
   var totalM=D.metros.reduce(function(a,b){return a+b;},0);
   var sobre=cuBase>bc;
+  var lastLbl=D.mesLbls[D.mesLbls.length-1];
   /* exec line */
-  document.getElementById('exec-line').innerHTML='<strong>El MC cuesta hoy $'+cuBase.toLocaleString()+'/m</strong> ('+D.mesLbls[D.mesLbls.length-1]+'). Necesita '+D.umbralBv+' m/mes para igualar B&V y '+D.umbralBdg+' m/mes para el budget. Julio proyecta <strong>~'+jp+' m</strong>. '+(jp>=D.umbralBv?'Tendencia positiva \u2014 el cierre de julio superar\u00eda el punto de equilibrio vs. B&V.':'A\u00fan por debajo del punto de equilibrio, pero la tendencia de metros es ascendente.');
+  document.getElementById('exec-line').innerHTML='<strong>El MC cuesta hoy $'+cuBase.toLocaleString()+'/m</strong> ('+lastLbl+', mes cerrado). Necesita '+D.umbralBv+' m/mes para igualar B&V y '+D.umbralBdg+' m/mes para el budget. '+(mb>=D.umbralBv?'<strong>'+lastLbl+' ya super\u00f3 el punto de equilibrio vs. B&V.</strong>':mb>=D.umbralBdg?lastLbl+' ya est\u00e1 dentro del budget.':'A\u00fan por debajo del punto de equilibrio, pero la tendencia de metros es ascendente.');
   /* estado */
   document.getElementById('r-est').className='estado '+(sobre?'er':cuBase>bv?'ea':'eg');
   document.getElementById('r-est-t').textContent=sobre?'Sobre el budget \u2014 acci\u00f3n requerida':cuBase>bv?'Dentro del budget, sobre B&V':'Rentable';
   var pct=Math.round(Math.abs(cuBase/bc-1)*100);
   var msg=document.getElementById('r-msg');msg.className='msg '+(sobre?'mr':cuBase>bv?'ma':'mg');
   msg.innerHTML=sobre
-    ?'<strong>'+D.mesLbls[D.mesLbls.length-1]+' cerr\u00f3 a $'+cuBase.toLocaleString()+'/m ('+pct+'% sobre budget).</strong> La renta fija de $'+D.rentaMes.toLocaleString()+'/mes entre '+mb+' m genera un costo fijo de $'+Math.round(D.fijoMes/mb).toLocaleString()+'/m. Julio avanza a '+jm+' m al d\u00eda '+D.julDias+' y proyecta ~'+jp+' m al cierre.'+(jp>=D.umbralBv?' Eso superar\u00eda el punto de equilibrio vs. B&V ('+D.umbralBv+' m/mes).':' Aún por debajo del umbral de '+D.umbralBv+' m/mes.')
-    :'<strong>El costo real es $'+cuBase.toLocaleString()+'/m \u2014 '+(cuBase<=bv?'dentro del budget y m\u00e1s barato que B&V':'dentro del budget, sobre B&V')+'.</strong>';
+    ?'<strong>'+lastLbl+' cerr\u00f3 a $'+cuBase.toLocaleString()+'/m ('+pct+'% sobre budget).</strong> La renta fija de $'+D.rentaMes.toLocaleString()+'/mes entre '+mb+' m genera un costo fijo de $'+Math.round(D.fijoMes/mb).toLocaleString()+'/m. Faltan <strong>'+Math.max(0,D.umbralBv-mb)+' m/mes</strong> para igualar B&V y <strong>'+Math.max(0,D.umbralBdg-mb)+' m/mes</strong> para el budget.'
+    :'<strong>'+lastLbl+' cerr\u00f3 a $'+cuBase.toLocaleString()+'/m \u2014 '+(cuBase<=bv?'dentro del budget y m\u00e1s barato que B&V':'dentro del budget, sobre B&V')+'.</strong> Con '+mb+' m producidos, la tendencia es favorable.';
   document.getElementById('k1').textContent='$'+cuBase.toLocaleString()+'/m';
   document.getElementById('k1').className='kv '+(cuBase>bc?'kr':cuBase>bv?'ka':'kg');
-  document.getElementById('k1s').textContent='Budget: $'+bc.toLocaleString()+'/m';
+  document.getElementById('k1s').textContent='Budget: $'+bc.toLocaleString()+'/m \u00b7 '+lastLbl;
   document.getElementById('k2').textContent=totalM+' m';
   document.getElementById('k2s').textContent=D.mesLbls.join('\u2013')+' cerrados';
   document.getElementById('k3').textContent='$'+Math.round(D.gastoTotal/1000)+'K';
-  document.getElementById('k4').textContent='~'+jp+' m';
-  document.getElementById('k4s').textContent=jm+' m al '+D.julDias+'-jul';
+  document.getElementById('k4').textContent=mb+' m';
+  document.getElementById('k4s').textContent=lastLbl+' (mes cerrado)';
   /* c1 costo real por mes del Excel */
   var labsC=D.mesLbls.slice();
   mkC('c1',{type:'line',data:{labels:labsC,datasets:[
@@ -294,18 +296,14 @@ function rResumen(){
     lDs(new Array(labsC.length).fill(bv),'#888',[2,3])
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
     scales:{x:{ticks:{color:TK,font:{size:11}},grid:{color:GR}},y:{min:Math.min(bc,Math.min.apply(null,D.cuRealMes))-300,max:Math.max.apply(null,D.cuRealMes)+400,ticks:{color:TK,font:{size:11},callback:function(v){return'$'+v.toLocaleString();}},grid:{color:GR}}}}});
-  /* c2 metros con tendencia y julio proy */
-  var mLabs=D.mesLbls.concat(['Jul (proy)']);
-  var crecPct=D.metros.length>=2?Math.round((D.metros[D.metros.length-1]/D.metros[D.metros.length-2]-1)*100):0;
-  mkC('c2',{type:'bar',data:{labels:mLabs,datasets:[
-    {data:D.metros.map(function(){return 117;}).concat([117]),backgroundColor:'rgba(26,107,201,.12)',borderColor:'#1a6bc9',borderWidth:1.5,borderRadius:4,borderDash:[4,3]},
-    {data:D.metros.concat([null]),backgroundColor:'#d63b3a',borderRadius:4},
-    {data:new Array(D.metros.length).fill(null).concat([jp]),backgroundColor:'rgba(26,107,201,.5)',borderRadius:4,borderWidth:1.5,borderColor:'#1a6bc9',borderDash:[3,3]}
+  /* c2 metros — todos los meses cerrados, sin proyección (ya no aplica) */
+  mkC('c2',{type:'bar',data:{labels:D.mesLbls,datasets:[
+    {data:D.metros.map(function(){return 117;}),backgroundColor:'rgba(26,107,201,.12)',borderColor:'#1a6bc9',borderWidth:1.5,borderRadius:4,borderDash:[4,3]},
+    {data:D.metros,backgroundColor:'#d63b3a',borderRadius:4}
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
     scales:{x:{ticks:{color:TK,font:{size:11}},grid:{color:GR}},y:{ticks:{color:TK,font:{size:11},callback:function(v){return v+'m';}},grid:{color:GR}}}}});
   /* c10 gasto acumulado vs budget vs B&V */
   var gastoBdg=totalM*bc, gastoBv=totalM*bv;
-  var dBdg=D.gastoTotal-gastoBdg, dBv=D.gastoTotal-gastoBv;
   document.getElementById('c10s').textContent=totalM+'m \u00b7 Real $'+Math.round(D.gastoTotal/1000)+'K vs Budget $'+Math.round(gastoBdg/1000)+'K vs B&V $'+Math.round(gastoBv/1000)+'K';
   mkC('c10',{type:'bar',data:{
     labels:['Real MC','Budget MC','B&V ref.'],
@@ -313,27 +311,28 @@ function rResumen(){
   },options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
     tooltip:{callbacks:{label:function(c){return'$'+Math.round(c.raw/1000)+'K';}}}},
     scales:{x:{ticks:{color:TK,font:{size:11},callback:function(v){return'$'+Math.round(v/1000)+'K';}},grid:{color:GR}},y:{ticks:{color:TK,font:{size:11}},grid:{display:false}}}}});
-  /* anual — incluye meses ya gastados */
+  /* anual — meses ya cerrados + resto del año a budget de metros */
   var aw=document.getElementById('anual-wrap');aw.innerHTML='';
-  var nR=5,mM=117;
-  var gJul=D.fijoMes+D.varM*jp;
+  var mesesTotalAno=12,mesesCerrados=D.mesLbls.length,nR=Math.max(0,mesesTotalAno-mesesCerrados-4);/* -4 por ene-abr sin producción MC */
+  if(nR<=0)nR=12-4-mesesCerrados;if(nR<0)nR=0;
+  var mM=117;
   var gResto=nR*(D.fijoMes+D.varM*mM);
-  var mtAnual=totalM+jp+mM*nR;
-  var gAnual=D.gastoTotal+gJul+gResto;
-  var cuA=Math.round(gAnual/mtAnual);
+  var mtAnual=totalM+mM*nR;
+  var gAnual=D.gastoTotal+gResto;
+  var cuA=mtAnual>0?Math.round(gAnual/mtAnual):0;
   var gBvA=mtAnual*bv,gBdgA=mtAnual*bc;
   var ahBv=gBvA-gAnual,ahBdg=gBdgA-gAnual;
   var metaNec=0;
-  if(cuA>bc){metaNec=Math.ceil((D.gastoTotal+gJul+nR*D.fijoMes-bc*(totalM+jp))/(nR*(bc-D.varM)));if(metaNec<0)metaNec=0;}
+  if(cuA>bc&&nR>0){metaNec=Math.ceil((D.gastoTotal+nR*D.fijoMes-bc*totalM)/(nR*(bc-D.varM)));if(metaNec<0)metaNec=0;}
   aw.innerHTML='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">'
     +'<div class="rb"><div class="rl">Metros anuales</div><div class="rv">'+Math.round(mtAnual)+' m</div></div>'
     +'<div class="rb"><div class="rl">CU prom. ponderado</div><div class="rv" style="color:'+(cuA>bc?'var(--re)':cuA>bv?'var(--am)':'var(--gr)')+'">$'+cuA.toLocaleString()+'/m</div></div>'
     +'<div class="rb"><div class="rl">vs. Budget ($'+bc+')</div><div class="rv" style="color:'+(ahBdg>=0?'var(--gr)':'var(--re)')+'">'+(ahBdg>=0?'Ahorro ':'')+'$'+Math.round(Math.abs(ahBdg)/1000)+'K'+(ahBdg<0?' sobre':'')+'</div></div>'
     +'<div class="rb"><div class="rl">vs. B&V ($'+bv+')</div><div class="rv" style="color:'+(ahBv>=0?'var(--gr)':'var(--re)')+'">'+(ahBv>=0?'Ahorro ':'')+'$'+Math.round(Math.abs(ahBv)/1000)+'K'+(ahBv<0?' sobre':'')+'</div></div></div>'
     +'<div style="font-size:12px;color:var(--t2);margin-top:8px;line-height:1.65">'
-    +'<strong style="color:var(--t1)">Desglose:</strong> May\u2013Jun gastados: $'+Math.round(D.gastoTotal/1000)+'K ('+totalM+'m) + Jul ~'+jp+'m: $'+Math.round(gJul/1000)+'K + Ago\u2013Dic a '+mM+'m/mes: $'+Math.round(gResto/1000)+'K.'
+    +'<strong style="color:var(--t1)">Desglose:</strong> '+D.mesLbls.join('+')+' ya gastados: $'+Math.round(D.gastoTotal/1000)+'K ('+totalM+'m) + '+nR+' meses restantes a '+mM+' m/mes: $'+Math.round(gResto/1000)+'K ('+mM*nR+'m).'
     +'<br>CU ponderado del a\u00f1o: <strong style="color:'+(cuA>bc?'var(--re)':'var(--gr)')+'">$'+cuA.toLocaleString()+'/m</strong>.'
-    +(cuA>bc&&metaNec>0?'<br><span style="color:var(--am);font-weight:500">\u26A0 Para cerrar el a\u00f1o en budget ($'+bc+'/m) necesitas <strong>'+metaNec+' m/mes</strong> de ago\u2013dic.</span>':'')
+    +(cuA>bc&&metaNec>0?'<br><span style="color:var(--am);font-weight:500">\u26A0 Para cerrar el a\u00f1o en budget ($'+bc+'/m) necesitas <strong>'+metaNec+' m/mes</strong> el resto del a\u00f1o.</span>':'')
     +'</div>';
   updAhorro();
 }
@@ -377,7 +376,11 @@ function rEstructura(){
 function updAnat(){var m=parseInt(document.getElementById('sl-anat').value);document.getElementById('sv-anat').textContent=m;var r=Math.round(D.rentaMes/m),s=Math.round(D.svcMes/m),v=D.varM,tot=r+s+v;document.getElementById('an-r').textContent='$'+r.toLocaleString();document.getElementById('an-s').textContent='$'+s.toLocaleString();document.getElementById('an-v').textContent='$'+v.toLocaleString();document.getElementById('an-tot').textContent='$'+tot.toLocaleString();var vs=document.getElementById('an-vs'),d=tot-D.budCu;vs.textContent=d>0?'$'+d+'/m sobre budget':'$'+Math.abs(d)+'/m bajo budget';vs.style.color=d>0?'var(--re)':'var(--gr)';var pr=r/tot,ps=s/tot,pv=v/tot;document.getElementById('seg-r').style.flex=pr;document.getElementById('seg-s').style.flex=ps;document.getElementById('seg-v').style.flex=pv;document.getElementById('seg-r').textContent=m<50?'':Math.round(pr*100)+'%';document.getElementById('seg-s').textContent=ps<0.07?'':Math.round(ps*100)+'%';document.getElementById('seg-v').textContent=Math.round(pv*100)+'%';}
 document.getElementById('sl-anat').addEventListener('input',updAnat);
 
-var DP=[{f:'08-may',m:'may',mt:1.68,p:0},{f:'13-may',m:'may',mt:2.03,p:0},{f:'14-may',m:'may',mt:3.09,p:0},{f:'15-may',m:'may',mt:0,p:2},{f:'16-may',m:'may',mt:1.29,p:2},{f:'18-may',m:'may',mt:0,p:76},{f:'19-may',m:'may',mt:2.43,p:0},{f:'21-may',m:'may',mt:2.89,p:0},{f:'22-may',m:'may',mt:4.5,p:0},{f:'23-may',m:'may',mt:0,p:2},{f:'24-may',m:'may',mt:4.81,p:0},{f:'25-may',m:'may',mt:1.77,p:0},{f:'26-may',m:'may',mt:3.34,p:0},{f:'27-may',m:'may',mt:2.62,p:0},{f:'28-may',m:'may',mt:4.92,p:0},{f:'29-may',m:'may',mt:2.01,p:0},{f:'30-may',m:'may',mt:3.27,p:0},{f:'31-may',m:'may',mt:3.77,p:0},{f:'03-jun',m:'jun',mt:3.7,p:0},{f:'04-jun',m:'jun',mt:0.5,p:0},{f:'05-jun',m:'jun',mt:0.92,p:0},{f:'07-jun',m:'jun',mt:2.55,p:0},{f:'08-jun',m:'jun',mt:4.16,p:0},{f:'09-jun',m:'jun',mt:4.36,p:0},{f:'10-jun',m:'jun',mt:1.39,p:0},{f:'11-jun',m:'jun',mt:2.6,p:0},{f:'12-jun',m:'jun',mt:3.89,p:0},{f:'13-jun',m:'jun',mt:2.1,p:0},{f:'14-jun',m:'jun',mt:3.44,p:4},{f:'15-jun',m:'jun',mt:0,p:12},{f:'16-jun',m:'jun',mt:4.13,p:0},{f:'18-jun',m:'jun',mt:5.1,p:12},{f:'19-jun',m:'jun',mt:0,p:2},{f:'20-jun',m:'jun',mt:0,p:3},{f:'21-jun',m:'jun',mt:3,p:1},{f:'22-jun',m:'jun',mt:2.06,p:4},{f:'24-jun',m:'jun',mt:3.61,p:0},{f:'25-jun',m:'jun',mt:4.46,p:5},{f:'26-jun',m:'jun',mt:2.94,p:3},{f:'27-jun',m:'jun',mt:2,p:3},{f:'29-jun',m:'jun',mt:4.15,p:0},{f:'30-jun',m:'jun',mt:5,p:1},{f:'01-jul',m:'jul',mt:6.81,p:0},{f:'02-jul',m:'jul',mt:2.39,p:0},{f:'03-jul',m:'jul',mt:2.38,p:2},{f:'04-jul',m:'jul',mt:0,p:7},{f:'05-jul',m:'jul',mt:2.98,p:3},{f:'06-jul',m:'jul',mt:0.42,p:9},{f:'07-jul',m:'jul',mt:3.35,p:0},{f:'08-jul',m:'jul',mt:2.4,p:4},{f:'09-jul',m:'jul',mt:5.89,p:10},{f:'10-jul',m:'jul',mt:3.74,p:0},{f:'12-jul',m:'jul',mt:4.08,p:3},{f:'13-jul',m:'jul',mt:0,p:3},{f:'14-jul',m:'jul',mt:5.13,p:3},{f:'15-jul',m:'jul',mt:2.06,p:4},{f:'16-jul',m:'jul',mt:3.31,p:3},{f:'17-jul',m:'jul',mt:2.11,p:21}];
+var DP=[
+{f:'08-may',m:'may',mt:1.68,p:0},{f:'09-may',m:'may',mt:0,p:0},{f:'10-may',m:'may',mt:0,p:0},{f:'11-may',m:'may',mt:0,p:0},{f:'12-may',m:'may',mt:0,p:0},{f:'13-may',m:'may',mt:2.03,p:0},{f:'14-may',m:'may',mt:3.09,p:0},{f:'15-may',m:'may',mt:1.29,p:2},{f:'16-may',m:'may',mt:0,p:2},{f:'17-may',m:'may',mt:0,p:0},{f:'18-may',m:'may',mt:0,p:76},{f:'19-may',m:'may',mt:2.43,p:0},{f:'20-may',m:'may',mt:0,p:0},{f:'21-may',m:'may',mt:2.89,p:0},{f:'22-may',m:'may',mt:4.5,p:0},{f:'23-may',m:'may',mt:0,p:2},{f:'24-may',m:'may',mt:4.81,p:0},{f:'25-may',m:'may',mt:1.77,p:0},{f:'26-may',m:'may',mt:3.34,p:0},{f:'27-may',m:'may',mt:2.62,p:0},{f:'28-may',m:'may',mt:4.92,p:0},{f:'29-may',m:'may',mt:2.01,p:0},{f:'30-may',m:'may',mt:3.27,p:0},{f:'31-may',m:'may',mt:3.77,p:0},
+{f:'01-jun',m:'jun',mt:0,p:0},{f:'02-jun',m:'jun',mt:0,p:0},{f:'03-jun',m:'jun',mt:3.7,p:0},{f:'04-jun',m:'jun',mt:0.5,p:0},{f:'05-jun',m:'jun',mt:0.92,p:0},{f:'06-jun',m:'jun',mt:0,p:0},{f:'07-jun',m:'jun',mt:2.55,p:0},{f:'08-jun',m:'jun',mt:4.16,p:0},{f:'09-jun',m:'jun',mt:4.36,p:0},{f:'10-jun',m:'jun',mt:1.39,p:0},{f:'11-jun',m:'jun',mt:2.6,p:0},{f:'12-jun',m:'jun',mt:3.89,p:0},{f:'13-jun',m:'jun',mt:2.1,p:0},{f:'14-jun',m:'jun',mt:3.44,p:4},{f:'15-jun',m:'jun',mt:0,p:12},{f:'16-jun',m:'jun',mt:7.07,p:3},{f:'17-jun',m:'jun',mt:0,p:0},{f:'18-jun',m:'jun',mt:5.1,p:12},{f:'19-jun',m:'jun',mt:0,p:2},{f:'20-jun',m:'jun',mt:0,p:3},{f:'21-jun',m:'jun',mt:3,p:1},{f:'22-jun',m:'jun',mt:2.06,p:4},{f:'23-jun',m:'jun',mt:0,p:0},{f:'24-jun',m:'jun',mt:3.61,p:0},{f:'25-jun',m:'jun',mt:4.46,p:5},{f:'27-jun',m:'jun',mt:2,p:3},{f:'28-jun',m:'jun',mt:0,p:0},{f:'29-jun',m:'jun',mt:4.15,p:0},{f:'30-jun',m:'jun',mt:5,p:1},
+{f:'01-jul',m:'jul',mt:6.81,p:0},{f:'02-jul',m:'jul',mt:2.39,p:0},{f:'03-jul',m:'jul',mt:2.38,p:2},{f:'04-jul',m:'jul',mt:0,p:7},{f:'05-jul',m:'jul',mt:2.98,p:3},{f:'06-jul',m:'jul',mt:0.42,p:9},{f:'07-jul',m:'jul',mt:3.35,p:0},{f:'08-jul',m:'jul',mt:2.4,p:4},{f:'09-jul',m:'jul',mt:5.89,p:10},{f:'10-jul',m:'jul',mt:3.74,p:0},{f:'11-jul',m:'jul',mt:0,p:0},{f:'12-jul',m:'jul',mt:4.08,p:3},{f:'13-jul',m:'jul',mt:0,p:3},{f:'14-jul',m:'jul',mt:5.13,p:3},{f:'15-jul',m:'jul',mt:2.06,p:4},{f:'16-jul',m:'jul',mt:3.31,p:4},{f:'17-jul',m:'jul',mt:2.11,p:21},{f:'18-jul',m:'jul',mt:0,p:0},{f:'19-jul',m:'jul',mt:4.46,p:4},{f:'20-jul',m:'jul',mt:0,p:5},{f:'21-jul',m:'jul',mt:0,p:0},{f:'22-jul',m:'jul',mt:4.39,p:3},{f:'23-jul',m:'jul',mt:6,p:2},{f:'24-jul',m:'jul',mt:0,p:4},{f:'25-jul',m:'jul',mt:7.64,p:2},{f:'26-jul',m:'jul',mt:3.75,p:3}
+];
 var PLANNED=76;
 function picaC(p,mt){if(p===PLANNED)return'#1a6bc9';if(mt===0&&p===0)return dk?'#0e0e0d':'#f0efec';if(p===0)return dk?'#0a2318':'#eaf7f2';return p<=5?'#7fcfb0':p<=15?'#0e8f62':'#075e40';}
 var hmDone=false;
@@ -402,11 +405,23 @@ function rPicas(){
 
 var simCh;function setM(m){document.getElementById('sl-sim').value=m;updSim();}
 function rSimulador(){
-  var ubv=D.umbralBv,ubdg=D.umbralBdg,jm=D.julM,jp=D.julProy;
+  var ubv=D.umbralBv,ubdg=D.umbralBdg;
   document.getElementById('sim-ubv').textContent=ubv+' m';
-  document.getElementById('sim-desc').innerHTML='\u2014 Con <strong>'+ubv+' m/mes</strong> igualas B&V ($'+D.bvCu.toLocaleString()+'/m)<br>\u2014 Con <strong>'+ubdg+' m/mes</strong> alcanzas el budget ($'+D.budCu.toLocaleString()+'/m)<br>Julio proyecta <strong>~'+jp+' m</strong> al cierre.';
+  document.getElementById('sim-desc').innerHTML='\u2014 Con <strong>'+ubv+' m/mes</strong> igualas B&V ($'+D.bvCu.toLocaleString()+'/m)<br>\u2014 Con <strong>'+ubdg+' m/mes</strong> alcanzas el budget ($'+D.budCu.toLocaleString()+'/m)<br>'+D.mesLbls[D.mesLbls.length-1]+' cerr\u00f3 con <strong>'+D.mBase+' m</strong>.';
+  /* botones por cada mes cerrado */
+  var br=document.getElementById('btnrow-meses');br.innerHTML='';
+  D.mesLbls.forEach(function(lbl,idx){
+    var btn=document.createElement('button');btn.className='btn';
+    btn.textContent=lbl+' ('+D.metros[idx]+'m)';
+    btn.onclick=function(){setM(D.metros[idx]);};
+    br.appendChild(btn);
+  });
+  /* tarjetas: un mes por cada cerrado + B&V + budget */
   var ec=document.getElementById('sim-escs');ec.innerHTML='';
-  [{m:D.mBase,label:D.mesLbls[D.mesLbls.length-1]+' real',color:'var(--re)'},{m:ubv,label:'Igualar B&V',color:'var(--tm)'},{m:ubdg,label:'Igualar budget',color:'var(--gr)'}].forEach(function(e){
+  var escenarios=D.mesLbls.map(function(lbl,idx){return{m:D.metros[idx],label:lbl,color:idx===D.mesLbls.length-1?'var(--re)':'var(--tm)'};});
+  escenarios.push({m:ubv,label:'Igualar B&V',color:'var(--tm)'});
+  escenarios.push({m:ubdg,label:'Igualar budget',color:'var(--gr)'});
+  escenarios.forEach(function(e){
     var cu=costMC(e.m),dB=cu-D.budCu,dBv=cu-D.bvCu;var div=document.createElement('div');div.className='sc';
     div.style.cssText='border-left-color:'+e.color+';border-left-width:3px;border-radius:0 10px 10px 0';
     div.innerHTML='<div class="sc-e" style="color:'+e.color+'">'+e.label+'</div><div class="sc-m" style="color:'+e.color+'">'+e.m+' m/mes</div><div class="sc-c">$'+cu.toLocaleString()+'/m</div><div class="sc-d">budget: '+(dB>0?'+$'+dB:'\u2212$'+Math.abs(dB))+' \u00b7 B&V: '+(dBv>0?'+$'+dBv:'\u2212$'+Math.abs(dBv))+'</div>';
@@ -415,35 +430,58 @@ function rSimulador(){
   options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:TK,font:{size:10},maxTicksLimit:10,callback:function(_,i){return xs[i]+'m';}},grid:{color:GR}},y:{min:1200,max:7500,ticks:{color:TK,font:{size:11},callback:function(v){return'$'+v.toLocaleString();}},grid:{color:GR}}}}});
   setM(D.umbralBdg);
 }
-function updSim(){var m=parseInt(document.getElementById('sl-sim').value);document.getElementById('sv-sim').textContent=m;var cu=costMC(m),dB=cu-D.budCu,dBv=cu-D.bvCu,ah=(D.budCu-cu)*m;document.getElementById('rv1').textContent='$'+cu.toLocaleString()+'/m';document.getElementById('rv1').style.color=cu>D.budCu?'var(--re)':cu>D.bvCu?'var(--am)':'var(--gr)';document.getElementById('rv2').textContent='$'+Math.round(D.fijoMes/m).toLocaleString();document.getElementById('rv3').textContent=(dB>0?'+$':'\u2212$')+Math.abs(dB)+'/m';document.getElementById('rv3').style.color=dB>0?'var(--re)':'var(--gr)';document.getElementById('rv4').textContent=(ah>=0?'+$':'\u2212$')+Math.round(Math.abs(ah)/1000)+'K';document.getElementById('rv4').style.color=ah>=0?'var(--gr)':'var(--re)';
+function updSim(){
+  var m=parseInt(document.getElementById('sl-sim').value);document.getElementById('sv-sim').textContent=m;
+  var cu=costMC(m),dB=cu-D.budCu,dBv=cu-D.bvCu,ah=(D.budCu-cu)*m;
+  var loRef=Math.min(D.budCu,D.bvCu),hiRef=Math.max(D.budCu,D.bvCu);
+  document.getElementById('rv1').textContent='$'+cu.toLocaleString()+'/m';
+  document.getElementById('rv1').style.color=cu>hiRef?'var(--re)':cu>loRef?'var(--am)':'var(--gr)';
+  document.getElementById('rv2').textContent='$'+Math.round(D.fijoMes/m).toLocaleString();
+  document.getElementById('rv3').textContent=(dB>0?'+$':'\u2212$')+Math.abs(dB)+'/m';
+  document.getElementById('rv3').style.color=dB>0?'var(--re)':'var(--gr)';
+  document.getElementById('rv4').textContent=(ah>=0?'+$':'\u2212$')+Math.round(Math.abs(ah)/1000)+'K';
+  document.getElementById('rv4').style.color=ah>=0?'var(--gr)':'var(--re)';
   var nota=document.getElementById('snota');
-  if(cu>D.budCu){nota.style.background='var(--rel)';nota.style.borderColor='var(--re)';nota.style.color='var(--red)';nota.innerHTML='Con <strong>'+m+' m/mes</strong> el costo es <strong>$'+cu.toLocaleString()+'/m</strong>. <strong>$'+Math.abs(dB)+'/m sobre budget</strong> y $'+Math.abs(dBv)+'/m sobre B&V. Para igualar B&V: <strong>'+(D.umbralBv-m)+' m/mes m\u00e1s</strong>; para budget: <strong>'+(D.umbralBdg-m)+' m/mes</strong>.';}
-  else if(cu>D.bvCu){nota.style.background='var(--aml)';nota.style.borderColor='var(--am)';nota.style.color='var(--amd)';nota.innerHTML='Con <strong>'+m+' m/mes</strong> el costo es <strong>$'+cu.toLocaleString()+'/m</strong>. <strong>$'+Math.abs(dB)+'/m dentro del budget</strong> pero $'+Math.abs(dBv)+'/m sobre B&V. Faltan <strong>'+(D.umbralBv-m)+' m/mes</strong> para igualar B&V.';}
-  else{nota.style.background='var(--grl)';nota.style.borderColor='var(--gr)';nota.style.color='var(--grd)';nota.innerHTML='Con <strong>'+m+' m/mes</strong> el costo es <strong>$'+cu.toLocaleString()+'/m</strong>. <strong>$'+Math.abs(dB)+'/m bajo budget</strong> y $'+Math.abs(dBv)+'/m m\u00e1s barato que B&V. Ahorro: <strong>$'+Math.round(Math.abs(ah)/1000)+'K/mes \u00b7 $'+Math.round(Math.abs(ah)*9/1000)+'K a 9 meses</strong>.';}
+  var txtBdg=dB>0?('$'+Math.abs(dB)+'/m sobre budget'):('$'+Math.abs(dB)+'/m bajo budget');
+  var txtBv=dBv>0?('$'+Math.abs(dBv)+'/m sobre B&V'):('$'+Math.abs(dBv)+'/m bajo B&V');
+  var faltaBv=D.umbralBv-m,faltaBdg=D.umbralBdg-m;
+  var txtFaltaBv=faltaBv>0?('Faltan <strong>'+faltaBv+' m/mes</strong> para igualar B&V.'):('Ya superaste el punto de equilibrio vs. B&V por <strong>'+Math.abs(faltaBv)+' m/mes</strong>.');
+  var txtFaltaBdg=faltaBdg>0?('Faltan <strong>'+faltaBdg+' m/mes</strong> para el budget.'):('Ya superaste el budget por <strong>'+Math.abs(faltaBdg)+' m/mes</strong>.');
+  if(cu>hiRef){
+    nota.style.background='var(--rel)';nota.style.borderColor='var(--re)';nota.style.color='var(--red)';
+    nota.innerHTML='Con <strong>'+m+' m/mes</strong> el costo es <strong>$'+cu.toLocaleString()+'/m</strong>. <strong>'+txtBdg+'</strong> y <strong>'+txtBv+'</strong>. '+txtFaltaBv+' '+txtFaltaBdg;
+  } else if(cu>loRef){
+    nota.style.background='var(--aml)';nota.style.borderColor='var(--am)';nota.style.color='var(--amd)';
+    nota.innerHTML='Con <strong>'+m+' m/mes</strong> el costo es <strong>$'+cu.toLocaleString()+'/m</strong>. <strong>'+txtBdg+'</strong> y <strong>'+txtBv+'</strong>. '+txtFaltaBv+' '+txtFaltaBdg;
+  } else {
+    nota.style.background='var(--grl)';nota.style.borderColor='var(--gr)';nota.style.color='var(--grd)';
+    nota.innerHTML='Con <strong>'+m+' m/mes</strong> el costo es <strong>$'+cu.toLocaleString()+'/m</strong>. <strong>'+txtBdg+'</strong> y <strong>'+txtBv+'</strong>. Ahorro vs. budget: <strong>$'+Math.round(Math.abs(ah)/1000)+'K/mes</strong>.';
+  }
   if(simCh){var ni=xs.reduce(function(b,v,i){return Math.abs(v-m)<Math.abs(xs[b]-m)?i:b;},0);simCh.data.datasets[3].data=xs.map(function(_,i){return i===ni?cu:null;});simCh.update();}
 }
 document.getElementById('sl-sim').addEventListener('input',updSim);
 
 function rOportunidades(){
-  var rc=D.realCu,bc=D.budCu,bv=D.bvCu,mb=D.mBase,jm=D.julM,jp=D.julProy,fm=D.fijoMes,ubv=D.umbralBv,ubdg=D.umbralBdg,rz=D.real.rezagado||370,rm=D.rentaMes;
+  var rc=D.realCu,bc=D.budCu,bv=D.bvCu,mb=D.mBase,fm=D.fijoMes,ubv=D.umbralBv,ubdg=D.umbralBdg,rz=D.real.rezagado||370,rm=D.rentaMes;
+  var lastLbl=D.mesLbls[D.mesLbls.length-1];
   var cuBase=D.cuRealMes[D.cuRealMes.length-1]||rc,cuBdg=costMC(ubdg),cuBv=costMC(ubv);
   document.getElementById('diag-causa').innerHTML='La renta de <strong>$'+rm.toLocaleString()+'/mes</strong> entre '+mb+' m = <strong>$'+Math.round(rm/mb).toLocaleString()+'/m</strong>. Con '+ubdg+' m bajar\u00eda a $'+Math.round(rm/ubdg).toLocaleString()+'/m. La palanca principal es producir m\u00e1s metros, no reducir el costo fijo.';
-  document.getElementById('diag-estado').innerHTML='<strong>Tendencia ascendente:</strong> '+D.mesLbls.map(function(l,i){return l+' '+D.metros[i]+'m';}).join(' \u2192 ')+' \u2192 Jul ~'+jp+'m (proy). '+(jp>=ubv?'Julio proyecta superar el punto de equilibrio vs. B&V.':'A\u00fan por debajo del umbral de '+ubv+' m/mes.');
+  document.getElementById('diag-estado').innerHTML='<strong>Tendencia:</strong> '+D.mesLbls.map(function(l,i){return l+' '+D.metros[i]+'m';}).join(' \u2192 ')+'. '+(mb>=ubv?lastLbl+' ya super\u00f3 el punto de equilibrio vs. B&V.':mb>=ubdg?lastLbl+' ya est\u00e1 dentro del budget.':'A\u00fan por debajo del umbral de '+ubv+' m/mes.');
   var ol=document.getElementById('opp-list');ol.innerHTML='';
   var opps=[
     {ico:'\uD83D\uDCC8',bg:'var(--rel)',t:'Aumentar rendimiento mensual',chip:mb<ubv?'-$'+Math.round(cuBase-cuBv)+' a -$'+Math.round(cuBase-cuBdg)+'/m':'Ya en zona',cls:mb<ubv?'cr':'cg',
-     txt:mb<ubdg?'Con '+mb+' m/mes el costo es $'+cuBase.toLocaleString()+'/m. Llegar a <strong>'+ubv+' m/mes</strong> lo baja a $'+cuBv.toLocaleString()+'/m; a <strong>'+ubdg+'</strong> alcanza el budget de $'+cuBdg.toLocaleString()+'/m. La tendencia es positiva: julio proyecta ~'+jp+' m. Cada d\u00eda sin avance cuesta ~$'+Math.round(fm/30).toLocaleString()+' de fijo.':'Con '+mb+' m/mes ya se cumplen ambas referencias. Sostener y estabilizar. Cada d\u00eda parado = ~$'+Math.round(fm/30).toLocaleString()+' de fijo perdido.'},
+     txt:mb<ubdg?'Con '+mb+' m/mes el costo es $'+cuBase.toLocaleString()+'/m. Llegar a <strong>'+ubv+' m/mes</strong> lo baja a $'+cuBv.toLocaleString()+'/m; a <strong>'+ubdg+'</strong> alcanza el budget de $'+cuBdg.toLocaleString()+'/m. Cada d\u00eda sin avance cuesta ~$'+Math.round(fm/30).toLocaleString()+' de fijo.':'Con '+mb+' m/mes ya se cumplen ambas referencias. Sostener y estabilizar. Cada d\u00eda parado = ~$'+Math.round(fm/30).toLocaleString()+' de fijo perdido.'},
     {ico:'\uD83D\uDCDD',bg:'var(--rel)',t:'Renegociar renta',chip:'-$100 a -$300/m',cls:'cr',
      txt:'Renta actual: $'+rm.toLocaleString()+'/mes. Una cl\u00e1usula de rendimiento (precio por metro o descuento proporcional) reducir\u00eda el fijo. El 10% libera ~$'+Math.round(rm*0.1/ubdg)+'/m al llegar al budget. Se han logrado reducciones de 15\u201317% en contratos similares.'},
     {ico:'\uD83D\uDEA7',bg:'var(--aml)',t:'Optimizar rezagado',chip:'-$100 a -$200/m',cls:'ca',
      txt:'El rezagado cuesta $'+rz+'/m y es 100% variable. Si la distancia de acarreo es <150 m, un scraper de cables puede reducir 40\u201360%. Para distancias mayores, un LHD el\u00e9ctrico reduce 30\u201340% el costo/t. La cotizaci\u00f3n comparativa es la acci\u00f3n inmediata.'},
     {ico:'\uD83D\uDD29',bg:'var(--bll)',t:'Optimizar picas',chip:'-$30 a -$60/m',cls:'cb',
-     txt:'Consumo operativo: jun 0.76/m, jul 0.92/m (budget 0.52/m). Evaluar picas de mayor grado: mayor precio unitario pero menor consumo total. El ahorro unitario es modesto pero acumula a lo largo del proyecto.'}
+     txt:'Consumo operativo por encima del budget de 0.52/m en los meses recientes. Evaluar picas de mayor grado: mayor precio unitario pero menor consumo total. El ahorro unitario es modesto pero acumula a lo largo del proyecto.'}
   ];
   opps.forEach(function(o){var div=document.createElement('div');div.className='opp';div.innerHTML='<div class="oico" style="background:'+o.bg+'">'+o.ico+'</div><div style="flex:1"><div class="ot">'+o.t+'<span class="chip '+o.cls+'">'+o.chip+'</span></div><div class="os">'+o.txt+'</div></div>';ol.appendChild(div);});
   /* cascada */
   var cuR10=Math.round((rm*0.9+D.svcMes)/ubdg+D.varM),cuRez=Math.round((rm*0.9+D.svcMes)/ubdg+(D.varM-150)),cuFin=Math.round((rm*0.9+D.svcMes)/ubdg+(D.varM-190));
-  var steps=[{l:'Costo real ('+D.mesLbls[D.mesLbls.length-1]+')',v:cuBase,c:'#d63b3a'},{l:'+ '+ubdg+' m/mes',v:cuBdg,c:'#c98500'},{l:'+ Renta \u221210%',v:cuR10,c:'#0e8f62'},{l:'+ Rezagado \u2212$150',v:cuRez,c:'#0e8f62'},{l:'+ Picas \u2212$40',v:cuFin,c:'#075e40'},{l:'B&V ref.',v:bv,c:'#888',ref:true},{l:'Budget ref.',v:bc,c:'#1a6bc9',ref:true}];
+  var steps=[{l:'Costo real ('+lastLbl+')',v:cuBase,c:'#d63b3a'},{l:'+ '+ubdg+' m/mes',v:cuBdg,c:'#c98500'},{l:'+ Renta \u221210%',v:cuR10,c:'#0e8f62'},{l:'+ Rezagado \u2212$150',v:cuRez,c:'#0e8f62'},{l:'+ Picas \u2212$40',v:cuFin,c:'#075e40'},{l:'B&V ref.',v:bv,c:'#888',ref:true},{l:'Budget ref.',v:bc,c:'#1a6bc9',ref:true}];
   var wmax=Math.max(cuBase,bv)+400,ww=document.getElementById('wf-wrap');ww.innerHTML='';
   steps.forEach(function(s){var row=document.createElement('div');row.className='wfi';row.innerHTML='<div class="wfl">'+s.l+'</div><div class="wft"><div class="wfb" style="width:'+Math.round(s.v/wmax*100)+'%;background:'+s.c+'">$'+s.v.toLocaleString()+'/m</div></div><div class="wfn" style="color:'+(s.ref?s.c:s.v<=bc?'var(--gr)':s.v<=bv?'var(--am)':'var(--re)')+'">$'+s.v.toLocaleString()+'</div>';ww.appendChild(row);});
   document.getElementById('casc-sub').textContent='De $'+cuBase.toLocaleString()+'/m a ~$'+cuFin.toLocaleString()+'/m con cuatro mejoras.';
@@ -451,17 +489,17 @@ function rOportunidades(){
   /* plan */
   var pl=document.getElementById('plan-wrap');pl.innerHTML='';
   [{hz:'Inmediato',col:'var(--rel)',bc2:'rgba(214,59,58,.2)',tc:'var(--re)',items:[{t:'Reporte diario de metros y paros',s:'Cada d\u00eda sin avance = ~$'+Math.round(fm/30).toLocaleString()+' de fijo sin metro.'},{t:mb<ubdg?'Subir a '+ubdg+' m/mes':'Sostener '+mb+' m/mes',s:mb<ubdg?'Meta: igualar el budget ($'+cuBdg.toLocaleString()+'/m).':'El ritmo actual ya es rentable. No bajar del umbral.'}]},
-   {hz:'Q3 2026',col:'var(--aml)',bc2:'rgba(201,133,0,.2)',tc:'var(--am)',items:[{t:'Cotizar alternativa de rezagado',s:'Comparar vs. $'+rz+'/m actual.'},{t:'Evaluar tipo de pica',s:'Consumo operativo (0.76\u20130.92/m) vs. budget (0.52/m).'}]},
+   {hz:'Q3 2026',col:'var(--aml)',bc2:'rgba(201,133,0,.2)',tc:'var(--am)',items:[{t:'Cotizar alternativa de rezagado',s:'Comparar vs. $'+rz+'/m actual.'},{t:'Evaluar tipo de pica',s:'Consumo operativo por encima del budget (0.52/m).'}]},
    {hz:'Q4 2026',col:'var(--grl)',bc2:'rgba(14,143,98,.2)',tc:'var(--gr)',items:[{t:'Renegociar renta con evidencia de rendimiento',s:'Reducci\u00f3n del 10% = ~$'+Math.round(rm*0.1/ubdg)+'/m menos.'},{t:'Meta: $'+cuFin.toLocaleString()+'/m sostenido',s:'Las cuatro mejoras combinadas. Revisar mensualmente.'}]}
   ].forEach(function(p){var col=document.createElement('div');col.className='pcol';col.style.cssText='background:'+p.col+';border-color:'+p.bc2;col.innerHTML='<div class="phz" style="color:'+p.tc+'">'+p.hz+'</div>';p.items.forEach(function(it){col.innerHTML+='<div class="pitem"><strong>'+it.t+'</strong>'+it.s+'</div>';});pl.appendChild(col);});
 }
 
 function rDatos(){
   var totalM=D.metros.reduce(function(a,b){return a+b;},0);
-  document.getElementById('d1').textContent='$'+D.realCu.toLocaleString()+'/m real \u00b7 $'+D.budCu.toLocaleString()+' budget \u00b7 $'+D.bvCu.toLocaleString()+' B&V';
+  document.getElementById('d1').textContent='$'+D.realCu.toLocaleString()+'/m real ('+D.mesLbls[D.mesLbls.length-1]+') \u00b7 $'+D.budCu.toLocaleString()+' budget \u00b7 $'+D.bvCu.toLocaleString()+' B&V';
   document.getElementById('d2').textContent=D.mesLbls.map(function(l,i){return l+' '+D.metros[i]+'m';}).join(' \u00b7 ')+' = '+totalM+'m \u00b7 CU: '+D.cuRealMes.map(function(c,i){return D.mesLbls[i]+' $'+c;}).join(', ');
-  document.getElementById('d3').textContent='Renta $'+D.rentaMes.toLocaleString()+'/mes \u00b7 Svc $'+D.svcMes.toLocaleString()+'/mes';
-  document.getElementById('d4').textContent='Jul '+D.julM+'m al '+D.julDias+'-jul \u2192 proy ~'+D.julProy+'m';
+  document.getElementById('d3').textContent='Renta $'+D.rentaMes.toLocaleString()+'/mes \u00b7 Svc $'+D.svcMes.toLocaleString()+'/mes ('+D.mesLbls[D.mesLbls.length-1]+')';
+  document.getElementById('d4').textContent=D.mesLbls.join(', ')+' cerrados \u00b7 '+totalM+'m acumulados';
 }
 
 /* UPLOAD */
@@ -474,49 +512,129 @@ function leer(f){if(!f||!f.name.endsWith('.xlsx')){alert('Solo .xlsx');return;}d
 
 function parseXL(wb,fn){
   var log=[];
-  if(wb.SheetNames.indexOf('Resumen')>=0){var s=XLSX.utils.sheet_to_json(wb.Sheets['Resumen'],{header:1,defval:null});
-    [[12,'renta'],[13,'spilling'],[14,'rezagado'],[15,'ancla'],[16,'malla'],[17,'concreto'],[18,'energia'],[19,'diesel'],[20,'explosivo']].forEach(function(p){var r=s[p[0]];if(r){if(typeof r[4]==='number')D.bud[p[1]]=Math.round(r[4]);if(typeof r[5]==='number')D.real[p[1]]=Math.round(r[5]);if(typeof r[7]==='number')D.bv[p[1]]=Math.round(r[7]);}});
-    var r23=s[22];if(r23){if(typeof r23[4]==='number')D.bud.svc=Math.round(r23[4]);if(typeof r23[5]==='number')D.real.svc=Math.round(r23[5]);}
-    var r24=s[23];if(r24){if(typeof r24[4]==='number')D.bud.picas=Math.round(r24[4]);if(typeof r24[5]==='number')D.real.picas=Math.round(r24[5]);}
-    var r27=s[26];if(r27){if(typeof r27[4]==='number'){D.budCu=Math.round(r27[4]);log.push('Budget: $'+D.budCu);}if(typeof r27[5]==='number'){D.realCu=Math.round(r27[5]);log.push('Real: $'+D.realCu);}if(typeof r27[7]==='number'){D.bvCu=Math.round(r27[7]);log.push('B&V: $'+D.bvCu);}}
-  }
-  if(wb.SheetNames.indexOf('Real')>=0){var sR=XLSX.utils.sheet_to_json(wb.Sheets['Real'],{header:1,defval:null});
-    var r12=sR[11];if(r12){var nm=[],nl=[];[[4,'Abril'],[6,'Mayo'],[8,'Junio'],[10,'Julio'],[12,'Agosto']].forEach(function(cp){if(typeof r12[cp[0]]==='number'&&r12[cp[0]]>0&&r12[cp[0]]<500){nm.push(Math.round(r12[cp[0]]*10)/10);nl.push(cp[1]);}});
-      if(nm.length){D.metros=nm;D.mesLbls=nl;log.push('Metros: '+nm.join('+'));}}
-    /* OPEX total por mes */
-    var rOp=sR[40];var rCap=sR[50];
-    if(rOp&&rCap){
-      var costos=[];var cols=[[6,'Mayo'],[8,'Junio'],[10,'Julio'],[12,'Agosto']];
-      D.mesLbls.forEach(function(lbl,i){
-        var colIdx=cols.filter(function(c){return c[1]===lbl;})[0];
-        if(colIdx){var opx=typeof rOp[colIdx[0]]==='number'?rOp[colIdx[0]]:0;var cpx=typeof rCap[colIdx[0]]==='number'?rCap[colIdx[0]]:0;costos.push(Math.round(opx+cpx));}
-        else{costos.push(0);}
-      });
-      D.costoRealMes=costos;
-      D.gastoTotal=costos.reduce(function(a,b){return a+b;},0);
-      log.push('Gasto total: $'+D.gastoTotal.toLocaleString());
-      log.push('CU real: '+D.mesLbls.map(function(l,i){return l+' $'+Math.round(costos[i]/D.metros[i]);}).join(', '));
+  var MESES_ABR=['Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var MESES_FULL={Abr:'Abril',May:'Mayo',Jun:'Junio',Jul:'Julio',Ago:'Agosto',Sep:'Septiembre',Oct:'Octubre',Nov:'Noviembre',Dic:'Diciembre'};
+  var CONCEPT_MAP=[['esarrollo de obra','renta'],['pilling','spilling'],['ezagado','rezagado'],['ncla','ancla'],['malla','malla'],['arpeo','zarpeo'],['nerg','energia'],['iesel','diesel'],['xplosivo','explosivo'],['ervicio t','svc'],['icas','picas']];
+  function slugFind(txt){txt=String(txt||'');for(var i=0;i<CONCEPT_MAP.length;i++){if(txt.indexOf(CONCEPT_MAP[i][0])>=0)return CONCEPT_MAP[i][1];}return null;}
+
+  if(wb.SheetNames.indexOf('Resumen')>=0){
+    var s=XLSX.utils.sheet_to_json(wb.Sheets['Resumen'],{header:1,defval:null});
+    /* ---- Tabla Escenario: metros y CU por mes ---- */
+    var escRow=-1;
+    for(var i=0;i<s.length;i++){for(var j=0;j<12;j++){if(s[i][j]==='Escenario'){escRow=i;break;}}if(escRow>=0)break;}
+    if(escRow>=0){
+      var monthCol={};
+      for(var c2=0;c2<s[escRow].length;c2++){var v=s[escRow][c2];if(MESES_ABR.indexOf(v)>=0)monthCol[v]=c2;}
+      var realMRow=null,realCuRow=null;
+      for(var r=escRow+1;r<Math.min(escRow+10,s.length);r++){
+        var lbl=String(s[r][3]||'');
+        if(lbl.indexOf('Real')>=0&&lbl.indexOf('(m)')>=0)realMRow=s[r];
+        if(lbl.indexOf('Real')>=0&&lbl.indexOf('All')>=0)realCuRow=s[r];
+      }
+      if(realMRow&&realCuRow){
+        var closed=[];
+        MESES_ABR.forEach(function(m){if(monthCol[m]!==undefined){var v=realMRow[monthCol[m]];if(typeof v==='number'&&v>0)closed.push(m);}});
+        if(closed.length){
+          D.metros=closed.map(function(m){return Math.round(realMRow[monthCol[m]]*100)/100;});
+          D.mesLbls=closed.map(function(m){return MESES_FULL[m];});
+          D.cuRealMes=closed.map(function(m){return Math.round(realCuRow[monthCol[m]]);});
+          D.costoRealMes=D.metros.map(function(mt,idx){return Math.round(mt*D.cuRealMes[idx]);});
+          D.gastoTotal=D.costoRealMes.reduce(function(a,b){return a+b;},0);
+          log.push('Meses cerrados: '+D.mesLbls.join(', '));
+          log.push('CU real: '+D.mesLbls.map(function(l,idx){return l+' $'+D.cuRealMes[idx];}).join(', '));
+        }
+      }
     }
-    /* abs por mes para donas */
-    if(D.metros.length>=2){
-      D.absM[0]=[D.rentaMes,Math.round(D.svcMes*(D.metros[0]<50?0.5:1))];
-      D.absM[1]=[D.rentaMes,D.svcMes];
-      var vKeys=['spilling','rezagado','ancla','malla','concreto','energia','picas','diesel','explosivo'];
-      vKeys.forEach(function(k){D.absM[0].push(Math.round((D.real[k]||0)*D.metros[0]));D.absM[1].push(Math.round((D.real[k]||0)*D.metros[1]));});
+    /* ---- Tabla OPEX/CAPEX grande: conceptos + TOTAL ALL IN + B&V ---- */
+    var headerRow=-1;
+    for(var i2=0;i2<s.length;i2++){for(var j2=0;j2<10;j2++){if(s[i2][j2]==='Concepto'){headerRow=i2;break;}}if(headerRow>=0)break;}
+    if(headerRow>=0){
+      var hdr=s[headerRow];
+      var conceptCol=hdr.indexOf('Concepto');
+      var bvCol=-1,accBudCol=-1,accActCol=-1;
+      for(var c3=0;c3<hdr.length;c3++){if(hdr[c3]==='Budget B&V')bvCol=c3;}
+      var monthRow=s[headerRow-1]||[];
+      for(var c4=0;c4<monthRow.length;c4++){
+        var mv=String(monthRow[c4]||'');
+        if(mv.indexOf('Acum')>=0||mv.indexOf('Acmu')>=0){accBudCol=c4;accActCol=c4+1;}
+      }
+      /* TOTAL ALL IN */
+      var allInIdx=-1;
+      for(var r2=headerRow+1;r2<s.length;r2++){var t=String(s[r2][1]||s[r2][2]||'');if(t.indexOf('TOTAL ALL IN')>=0){allInIdx=r2;break;}}
+      if(allInIdx>=0){
+        var allInRow=s[allInIdx];
+        if(bvCol>=0&&typeof allInRow[bvCol]==='number'){D.bvCu=Math.round(allInRow[bvCol]);log.push('B&V: $'+D.bvCu);}
+        if(accBudCol>=0&&typeof allInRow[accBudCol]==='number'){D.budCu=Math.round(allInRow[accBudCol]);log.push('Budget (acumulado): $'+D.budCu);}
+      }
+      /* conceptos entre headerRow y allInIdx */
+      if(accBudCol>=0&&accActCol>=0){
+        for(var r3=headerRow+1;r3<(allInIdx>0?allInIdx:s.length);r3++){
+          var concept=s[r3][conceptCol];
+          if(!concept||String(s[r3][1]||'').indexOf('Total')>=0)continue;
+          var key=slugFind(concept);
+          if(!key)continue;
+          var bV=s[r3][accBudCol],aV=s[r3][accActCol],vV=(bvCol>=0?s[r3][bvCol]:null);
+          if(typeof bV==='number')D.bud[key]=Math.round(bV);
+          if(typeof aV==='number')D.real[key]=Math.round(aV);
+          if(typeof vV==='number')D.bv[key]=Math.round(vV);
+        }
+      }
     }
   }
-  if(wb.SheetNames.indexOf('Budget')>=0){var sB=XLSX.utils.sheet_to_json(wb.Sheets['Budget'],{header:1,defval:null});
-    var b14=sB[13];if(b14&&typeof b14[3]==='number'&&b14[3]>50000){D.rentaMes=Math.round(b14[3]);log.push('Renta: $'+D.rentaMes+'/mes');}
-    var b39=sB[38];if(b39&&typeof b39[3]==='number'&&b39[3]>5000){D.svcMes=Math.round(b39[3]);log.push('Svc: $'+D.svcMes+'/mes');}
+
+  /* ---- Actual: renta y svc del ultimo mes cerrado (fijo) ---- */
+  if(wb.SheetNames.indexOf('Actual')>=0){
+    var sA=XLSX.utils.sheet_to_json(wb.Sheets['Actual'],{header:1,defval:null});
+    var hRow=-1;
+    for(var k=0;k<sA.length;k++){if(sA[k][1]==='Descripci\u00f3n'){hRow=k;break;}}
+    if(hRow>=0){
+      var monthColA={};
+      for(var c5=4;c5<sA[hRow].length;c5+=2){var lbl2=sA[hRow][c5];if(lbl2)monthColA[lbl2]=c5;}
+      var metrosRow=null,rentaRow=null,svcRow=null;
+      for(var k2=hRow+1;k2<sA.length;k2++){
+        var d0=String(sA[k2][1]||'');
+        if(d0.indexOf('Real 2026')>=0)metrosRow=sA[k2];
+        if(d0==='Desarrollo')rentaRow=sA[k2];
+        if(d0.indexOf('Servicio t\u00e9cnico')>=0&&!svcRow)svcRow=sA[k2];
+      }
+      if(metrosRow){
+        var lastCol=null,lastLbl=null;
+        Object.keys(monthColA).forEach(function(lbl3){var v=metrosRow[monthColA[lbl3]];if(typeof v==='number'&&v>0){if(lastCol===null||monthColA[lbl3]>lastCol){lastCol=monthColA[lbl3];lastLbl=lbl3;}}});
+        if(lastCol!==null){
+          if(rentaRow&&typeof rentaRow[lastCol]==='number'&&rentaRow[lastCol]>1000){D.rentaMes=Math.round(rentaRow[lastCol]);log.push('Renta ('+lastLbl+'): $'+D.rentaMes+'/mes');}
+          if(svcRow&&typeof svcRow[lastCol]==='number'&&svcRow[lastCol]>500){D.svcMes=Math.round(svcRow[lastCol]);log.push('Svc ('+lastLbl+'): $'+D.svcMes+'/mes');}
+        }
+      }
+    }
   }
-  if(wb.SheetNames.indexOf('Consumo de picas')>=0){var sP=XLSX.utils.sheet_to_json(wb.Sheets['Consumo de picas'],{header:1,defval:null});
-    var julM2=0,julP2=0,maxDay=0;
-    sP.forEach(function(r){if(r&&r[1]==='jul'){if(typeof r[5]==='number')julM2+=r[5];if(typeof r[7]==='number')julP2+=r[7];
-      var f=String(r[0]||'');var day=parseInt(f.split('-')[0]);if(day>maxDay)maxDay=day;}});
-    D.julM=Math.round(julM2*10)/10;
-    D.julDias=maxDay||17;
-    log.push('Julio: '+D.julM+'m en '+D.julDias+' d\u00edas \u2192 proy ~'+Math.round(D.julM/D.julDias*31)+'m');
+
+  /* ---- BD_Performance: picas y metros diarios ---- */
+  if(wb.SheetNames.indexOf('BD_Performance')>=0){
+    var sBD=XLSX.utils.sheet_to_json(wb.Sheets['BD_Performance'],{header:1,defval:null});
+    var hIdx=-1;
+    for(var m=0;m<sBD.length;m++){if(sBD[m][0]==='Fecha'){hIdx=m;break;}}
+    if(hIdx>=0){
+      var mesMap={'Mayo':'may','Junio':'jun','Julio':'jul','Agosto':'ago','Septiembre':'sep'};
+      var daily={};
+      for(var n=hIdx+1;n<sBD.length;n++){
+        var row=sBD[n];if(!row||!row[0])continue;
+        var fecha=row[0];var mesN=row[1];
+        var mt=typeof row[14]==='number'?row[14]:0;
+        var p=typeof row[16]==='number'?row[16]:0;
+        var dkey;
+        try{dkey=(fecha instanceof Date)?fecha.toISOString().slice(0,10):String(fecha);}catch(e){dkey=String(fecha);}
+        if(!daily[dkey])daily[dkey]={mt:0,p:0,mes:mesMap[mesN]||''};
+        daily[dkey].mt+=mt;daily[dkey].p+=p;
+      }
+      var keys=Object.keys(daily).sort();
+      if(keys.length){
+        var newDP=keys.map(function(k){var d=daily[k];var day=k.slice(8,10);return{f:day+'-'+d.mes,m:d.mes,mt:Math.round(d.mt*100)/100,p:Math.round(d.p)};});
+        DP=newDP;hmDone=false;document.getElementById('hm-wrap').innerHTML='';
+        log.push('Picas: '+newDP.length+' d\u00edas cargados desde BD_Performance');
+      }
+    }
   }
+
   recalc();render();
   document.getElementById('dz').classList.add('ok');document.getElementById('dico').textContent='\u2705';document.getElementById('dt').textContent='Actualizado \u2014 '+fn;document.getElementById('ds').textContent='Todo recalculado';document.getElementById('sbfoot').textContent='\u2705 '+fn;document.getElementById('sbdate').textContent=fn.replace('.xlsx','');document.getElementById('datos-src').textContent='Fuente: '+fn;
   var po=document.getElementById('parsed-out');po.innerHTML='<strong>Datos de '+fn+':</strong><br>'+log.map(function(l){return'\u00b7 '+l;}).join('<br>');po.style.display='block';
@@ -528,18 +646,18 @@ function updAhorro(){
   var el=document.getElementById('ahorro-wrap');if(!el)return;
   var target=parseInt(document.getElementById('in-ahorro').value)||220000;
   var totalM=D.metros.reduce(function(a,b){return a+b;},0);
-  var jp=D.julProy,nR=5;
-  var gJul=D.fijoMes+D.varM*jp;
+  var mesesCerrados=D.mesLbls.length;
+  var nR=Math.max(0,12-4-mesesCerrados);/* 4 meses sin operacion MC (ene-abr) */
   var bc=D.budCu;
   /* Ahorro vs Budget = metrosAnual*budCu - costoAnual >= target */
-  var num=target-(totalM+jp)*bc+D.gastoTotal+gJul+nR*D.fijoMes;
+  var num=target-totalM*bc+D.gastoTotal+nR*D.fijoMes;
   var den=nR*(bc-D.varM);
   var mNec=den>0?Math.ceil(num/den):999;
   if(mNec<0)mNec=0;
-  var mtA=totalM+jp+nR*mNec;
-  var gA=D.gastoTotal+gJul+nR*(D.fijoMes+D.varM*mNec);
-  var cuRes=Math.round(gA/mtA);
-  var viable=mNec<=250;
+  var mtA=totalM+nR*mNec;
+  var gA=D.gastoTotal+nR*(D.fijoMes+D.varM*mNec);
+  var cuRes=mtA>0?Math.round(gA/mtA):0;
+  var viable=mNec<=250&&nR>0;
   el.innerHTML='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">'
     +'<div class="rb"><div class="rl">Meta ahorro vs. Budget</div><div class="rv" style="color:var(--bl)">$'+Math.round(target/1000)+'K</div></div>'
     +'<div class="rb"><div class="rl">Metros necesarios ago\u2013dic</div><div class="rv" style="color:'+(viable?'var(--gr)':'var(--re)')+'">'+mNec+' m/mes</div></div>'
